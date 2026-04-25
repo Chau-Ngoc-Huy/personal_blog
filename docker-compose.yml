@@ -1,0 +1,11 @@
+services:
+  blog:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/blog.db:/app/blog.db
+      - ./public/uploads:/app/public/uploads
+    env_file:
+      - .env
