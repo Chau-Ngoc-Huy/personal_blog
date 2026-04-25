@@ -7,10 +7,10 @@ export async function login(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
-  if (
-    username !== process.env.ADMIN_USER ||
-    password !== process.env.ADMIN_PASS
-  ) {
+  const adminUser = process.env.ADMIN_USER || "admin";
+  const adminPass = process.env.ADMIN_PASS || "12345678";
+
+  if (username !== adminUser || password !== adminPass) {
     return { error: "Tên đăng nhập hoặc mật khẩu không đúng" };
   }
 
