@@ -1,24 +1,44 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+// Admin profile
+model AdminProfile {
+  id          String    @id @default(uuid())
+  displayName String
+  bio         String?
+  avatar      String?
+  email       String?
+  socialLinks String?   // JSON: {"twitter":"...", "github":"...", "linkedin":"..."}
+  updatedAt   DateTime  @updatedAt
+}
+
+// Tags/Chủ đề
+model Tag {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  color     String?   // HEX color e.g. "#6366f1"
+  posts     Post[]    // Many-to-many relationship
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// Blog posts
 model Post {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   title       String
   slug        String    @unique
   excerpt     String?
   content     String
-  tags        String?
   coverImage  String?
-  status      String    @default("draft")
+  status      String    @default("draft")     // "draft" | "published"
+  tags        Tag[]                            // Many-to-many relationship
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

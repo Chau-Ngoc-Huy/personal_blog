@@ -6,11 +6,11 @@ import Image from "next/image";
 import { deletePost } from "@/lib/actions/posts";
 
 interface Post {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   excerpt: string | null;
-  tags: string | null;
+  tags: Array<{ id: string; name: string; slug: string; color?: string | null }>;
   coverImage: string | null;
   status: string;
   publishedAt: Date | null;
@@ -33,10 +33,12 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
     localStorage.setItem("admin-view", v);
   }
 
-  const filtered = posts.filter(p =>
-    p.title.toLowerCase().includes(search.toLowerCase()) ||
-    (p.tags ?? "").toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = posts.filter(p => {
+    const searchLower = search.toLowerCase();
+    const titleMatch = p.title.toLowerCase().includes(searchLower);
+    const tagsMatch = p.tags.some(tag => tag.name.toLowerCase().includes(searchLower));
+    return titleMatch || tagsMatch;
+  });
 
   return (
     <div className="p-8">
@@ -114,8 +116,8 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
                 <p className="font-medium text-slate-800 text-sm truncate">{post.title}</p>
                 <div className="flex items-center gap-2 mt-1">
                   <code className="text-[11px] text-slate-400">/{post.slug}</code>
-                  {post.tags?.split(",").slice(0, 2).map(t => t.trim()).filter(Boolean).map(tag => (
-                    <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{tag}</span>
+                  {post.tags?.slice(0, 2).map(tag => (
+                    <span key={tag.id} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{tag.name}</span>
                   ))}
                 </div>
               </div>
@@ -177,8 +179,8 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
                 {post.excerpt && <p className="text-xs text-slate-400 line-clamp-2 mb-3">{post.excerpt}</p>}
                 <div className="flex items-center justify-between pt-3 border-t border-slate-100">
                   <div className="flex gap-1">
-                    {post.tags?.split(",").slice(0, 2).map(t => t.trim()).filter(Boolean).map(tag => (
-                      <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{tag}</span>
+                    {post.tags?.slice(0, 2).map(tag => (
+                      <span key={tag.id} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{tag.name}</span>
                     ))}
                   </div>
                   <div className="flex items-center gap-1">
@@ -204,7 +206,7 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
 }
 
 /* ── Delete Button ─────────────────────────────────────── */
-function DeleteBtn({ id, title, small }: { id: number; title: string; small?: boolean }) {
+function DeleteBtn({ id, title, small }: { id: string; title: string; small?: boolean }) {
   async function handleDelete() {
     if (!confirm(`Xóa "${title}"?`)) return;
     await deletePost(id);
@@ -266,8 +268,8 @@ function CalendarView({ posts }: { posts: Post[] }) {
                       }`}>
                         {post.status === "published" ? "Published" : "Draft"}
                       </span>
-                      {post.tags?.split(",").slice(0, 2).map(t => t.trim()).filter(Boolean).map(tag => (
-                        <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{tag}</span>
+                      {post.tags?.slice(0, 2).map(tag => (
+                        <span key={tag.id} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{tag.name}</span>
                       ))}
                     </div>
                   </div>

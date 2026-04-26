@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { slugify, formatDate, parseTags } from "@/lib/utils";
 import dynamic from "next/dynamic";
+import { ErrorNotification, SuccessNotification } from "../ErrorNotification";
+import { ActionResponse } from "@/lib/error-handler";
 
 const NovelEditor = dynamic(() => import("./NovelEditor"), {
   ssr: false,
@@ -14,7 +16,7 @@ const NovelEditor = dynamic(() => import("./NovelEditor"), {
 });
 
 interface Props {
-  action: (formData: FormData) => Promise<{ error?: string } | void>;
+  action: (formData: FormData) => Promise<ActionResponse | void>;
   defaultValues?: {
     title?: string;
     slug?: string;
@@ -35,6 +37,7 @@ export default function PostForm({ action, defaultValues = {} }: Props) {
   const [content, setContent]       = useState(defaultValues.content ?? "");
   const [slugEdited, setSlugEdited] = useState(!!defaultValues.slug);
   const [error, setError]           = useState<string | null>(null);
+  const [success, setSuccess]       = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [pendingAction, setPendingAction] = useState<string | null>(null);
@@ -46,6 +49,7 @@ export default function PostForm({ action, defaultValues = {} }: Props) {
 
   function handleSubmit(actionType: "draft" | "publish") {
     setError(null);
+    setSuccess(null);
     setPendingAction(actionType);
     const fd = new FormData();
     fd.set("title", title);
@@ -56,24 +60,30 @@ export default function PostForm({ action, defaultValues = {} }: Props) {
     fd.set("content", content);
     fd.set("action", actionType);
     startTransition(async () => {
-      const result = await action(fd);
-      if (result?.error) { setError(result.error); setPendingAction(null); }
+      try {
+        const result = await action(fd);
+        if (result?.error) {
+          setError(result.error);
+          setPendingAction(null);
+        } else if (result?.success) {
+          setSuccess(actionType === "publish" ? "Bài viết đã được xuất bản!" : "Bài viết đã được lưu!");
+          setPendingAction(null);
+        }
+      } catch {
+        setError("Có lỗi xảy ra. Vui lòng thử lại.");
+        setPendingAction(null);
+      }
     });
   }
 
   const tagList = parseTags(tags);
 
   return (
+    <>
     <div className="flex gap-6 h-full">
 
       {/* ── Form ──────────────────────────────────── */}
       <div className={`flex flex-col gap-5 transition-all duration-300 ${showPreview ? "w-1/2" : "w-full max-w-2xl"}`}>
-
-        {error && (
-          <div className="bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl px-4 py-3">
-            {error}
-          </div>
-        )}
 
         {/* Title */}
         <div>
@@ -212,5 +222,8 @@ export default function PostForm({ action, defaultValues = {} }: Props) {
         </div>
       )}
     </div>
+    <ErrorNotification message={error} onDismiss={() => setError(null)} />
+    <SuccessNotification message={success} onDismiss={() => setSuccess(null)} />
+    </>
   );
 }

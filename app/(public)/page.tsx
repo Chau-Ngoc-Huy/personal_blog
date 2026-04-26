@@ -140,7 +140,7 @@ export default async function HomePage() {
 /* ── Post Card (grid) ──────────────────────────────────── */
 function PostCard(post: {
   title: string; slug: string; excerpt: string | null;
-  tags: string | null; coverImage: string | null; publishedAt: Date | null;
+  tags: Array<{ name: string; slug: string }> | null; coverImage: string | null; publishedAt: Date | null;
 }) {
   const tags = parseTags(post.tags);
   return (

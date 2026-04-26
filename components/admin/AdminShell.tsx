@@ -5,7 +5,7 @@ import { getAllPostsForAdmin } from "@/lib/actions/posts";
 
 interface Props {
   children: React.ReactNode;
-  active?: "dashboard" | "new";
+  active?: "dashboard" | "new" | "profile" | "tags";
 }
 
 export default async function AdminShell({ children, active }: Props) {
@@ -17,7 +17,7 @@ export default async function AdminShell({ children, active }: Props) {
     <div className="flex h-screen bg-slate-50 overflow-hidden">
 
       {/* ── Sidebar ──────────────────────────────────── */}
-      <aside className="w-64 bg-white border-r border-slate-100 flex flex-col shrink-0 overflow-y-auto">
+      <aside className="w-64 bg-white border-r border-slate-100 flex flex-col shrink-0 overflow-hidden">
 
         {/* Brand */}
         <div className="px-5 py-5 border-b border-slate-100">
@@ -64,6 +64,8 @@ export default async function AdminShell({ children, active }: Props) {
           {[
             { href: "/admin/dashboard", label: "Dashboard",  icon: "▦", key: "dashboard" },
             { href: "/admin/posts/new", label: "Bài viết mới", icon: "+", key: "new" },
+            { href: "/admin/tags", label: "Tags", icon: "🏷️", key: "tags" },
+            { href: "/admin/profile", label: "Profile", icon: "👤", key: "profile" },
           ].map(({ href, label, icon, key }) => (
             <Link
               key={key}

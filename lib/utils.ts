@@ -18,10 +18,24 @@ export function formatDate(date: Date | string): string {
   });
 }
 
-export function parseTags(tags: string | null): string[] {
+// For backwards compatibility - convert Tag array to tag names
+export function parseTags(
+  tags: string | null | Array<{ name: string; slug: string }>
+): string[] {
   if (!tags) return [];
-  return tags
-    .split(",")
-    .map((t) => t.trim())
-    .filter(Boolean);
+  
+  // If tags is a string (old format)
+  if (typeof tags === "string") {
+    return tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+  }
+
+  // If tags is an array of Tag objects (new format)
+  if (Array.isArray(tags)) {
+    return tags.map((t) => t.name);
+  }
+
+  return [];
 }

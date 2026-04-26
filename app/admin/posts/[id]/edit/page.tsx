@@ -8,7 +8,7 @@ interface Props { params: { id: string } }
 export const dynamic = "force-dynamic";
 
 export default async function EditPostPage({ params }: Props) {
-  const id = parseInt(params.id);
+  const id = params.id;
   const post = await getPostById(id);
   if (!post) notFound();
 
@@ -31,7 +31,7 @@ export default async function EditPostPage({ params }: Props) {
             slug:       post.slug,
             excerpt:    post.excerpt ?? "",
             content:    post.content,
-            tags:       post.tags ?? "",
+            tags:       post.tags?.map(t => t.name).join(", ") ?? "",
             coverImage: post.coverImage ?? "",
             status:     post.status,
           }}
