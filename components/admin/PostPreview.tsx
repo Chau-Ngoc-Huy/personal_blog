@@ -17,6 +17,8 @@ interface PostPreviewProps {
     displayName: string;
     avatar: string | null;
     bio: string | null;
+    email: string | null;
+    socialLinks: string | null;
   };
 }
 

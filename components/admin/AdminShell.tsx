@@ -1,9 +1,6 @@
-import Link from "next/link";
 import { getAllPostsForAdmin } from "@/lib/actions/posts";
 import { getProfile } from "@/lib/actions/profile";
 import AdminSidebarClient from "./AdminSidebarClient";
-import AdminNav from "./AdminNav";
-import ProfileSidebarCard from "./ProfileSidebarCard";
 
 export default async function AdminShell({ children }: { children: React.ReactNode }) {
   const [posts, profile] = await Promise.all([
