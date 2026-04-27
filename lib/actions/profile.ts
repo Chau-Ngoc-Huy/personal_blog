@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 interface UpdateProfileInput {
   displayName?: string;
   bio?: string;
+  sayHi?: string;
   avatar?: string;
   email?: string;
   socialLinks?: {

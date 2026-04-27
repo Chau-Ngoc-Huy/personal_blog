@@ -18,9 +18,20 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3]">
-      <Navbar name={profile.displayName} />
-      <HeroSection profile={profile} />
+    <div className="min-h-screen bg-white">
+      {/* ── Combined Navbar + Hero Section — unified beige box ── */}
+      <div
+        className="max-w-[1400px] mx-auto bg-[#F9F6F3]"
+        style={{
+          margin: "var(--box-margin) auto",
+          borderRadius: "20px",
+          overflow: "hidden",
+        }}
+      >
+        <Navbar name={profile.displayName} transparent />
+        <HeroSection profile={profile} />
+      </div>
+
       <HelpCardsSection tags={tagsResult.tags} />
       <AboutSection profile={profile} />
       <BlogsSection posts={posts} />

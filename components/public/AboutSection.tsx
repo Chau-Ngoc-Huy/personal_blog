@@ -31,15 +31,15 @@ export default function AboutSection({ profile }: { profile: Profile }) {
       id="about"
       className="bg-[#F9F6F3]"
       style={{
-        paddingTop: "clamp(2rem,8vw,7.5rem)",
-        paddingBottom: "clamp(2rem,8vw,7.5rem)",
+        paddingTop: "var(--section-py)",
+        paddingBottom: "var(--section-py)",
       }}
     >
       <div
-        className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-start"
+        className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-start"
         style={{
-          paddingLeft: "clamp(1.25rem,4vw,3rem)",
-          paddingRight: "clamp(1.25rem,4vw,3rem)",
+          paddingLeft: "var(--page-px)",
+          paddingRight: "var(--page-px)",
           gap: "clamp(2rem,7.5vw,6rem)",
         }}
       >

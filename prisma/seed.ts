@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 // ── Admin profile (from Ali Abdaal's page) ─────────────────
 const profile = {
   displayName: "Ali Abdaal",
-  bio: "I'm a doctor turned entrepreneur, author, and content creator.\n\nI spent 6 years studying medicine at Cambridge before realising my passion was in helping people learn more effectively and live more intentionally.\n\nI write about productivity, business, books, and building a life you love — through weekly essays, videos, and a podcast listened to by millions.",
+  sayHi: "I'm a doctor turned entrepreneur, author, and content creator.\n\nI spent 6 years studying medicine at Cambridge before realising my passion was in helping people learn more effectively and live more intentionally.\n\nI write about productivity, business, books, and building a life you love — through weekly essays, videos, and a podcast listened to by millions.",
+  bio: "I started my YouTube channel in 2017 as a side project while working as a doctor. It quickly grew to millions of subscribers, which allowed me to leave medicine and focus on content creation full-time. Since then, I've published two best-selling books, launched an online course, and built a business around helping people learn and grow.",
   avatar: "/images/hero-ali.png",
   email: "ali@aliabdaal.com",
   socialLinks: JSON.stringify({
@@ -222,9 +223,9 @@ const posts = [
 // ── Main ───────────────────────────────────────────────────
 async function main() {
   console.log("Clearing existing data...");
-  await prisma.post.deleteMany();
-  await prisma.tag.deleteMany();
-  await prisma.adminProfile.deleteMany();
+  // await prisma.post.deleteMany();
+  // await prisma.tag.deleteMany();
+  // await prisma.adminProfile.deleteMany();
 
   // ── Profile ──
   console.log("\nCreating demo profile...");

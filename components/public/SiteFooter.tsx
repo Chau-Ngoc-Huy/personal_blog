@@ -25,18 +25,18 @@ export default function SiteFooter({ profile }: { profile: Profile }) {
     <footer className="bg-[#F9F6F3]" style={{ marginTop: "clamp(0.75rem,2vw,1.5rem)" }}>
       {/* ── Divider ── */}
       <div
-        className="max-w-[1200px] mx-auto"
-        style={{ paddingLeft: "clamp(1.25rem,4vw,3rem)", paddingRight: "clamp(1.25rem,4vw,3rem)" }}
+        className="max-w-[1400px] mx-auto"
+        style={{ paddingLeft: "var(--page-px)", paddingRight: "var(--page-px)" }}
       >
         <hr style={{ border: "none", borderTop: "1px solid #F3EDE9", margin: 0 }} />
       </div>
 
       {/* ── Main content ── */}
       <div
-        className="max-w-[1200px] mx-auto"
+        className="max-w-[1400px] mx-auto"
         style={{
-          paddingLeft: "clamp(1.25rem,4vw,3rem)",
-          paddingRight: "clamp(1.25rem,4vw,3rem)",
+          paddingLeft: "var(--page-px)",
+          paddingRight: "var(--page-px)",
           paddingTop: "clamp(1.5rem,6.5vw,4rem)",
           paddingBottom: "clamp(1.5rem,6.5vw,4rem)",
         }}

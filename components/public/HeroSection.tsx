@@ -3,7 +3,7 @@ import Link from "next/link";
 
 interface Profile {
   displayName: string;
-  bio: string | null;
+  sayHi: string | null;
   avatar: string | null;
 }
 
@@ -19,15 +19,15 @@ export default function HeroSection({ profile }: { profile: Profile }) {
     <section
       className="bg-[#F9F6F3]"
       style={{
-        paddingTop: "clamp(2rem,8vw,7.5rem)",
-        paddingBottom: "clamp(2rem,8vw,7.5rem)",
+        paddingTop: "var(--section-py)",
+        paddingBottom: "var(--section-py)",
       }}
     >
       <div
-        className="max-w-[1200px] mx-auto flex flex-col-reverse md:flex-row items-center"
+        className="max-w-[1400px] mx-auto flex flex-col-reverse md:flex-row items-center"
         style={{
-          paddingLeft: "clamp(1.25rem,4vw,3rem)",
-          paddingRight: "clamp(1.25rem,4vw,3rem)",
+          paddingLeft: "var(--page-px)",
+          paddingRight: "var(--page-px)",
           gap: "clamp(2rem,6.5vw,4rem)",
         }}
       >
@@ -38,7 +38,7 @@ export default function HeroSection({ profile }: { profile: Profile }) {
             style={{
               fontSize: "clamp(3rem,3rem + ((1vw - 0.2rem) * 4.091),5.25rem)",
               lineHeight: 1.1,
-              fontWeight: 400,
+              fontWeight: 500,
               letterSpacing: "-0.03em",
             }}
           >
@@ -50,7 +50,7 @@ export default function HeroSection({ profile }: { profile: Profile }) {
             style={{
               fontSize: "clamp(1.5rem,1.5rem + ((1vw - 0.2rem) * 2.045),2.625rem)",
               lineHeight: 1.25,
-              fontWeight: 400,
+              fontWeight: 500,
               letterSpacing: "-0.03em",
             }}
           >
@@ -64,7 +64,7 @@ export default function HeroSection({ profile }: { profile: Profile }) {
             </span>
           </h1>
 
-          {profile.bio && (
+          {profile.sayHi && (
             <p
               className="font-sans text-[#54505B] mb-8 max-w-lg mx-auto md:mx-0"
               style={{
@@ -73,12 +73,11 @@ export default function HeroSection({ profile }: { profile: Profile }) {
                 fontWeight: 500,
               }}
             >
-              {profile.bio}
+              {profile.sayHi}
             </p>
           )}
 
           <div className="flex items-center gap-3 justify-center md:justify-start flex-wrap">
-            {/* Primary button — blue, hover goes dark */}
             <Link
               href="#blogs"
               className="font-sans font-medium no-underline bg-[#5DCDF1] text-[#1B1624] hover:bg-[#1B1624] hover:text-white transition-colors duration-150 rounded-full"
@@ -93,7 +92,6 @@ export default function HeroSection({ profile }: { profile: Profile }) {
               Read my blogs →
             </Link>
 
-            {/* Ghost / outline button */}
             <Link
               href="#about"
               className="font-sans font-medium no-underline bg-transparent text-[#1B1624] hover:bg-[#1B1624] hover:text-white transition-all duration-150 rounded-full"
@@ -114,20 +112,20 @@ export default function HeroSection({ profile }: { profile: Profile }) {
         {/* ── Avatar ── */}
         <div className="shrink-0">
           <div
-            className="overflow-hidden bg-[#F3EDE9]"
+            className="overflow-hidden bg-transparent"
             style={{
-              width: "clamp(180px,25vw,320px)",
-              height: "clamp(200px,28vw,360px)",
-              borderRadius: "clamp(1.25rem,2.5vw,2rem)",
-              boxShadow: "0px 48px 64px -20px rgba(0,0,0,0.15)",
+              width: "clamp(320px,58vw,560px)",
+              height: "clamp(320px,58vw,560px)",
+              // borderRadius: "clamp(1.25rem,2.5vw,2rem)",
+              // boxShadow: "0px 48px 64px -20px rgba(0,0,0,0.15)",
             }}
           >
             {profile.avatar ? (
               <Image
                 src={profile.avatar}
                 alt={profile.displayName}
-                width={320}
-                height={360}
+                width={640}
+                height={640}
                 className="w-full h-full object-cover"
                 priority
               />
