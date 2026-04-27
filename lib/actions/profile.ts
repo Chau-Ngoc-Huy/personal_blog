@@ -44,6 +44,7 @@ export async function updateProfile(data: UpdateProfileInput) {
       data: {
         displayName: data.displayName ?? profile.displayName,
         bio: data.bio,
+        sayHi: data.sayHi,
         avatar: data.avatar,
         email: data.email,
         socialLinks,
