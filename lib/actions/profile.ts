@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 interface UpdateProfileInput {
   displayName?: string;
   bio?: string;
+  sayHi?: string;
   avatar?: string;
   email?: string;
   socialLinks?: {
@@ -43,6 +44,7 @@ export async function updateProfile(data: UpdateProfileInput) {
       data: {
         displayName: data.displayName ?? profile.displayName,
         bio: data.bio,
+        sayHi: data.sayHi,
         avatar: data.avatar,
         email: data.email,
         socialLinks,
