@@ -19,76 +19,116 @@ export default function SiteFooter({ profile }: { profile: Profile }) {
   } catch {}
 
   const hasConnect = socials.twitter || socials.github || socials.linkedin || profile.email;
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-stone-900 text-white">
-      <div className="max-w-5xl mx-auto px-6 py-16">
-        <div className="flex flex-col md:flex-row gap-12 md:gap-20 justify-between">
+    <footer className="bg-[#F9F6F3]" style={{ marginTop: "clamp(0.75rem,2vw,1.5rem)" }}>
+      {/* ── Divider ── */}
+      <div
+        className="max-w-[1200px] mx-auto"
+        style={{ paddingLeft: "clamp(1.25rem,4vw,3rem)", paddingRight: "clamp(1.25rem,4vw,3rem)" }}
+      >
+        <hr style={{ border: "none", borderTop: "1px solid #F3EDE9", margin: 0 }} />
+      </div>
+
+      {/* ── Main content ── */}
+      <div
+        className="max-w-[1200px] mx-auto"
+        style={{
+          paddingLeft: "clamp(1.25rem,4vw,3rem)",
+          paddingRight: "clamp(1.25rem,4vw,3rem)",
+          paddingTop: "clamp(1.5rem,6.5vw,4rem)",
+          paddingBottom: "clamp(1.5rem,6.5vw,4rem)",
+        }}
+      >
+        <div className="flex flex-col md:flex-row justify-between" style={{ gap: "clamp(2rem,5vw,5rem)" }}>
+
           {/* Brand */}
-          <div className="max-w-xs">
-            <p className="text-base font-bold tracking-tight mb-1">{profile.displayName}</p>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-stone-500 mb-5">Personal Blog</p>
-            <p className="text-sm text-stone-400 leading-relaxed">
+          <div style={{ maxWidth: 320 }}>
+            <p
+              className="font-heading text-[#1B1624] mb-1"
+              style={{ fontSize: "clamp(1.125rem,1.125rem + ((1vw - 0.2rem) * 0.455),1.375rem)", fontWeight: 400, letterSpacing: "-0.03em" }}
+            >
+              {profile.displayName}
+            </p>
+            <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-[#8D8A91] font-medium mb-4">
+              Personal Blog
+            </p>
+            <p
+              className="font-sans text-[#76737C]"
+              style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)", lineHeight: 1.6, fontWeight: 500 }}
+            >
               Thanks for reading. Writing is how I think out loud.
             </p>
           </div>
 
           {/* Navigation */}
-          <div className="flex flex-col gap-3">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-stone-500 font-semibold mb-1">
+          <div className="flex flex-col" style={{ gap: "0.75rem" }}>
+            <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-[#8D8A91] font-semibold mb-1">
               Navigation
             </p>
-            <Link href="#blogs" className="text-sm text-stone-400 hover:text-white transition-colors duration-150">
-              Blogs
-            </Link>
-            <Link href="#about" className="text-sm text-stone-400 hover:text-white transition-colors duration-150">
-              About Me
-            </Link>
+            <FooterLink href="#blogs" label="Blogs" />
+            <FooterLink href="#about" label="About Me" />
           </div>
 
           {/* Connect */}
           {hasConnect && (
-            <div className="flex flex-col gap-3">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-stone-500 font-semibold mb-1">
+            <div className="flex flex-col" style={{ gap: "0.75rem" }}>
+              <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-[#8D8A91] font-semibold mb-1">
                 Connect
               </p>
-              {socials.twitter && (
-                <a href={socials.twitter} target="_blank" rel="noopener noreferrer"
-                  className="text-sm text-stone-400 hover:text-white transition-colors duration-150">
-                  Twitter ↗
-                </a>
-              )}
-              {socials.github && (
-                <a href={socials.github} target="_blank" rel="noopener noreferrer"
-                  className="text-sm text-stone-400 hover:text-white transition-colors duration-150">
-                  GitHub ↗
-                </a>
-              )}
-              {socials.linkedin && (
-                <a href={socials.linkedin} target="_blank" rel="noopener noreferrer"
-                  className="text-sm text-stone-400 hover:text-white transition-colors duration-150">
-                  LinkedIn ↗
-                </a>
-              )}
-              {profile.email && (
-                <a href={`mailto:${profile.email}`}
-                  className="text-sm text-stone-400 hover:text-white transition-colors duration-150">
-                  Email ↗
-                </a>
-              )}
+              {socials.twitter  && <ExternalLink href={socials.twitter}  label="Twitter" />}
+              {socials.github   && <ExternalLink href={socials.github}   label="GitHub" />}
+              {socials.linkedin && <ExternalLink href={socials.linkedin} label="LinkedIn" />}
+              {profile.email    && <ExternalLink href={`mailto:${profile.email}`} label="Email" />}
             </div>
           )}
         </div>
 
-        <div className="border-t border-stone-800 mt-14 pt-8 flex items-center justify-between">
-          <p className="text-xs text-stone-600">
-            © {new Date().getFullYear()} {profile.displayName}. All rights reserved.
+        {/* ── Bottom bar ── */}
+        <hr style={{ border: "none", borderTop: "1px solid #F3EDE9", margin: "clamp(2rem,5vw,4rem) 0 clamp(1rem,2vw,2rem)" }} />
+        <div className="flex items-center justify-between">
+          <p
+            className="font-sans text-[#8D8A91] font-medium"
+            style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
+          >
+            © {profile.displayName} {year}. All rights reserved.
           </p>
-          <a href="/admin" className="text-xs text-stone-600 hover:text-stone-400 transition-colors duration-150">
+          <a
+            href="/admin"
+            className="font-sans text-[#8D8A91] hover:text-[#54505B] transition-colors font-medium"
+            style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
+          >
             Admin ↗
           </a>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="font-sans text-[#76737C] hover:text-[#1B1624] transition-colors font-medium"
+      style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)", textDecoration: "none" }}
+    >
+      {label}
+    </Link>
+  );
+}
+
+function ExternalLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target={href.startsWith("mailto") ? undefined : "_blank"}
+      rel="noopener noreferrer"
+      className="font-sans text-[#76737C] hover:text-[#1B1624] transition-colors font-medium"
+      style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)", textDecoration: "none" }}
+    >
+      {label} ↗
+    </a>
   );
 }

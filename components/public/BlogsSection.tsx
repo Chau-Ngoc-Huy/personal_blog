@@ -2,10 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatDate } from "@/lib/utils";
 
-interface Tag {
-  name: string;
-  slug: string;
-}
+interface Tag { name: string; slug: string }
 
 interface Post {
   id: string;
@@ -17,33 +14,52 @@ interface Post {
   tags: Tag[];
 }
 
-const PLACEHOLDER_COLORS = [
-  "from-amber-100 to-orange-100",
-  "from-blue-100 to-indigo-100",
-  "from-purple-100 to-violet-100",
-  "from-emerald-100 to-teal-100",
-  "from-rose-100 to-pink-100",
-  "from-sky-100 to-cyan-100",
+const PLACEHOLDERS = [
+  "from-[#FDD46B]/30 to-[#FD976D]/20",
+  "from-[#5DCDF1]/20 to-[#C9B1FB]/20",
+  "from-[#C9B1FB]/20 to-[#5DCDF1]/20",
+  "from-[#79D287]/20 to-[#5DCDF1]/20",
+  "from-[#FD976D]/20 to-[#FDD46B]/30",
+  "from-[#F3EDE9] to-[#ECE5E1]",
 ];
 
 export default function BlogsSection({ posts }: { posts: Post[] }) {
   return (
-    <section id="blogs" className="py-20 bg-white">
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="flex items-end justify-between mb-12">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-400 mb-2">
-              Latest posts
-            </p>
-            <h2 className="text-3xl md:text-4xl font-bold text-stone-900 tracking-tight">
-              My Blogs
-            </h2>
-          </div>
+    <section
+      id="blogs"
+      className="bg-[#FFFFFF]"
+      style={{
+        paddingTop: "clamp(2rem,8vw,7.5rem)",
+        paddingBottom: "clamp(2rem,8vw,7.5rem)",
+      }}
+    >
+      <div
+        className="max-w-[1200px] mx-auto"
+        style={{
+          paddingLeft: "clamp(1.25rem,4vw,3rem)",
+          paddingRight: "clamp(1.25rem,4vw,3rem)",
+        }}
+      >
+        <div className="mb-12">
+          <p className="font-sans font-semibold uppercase tracking-[0.18em] text-[#8D8A91] text-xs mb-2">
+            Latest posts
+          </p>
+          <h2
+            className="font-heading text-[#1B1624]"
+            style={{
+              fontSize: "clamp(1.5rem,1.5rem + ((1vw - 0.2rem) * 2.045),2.625rem)",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.25,
+              fontWeight: 400,
+            }}
+          >
+            My Blogs
+          </h2>
         </div>
 
         {posts.length === 0 ? (
-          <div className="text-center py-20 text-stone-400 text-sm">
-            No posts yet. Check back soon!
+          <div className="text-center py-20 font-sans text-[#8D8A91] text-sm">
+            No posts yet — check back soon!
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -58,12 +74,14 @@ export default function BlogsSection({ posts }: { posts: Post[] }) {
 }
 
 function BlogCard({ post, colorIndex }: { post: Post; colorIndex: number }) {
-  const gradient = PLACEHOLDER_COLORS[colorIndex % PLACEHOLDER_COLORS.length];
+  const placeholder = PLACEHOLDERS[colorIndex % PLACEHOLDERS.length];
 
   return (
     <Link
       href={`/${post.slug}`}
-      className="group flex flex-col bg-[#FAF8F3] border border-stone-200 rounded-2xl overflow-hidden transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_20px_40px_-12px_rgba(194,179,164,0.5)] hover:border-transparent"
+      className="group flex flex-col bg-[#F9F6F3] rounded-[20px] overflow-hidden no-underline
+                 transition-all duration-200 cursor-pointer
+                 hover:bg-ali-tertiary hover:-translate-y-3 hover:shadow-card-hover"
     >
       {/* Cover */}
       <div className="aspect-[3/2] overflow-hidden shrink-0">
@@ -76,7 +94,7 @@ function BlogCard({ post, colorIndex }: { post: Post; colorIndex: number }) {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
         ) : (
-          <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center text-4xl`}>
+          <div className={`w-full h-full bg-gradient-to-br ${placeholder} flex items-center justify-center text-4xl`}>
             ✍️
           </div>
         )}
@@ -89,7 +107,7 @@ function BlogCard({ post, colorIndex }: { post: Post; colorIndex: number }) {
             {post.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag.slug}
-                className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-white border border-stone-200 text-stone-500"
+                className="font-sans text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#ECE5E1] text-[#76737C]"
               >
                 {tag.name}
               </span>
@@ -97,21 +115,40 @@ function BlogCard({ post, colorIndex }: { post: Post; colorIndex: number }) {
           </div>
         )}
 
-        <h3 className="text-base font-semibold text-stone-900 leading-snug mb-2 group-hover:text-stone-600 transition-colors line-clamp-2">
+        <h3
+          className="font-heading text-[#1B1624] mb-2 line-clamp-2"
+          style={{
+            fontSize: "clamp(1.125rem,1.125rem + ((1vw - 0.2rem) * 0.455),1.375rem)",
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+            lineHeight: 1.3,
+          }}
+        >
           {post.title}
         </h3>
 
         {post.excerpt && (
-          <p className="text-sm text-stone-400 leading-relaxed line-clamp-2 flex-1 mb-4">
+          <p
+            className="font-sans text-[#76737C] leading-relaxed line-clamp-2 flex-1 mb-4"
+            style={{
+              fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)",
+              fontWeight: 500,
+            }}
+          >
             {post.excerpt}
           </p>
         )}
 
-        <div className="flex items-center justify-between mt-auto pt-3 border-t border-stone-100">
+        <div
+          className="flex items-center justify-between mt-auto pt-3"
+          style={{ borderTop: "1px solid #ECE5E1" }}
+        >
           {post.publishedAt && (
-            <time className="text-xs text-stone-400">{formatDate(post.publishedAt)}</time>
+            <time className="font-sans text-xs text-[#8D8A91] font-medium">
+              {formatDate(post.publishedAt)}
+            </time>
           )}
-          <span className="text-xs font-medium text-stone-400 group-hover:text-stone-700 transition-colors ml-auto">
+          <span className="font-sans text-xs font-medium text-[#8D8A91] group-hover:text-[#1B1624] transition-colors ml-auto">
             Read post →
           </span>
         </div>
