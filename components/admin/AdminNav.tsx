@@ -11,7 +11,7 @@ const navItems = [
   { href: "/admin/profile",   label: "Profile",       icon: "👤" },
 ];
 
-export default function AdminNav() {
+export default function AdminNav({ isCollapsed = false }: { isCollapsed?: boolean }) {
   const pathname = usePathname();
 
   function isActive(href: string) {
@@ -27,14 +27,15 @@ export default function AdminNav() {
           <Link
             key={href}
             href={href}
+            title={isCollapsed ? label : undefined}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
               isActive(href)
                 ? "bg-violet-50 text-violet-700"
                 : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-            }`}
+            } ${isCollapsed ? "justify-center" : ""}`}
           >
-            <span className="text-base w-5 text-center">{icon}</span>
-            {label}
+            <span className="text-base w-5 text-center flex-shrink-0">{icon}</span>
+            {!isCollapsed && <span>{label}</span>}
           </Link>
         ))}
       </nav>
@@ -43,18 +44,24 @@ export default function AdminNav() {
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors"
+          title={isCollapsed ? "Xem blog" : undefined}
+          className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors ${
+            isCollapsed ? "justify-center" : ""
+          }`}
         >
-          <span className="text-base w-5 text-center">↗</span>
-          Xem blog
+          <span className="text-base w-5 text-center flex-shrink-0">↗</span>
+          {!isCollapsed && <span>Xem blog</span>}
         </Link>
         <form action={logout}>
           <button
             type="submit"
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+            title={isCollapsed ? "Đăng xuất" : undefined}
+            className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors ${
+              isCollapsed ? "justify-center" : ""
+            }`}
           >
-            <span className="text-base w-5 text-center">⎋</span>
-            Đăng xuất
+            <span className="text-base w-5 text-center flex-shrink-0">⎋</span>
+            {!isCollapsed && <span>Đăng xuất</span>}
           </button>
         </form>
       </div>
