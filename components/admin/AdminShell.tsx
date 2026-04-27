@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { blogConfig } from "@/lib/config";
 import { getAllPostsForAdmin } from "@/lib/actions/posts";
 import { getProfile } from "@/lib/actions/profile";
 import AdminNav from "./AdminNav";
