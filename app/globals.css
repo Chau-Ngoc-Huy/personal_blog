@@ -15,10 +15,10 @@
   --primary:   #5DCDF1;
   --secondary: #FD976D;
   --tertiary:  #FDD46B;
+  --highlight: #38BD37;
   --accent:    #C9B1FB;
   --accent2:   #79D287;
 
-  /* ── Layout spacing ─────────────────────────────────── */
   --page-px:    clamp(3rem, 7vw, 6rem);
   --page-px-lg: clamp(2.25rem, 4vw, 4rem);
   --section-py: clamp(1rem, 4vw, 3.5rem);

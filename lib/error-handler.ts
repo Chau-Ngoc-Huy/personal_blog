@@ -16,6 +16,11 @@ export function createErrorResponse(
   error: unknown,
   defaultMessage: string = "Có lỗi xảy ra. Vui lòng thử lại."
 ): ActionResponse {
+  // Re-throw Next.js redirect errors to avoid logging them as real errors
+  if (error instanceof Error && error.digest?.startsWith("NEXT_REDIRECT")) {
+    throw error;
+  }
+
   let message = defaultMessage;
   let code: string | undefined;
 

@@ -15,12 +15,12 @@ interface Post {
 }
 
 const PLACEHOLDERS = [
-  "from-[#FDD46B]/30 to-[#FD976D]/20",
-  "from-[#5DCDF1]/20 to-[#C9B1FB]/20",
-  "from-[#C9B1FB]/20 to-[#5DCDF1]/20",
-  "from-[#79D287]/20 to-[#5DCDF1]/20",
-  "from-[#FD976D]/20 to-[#FDD46B]/30",
-  "from-[#F3EDE9] to-[#ECE5E1]",
+  { background: "linear-gradient(135deg, rgba(253, 212, 107, 0.3), rgba(253, 151, 109, 0.2))" },
+  { background: "linear-gradient(135deg, rgba(93, 205, 241, 0.2), rgba(201, 177, 251, 0.2))" },
+  { background: "linear-gradient(135deg, rgba(201, 177, 251, 0.2), rgba(93, 205, 241, 0.2))" },
+  { background: "linear-gradient(135deg, rgba(121, 210, 135, 0.2), rgba(93, 205, 241, 0.2))" },
+  { background: "linear-gradient(135deg, rgba(253, 151, 109, 0.2), rgba(253, 212, 107, 0.3))" },
+  { background: "linear-gradient(135deg, rgb(243, 237, 233), rgb(236, 229, 225))" },
 ];
 
 export default function BlogsSection({ posts }: { posts: Post[] }) {
@@ -94,7 +94,7 @@ function BlogCard({ post, colorIndex }: { post: Post; colorIndex: number }) {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
         ) : (
-          <div className={`w-full h-full bg-gradient-to-br ${placeholder} flex items-center justify-center text-4xl`}>
+          <div className="w-full h-full flex items-center justify-center text-4xl" style={placeholder}>
             ✍️
           </div>
         )}

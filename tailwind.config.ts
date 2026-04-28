@@ -25,7 +25,7 @@ const config: Config = {
           fg4:       "#8D8A91",
           primary:   "#5DCDF1",
           secondary: "#FD976D",
-          tertiary:  "#FDD46B",
+          tertiary:  "#38BD37",
           accent:    "#C9B1FB",
           accent2:   "#79D287",
         },

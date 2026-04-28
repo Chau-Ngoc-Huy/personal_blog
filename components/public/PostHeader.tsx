@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { formatDate } from "@/lib/utils";
 
 interface PostHeaderProps {
@@ -62,14 +61,15 @@ export default function PostHeader({
           {/* Meta row */}
           <div className="flex items-center gap-3 flex-wrap" style={{ fontSize: "0.875rem" }}>
             {profile.avatar ? (
-              <Image
-                src={profile.avatar}
-                alt={profile.displayName}
-                width={36}
-                height={36}
-                className="rounded-full object-cover"
-                style={{ width: 36, height: 36 }}
-              />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={profile.avatar}
+                  alt={profile.displayName}
+                  className="rounded-full object-cover"
+                  style={{ width: 36, height: 36 }}
+                />
+              </>
             ) : (
               <div
                 className="rounded-full bg-[#F3EDE9] flex items-center justify-center font-heading text-[#FD976D]"
@@ -99,13 +99,11 @@ export default function PostHeader({
                 maxWidth: "100%",
               }}
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={coverImage}
                 alt={title}
-                width={260}
-                height={340}
                 className="w-full h-full object-cover"
-                priority
               />
             </div>
           </div>

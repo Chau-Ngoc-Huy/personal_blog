@@ -35,8 +35,8 @@ export default function PostContent({
           >
             {excerpt && (
               <p
-                className="font-sans text-[#54505B] mb-8 border-l-4 border-[#FDD46B] pl-5"
-                style={{ fontSize: "1.125rem", lineHeight: 1.7, fontStyle: "italic" }}
+                className="font-sans text-[#54505B] mb-8 pl-5"
+                style={{ fontSize: "1.125rem", lineHeight: 1.7, fontStyle: "italic", borderLeft: "4px solid var(--highlight)" }}
               >
                 {excerpt}
               </p>

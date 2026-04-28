@@ -21,7 +21,7 @@ export default function AdminSidebarClient({ profile, stats }: AdminSidebarClien
       }`}
     >
       {/* Brand */}
-      <div className="px-5 py-5 border-b border-slate-100">
+      {/* <div className="px-5 py-5 border-b border-slate-100">
         <Link href="/admin/dashboard" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center text-white text-sm font-bold shrink-0">
             B
@@ -32,10 +32,10 @@ export default function AdminSidebarClient({ profile, stats }: AdminSidebarClien
             </span>
           )}
         </Link>
-      </div>
+      </div> */}
 
       {/* Toggle Button */}
-      <div className="px-3 py-3 border-b border-slate-100">
+      {/* <div className="px-3 py-3 border-b border-slate-100">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="w-full flex items-center justify-center px-3 py-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
@@ -43,7 +43,7 @@ export default function AdminSidebarClient({ profile, stats }: AdminSidebarClien
         >
           {isOpen ? "◀" : "▶"}
         </button>
-      </div>
+      </div> */}
 
       {/* Profile card with edit trigger */}
       {isOpen && (

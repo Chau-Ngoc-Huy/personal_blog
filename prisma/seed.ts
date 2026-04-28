@@ -21,7 +21,7 @@ const tags = [
   { name: "Productivity", slug: "productivity", color: "#5DCDF1" },
   { name: "YouTube",      slug: "youtube",      color: "#FD976D" },
   { name: "Studying",     slug: "studying",      color: "#79D287" },
-  { name: "Books",        slug: "books",         color: "#FDD46B" },
+  { name: "Books",        slug: "books",         color: "#38BD37" },
   { name: "Business",     slug: "business",      color: "#C9B1FB" },
 ];
 

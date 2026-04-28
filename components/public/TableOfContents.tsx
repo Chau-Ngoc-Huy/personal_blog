@@ -73,7 +73,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
                       lineHeight: 1.5,
                       fontWeight: activeId === h.id ? 600 : 400,
                       color: activeId === h.id ? "#1B1624" : "#76737C",
-                      background: activeId === h.id ? "#FDD46B" : "transparent",
+                      background: activeId === h.id ? "var(--highlight)" : "transparent",
                       textDecoration: "none",
                     }}
                   >

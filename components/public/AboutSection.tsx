@@ -93,7 +93,7 @@ export default function AboutSection({ profile }: { profile: Profile }) {
               <span className="relative z-10">{profile.displayName}</span>
               <span
                 className="absolute left-0 w-full rounded-sm -z-0"
-                style={{ bottom: "0.08em", height: "0.28em", background: "#FDD46B", opacity: 0.7 }}
+                style={{ bottom: "0.08em", height: "0.28em", background: "var(--highlight)", opacity: 0.7 }}
               />
             </span>
           </h2>

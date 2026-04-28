@@ -1,5 +1,6 @@
 "use server";
 
+import type { AdminProfile } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 interface UpdateProfileInput {
@@ -15,19 +16,35 @@ interface UpdateProfileInput {
   };
 }
 
+const fallbackProfile: AdminProfile = {
+  id: "",
+  displayName: "Admin",
+  sayHi: null,
+  bio: null,
+  avatar: null,
+  email: null,
+  socialLinks: null,
+  updatedAt: new Date(0),
+};
+
 // Get or create profile (singleton)
 export async function getProfile() {
-  let profile = await prisma.adminProfile.findFirst();
+  try {
+    let profile = await prisma.adminProfile.findFirst();
 
-  if (!profile) {
-    profile = await prisma.adminProfile.create({
-      data: {
-        displayName: "Admin",
-      },
-    });
+    if (!profile) {
+      profile = await prisma.adminProfile.create({
+        data: {
+          displayName: "Admin",
+        },
+      });
+    }
+
+    return profile;
+  } catch (error) {
+    console.error("Get profile error:", error);
+    return fallbackProfile;
   }
-
-  return profile;
 }
 
 // Update profile

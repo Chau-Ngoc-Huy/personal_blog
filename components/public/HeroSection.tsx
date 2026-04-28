@@ -59,7 +59,7 @@ export default function HeroSection({ profile }: { profile: Profile }) {
               <span className="relative z-10">{profile.displayName}</span>
               <span
                 className="absolute left-0 w-full rounded-sm -z-0"
-                style={{ bottom: "0.1em", height: "0.3em", background: "#FDD46B", opacity: 0.7 }}
+                style={{ bottom: "0.1em", height: "0.3em", background: "var(--highlight)", opacity: 0.7 }}
               />
             </span>
           </h1>

@@ -19,6 +19,10 @@ const dmSerif = DM_Serif_Display({
 export const metadata: Metadata = {
   title: "Doan Arlo",
   description: "Blog cá nhân",
+  icons: {
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
