@@ -17,7 +17,8 @@ export function createErrorResponse(
   defaultMessage: string = "Có lỗi xảy ra. Vui lòng thử lại."
 ): ActionResponse {
   // Re-throw Next.js redirect errors to avoid logging them as real errors
-  if (error instanceof Error && error.digest?.startsWith("NEXT_REDIRECT")) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (error instanceof Error && (error as any).digest?.startsWith("NEXT_REDIRECT")) {
     throw error;
   }
 

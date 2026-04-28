@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+// import { useState } from "react";
 import { getProfile } from "@/lib/actions/profile";
 import AdminNav from "./AdminNav";
 import ProfileSidebarCard from "./ProfileSidebarCard";
@@ -12,7 +11,8 @@ interface AdminSidebarClientProps {
 }
 
 export default function AdminSidebarClient({ profile, stats }: AdminSidebarClientProps) {
-  const [isOpen, setIsOpen] = useState(true);
+  // const [isOpen, setIsOpen] = useState(true);
+  const isOpen = true; // Force open for now, as collapse is not fully implemented yet
 
   return (
     <aside
