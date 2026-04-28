@@ -24,7 +24,7 @@ export default async function EditPostPage({ params }: Props) {
   return (
     <div className="p-8 h-screen flex flex-col">
       <div className="mb-8 shrink-0">
-        <h1 className="text-2xl font-bold text-slate-900">Sửa bài viết</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Edit Post</h1>
         <p className="text-sm text-slate-400 mt-0.5 truncate max-w-md">{post.title}</p>
       </div>
       <div className="flex-1 flex overflow-y-auto">

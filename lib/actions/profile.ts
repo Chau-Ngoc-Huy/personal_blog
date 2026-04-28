@@ -10,8 +10,8 @@ interface UpdateProfileInput {
   avatar?: string;
   email?: string;
   socialLinks?: {
-    twitter?: string;
-    github?: string;
+    instagram?: string;
+    facebook?: string;
     linkedin?: string;
   };
 }
@@ -71,6 +71,6 @@ export async function updateProfile(data: UpdateProfileInput) {
     return { success: true, profile: updated };
   } catch (error) {
     console.error("Update profile error:", error);
-    return { success: false, error: "Cập nhật profile thất bại" };
+    return { success: false, error: "Failed to update profile" };
   }
 }

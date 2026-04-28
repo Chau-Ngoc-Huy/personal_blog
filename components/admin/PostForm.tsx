@@ -13,7 +13,7 @@ const NovelEditor = dynamic(() => import("./NovelEditor"), {
   ssr: false,
   loading: () => (
     <div className="border border-slate-200 rounded-xl h-[400px] flex items-center justify-center text-slate-400 text-sm bg-slate-50">
-      Đang tải editor...
+      Loading editor...
     </div>
   ),
 });
@@ -73,13 +73,13 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
         } else if (result?.success) {
           setSuccess(
             actionType === "publish"
-              ? "Bài viết đã được xuất bản!"
-              : "Bài viết đã được lưu!"
+              ? "Post published!"
+              : "Post saved!"
           );
           setPendingAction(null);
         }
       } catch {
-        setError("Có lỗi xảy ra. Vui lòng thử lại.");
+        setError("Something went wrong. Please try again.");
         setPendingAction(null);
       }
     });
@@ -96,7 +96,7 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
               type="text"
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              placeholder="Tiêu đề bài viết..."
+              placeholder="Post title..."
               className="w-full text-3xl font-bold text-slate-900 focus:outline-none placeholder:text-slate-300 border-b-2 border-transparent hover:border-slate-200 focus:border-violet-500 pb-3 transition-colors"
             />
           </div>
@@ -104,7 +104,7 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
           {/* Content Editor */}
           <div className="flex-1 flex flex-col overflow-visible">
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">
-              Nội dung *
+              Content *
             </label>
             <div className="flex-1 overflow-y-auto">
               <NovelEditor
@@ -123,8 +123,8 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
               className="px-5 py-2.5 text-sm font-medium border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors disabled:opacity-50 text-slate-600"
             >
               {isPending && pendingAction === "draft"
-                ? "Đang lưu..."
-                : "Lưu nháp"}
+                ? "Saving..."
+                : "Save draft"}
             </button>
             <button
               type="button"
@@ -133,7 +133,7 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
               className="px-5 py-2.5 text-sm font-medium bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-colors disabled:opacity-50 shadow-sm shadow-violet-200"
             >
               {isPending && pendingAction === "publish"
-                ? "Đang đăng..."
+                ? "Publishing..."
                 : "Publish"}
             </button>
 
@@ -156,14 +156,14 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
               }`}
             >
               <span>👁</span>
-              {showPreview ? "Ẩn preview" : "Preview"}
+              {showPreview ? "Hide preview" : "Preview"}
             </button>
 
             <a
               href="/admin/dashboard"
               className="text-sm text-slate-400 hover:text-slate-600 transition-colors ml-2"
             >
-              Hủy
+              Cancel
             </a>
           </div>
         </div>
@@ -184,7 +184,7 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50 rounded-t-2xl">
                 <span className="text-sm font-semibold text-slate-700">
-                  📄 Preview Bài Viết
+                  📄 Post Preview
                 </span>
                 <button
                   onClick={() => setShowPreview(false)}

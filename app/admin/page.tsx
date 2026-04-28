@@ -11,7 +11,7 @@ export default async function AdminLoginPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 w-full max-w-sm p-8">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Admin</h1>
-          <p className="text-gray-400 text-sm mt-1">Đăng nhập để quản lý blog</p>
+          <p className="text-gray-400 text-sm mt-1">Sign in to manage the blog</p>
         </div>
         <LoginForm />
       </div>

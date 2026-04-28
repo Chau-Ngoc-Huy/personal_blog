@@ -13,7 +13,7 @@ export async function login(formData: FormData): Promise<ActionResponse> {
     const adminPass = process.env.ADMIN_PASS || "12345678";
 
     if (username !== adminUser || password !== adminPass) {
-      return createErrorResponse("Tên đăng nhập hoặc mật khẩu không đúng");
+      return createErrorResponse("Incorrect username or password");
     }
 
     const session = await getSession();
@@ -22,7 +22,7 @@ export async function login(formData: FormData): Promise<ActionResponse> {
 
     redirect("/admin/dashboard");
   } catch (error) {
-    return createErrorResponse(error, "Lỗi khi đăng nhập");
+    return createErrorResponse(error, "Error signing in");
   }
 }
 

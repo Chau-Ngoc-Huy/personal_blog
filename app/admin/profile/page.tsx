@@ -15,8 +15,8 @@ export default async function ProfilePage() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900">Profile Cá nhân</h1>
-        <p className="text-slate-500 mt-1">Chỉnh sửa thông tin về bạn</p>
+        <h1 className="text-3xl font-bold text-slate-900">Profile</h1>
+        <p className="text-slate-500 mt-1">Edit your personal information</p>
       </div>
 
       <div className="bg-white rounded-lg border border-slate-200 p-8">

@@ -1,3 +1,5 @@
+import SocialLinkIcon from "./SocialLinkIcon";
+
 interface Profile {
   displayName: string;
   bio: string | null;
@@ -6,10 +8,16 @@ interface Profile {
 }
 
 interface SocialLinks {
-  twitter?: string;
-  github?: string;
+  instagram?: string;
+  facebook?: string;
   linkedin?: string;
+  youtube?: string;
+  tiktok?: string;
+  x?: string;
+  twitter?: string;
 }
+
+type SocialKey = keyof SocialLinks;
 
 export default function AboutSection({ profile }: { profile: Profile }) {
   let socials: SocialLinks = {};
@@ -23,6 +31,16 @@ export default function AboutSection({ profile }: { profile: Profile }) {
     .join("")
     .slice(0, 2)
     .toUpperCase();
+
+  const socialItems: Array<{ key: SocialKey; label: string; icon: "youtube" | "instagram" | "linkedin" | "tiktok" | "x" | "facebook" }> = [
+    { key: "youtube", label: "YouTube", icon: "youtube" },
+    { key: "instagram", label: "Instagram", icon: "instagram" },
+    { key: "linkedin", label: "LinkedIn", icon: "linkedin" },
+    { key: "tiktok", label: "TikTok", icon: "tiktok" },
+    { key: "x", label: "X", icon: "x" },
+    { key: "twitter", label: "X", icon: "x" },
+    { key: "facebook", label: "Facebook", icon: "facebook" },
+  ];
 
   return (
     <section
@@ -117,41 +135,22 @@ export default function AboutSection({ profile }: { profile: Profile }) {
             <p className="font-sans text-[#8D8A91] italic">No bio yet.</p>
           )}
 
-          {(socials.twitter || socials.github || socials.linkedin) && (
+          {(socials.instagram || socials.facebook || socials.linkedin || socials.youtube || socials.tiktok || socials.x || socials.twitter) && (
             <div className="flex items-center flex-wrap mt-8" style={{ gap: "1.5rem" }}>
-              {socials.twitter && (
-                <a
-                  href={socials.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans font-medium text-[#76737C] hover:text-[#1B1624] transition-colors"
-                  style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
-                >
-                  Twitter ↗
-                </a>
-              )}
-              {socials.github && (
-                <a
-                  href={socials.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans font-medium text-[#76737C] hover:text-[#1B1624] transition-colors"
-                  style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
-                >
-                  GitHub ↗
-                </a>
-              )}
-              {socials.linkedin && (
-                <a
-                  href={socials.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans font-medium text-[#76737C] hover:text-[#1B1624] transition-colors"
-                  style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
-                >
-                  LinkedIn ↗
-                </a>
-              )}
+              {socialItems.map(({ key, label, icon }) => {
+                const href = socials[key];
+
+                return href ? (
+                  <SocialLinkIcon
+                    key={key}
+                    href={href}
+                    label={label}
+                    name={icon}
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#ECE5E1] text-[#060C39] transition-colors hover:bg-[#E2D8D2]"
+                    iconClassName="h-5 w-5"
+                  />
+                ) : null;
+              })}
             </div>
           )}
         </div>

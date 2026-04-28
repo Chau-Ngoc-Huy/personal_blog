@@ -1,3 +1,5 @@
+import SocialLinkIcon from "./SocialLinkIcon";
+
 interface AuthorBoxProps {
   profile: {
     displayName: string;
@@ -48,46 +50,28 @@ export default function AuthorBox({ profile, socialLinks }: AuthorBoxProps) {
       {/* Social links */}
       {Object.keys(socialLinks).length > 0 && (
         <div className="flex gap-4 flex-wrap justify-center">
-          {socialLinks.twitter && (
-            <a
-              href={socialLinks.twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-[#76737C] hover:text-[#1B1624] transition-colors text-sm"
-            >
-              Twitter
-            </a>
-          )}
-          {socialLinks.github && (
-            <a
-              href={socialLinks.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-[#76737C] hover:text-[#1B1624] transition-colors text-sm"
-            >
-              GitHub
-            </a>
-          )}
-          {socialLinks.linkedin && (
-            <a
-              href={socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-[#76737C] hover:text-[#1B1624] transition-colors text-sm"
-            >
-              LinkedIn
-            </a>
-          )}
-          {socialLinks.youtube && (
-            <a
-              href={socialLinks.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-[#76737C] hover:text-[#1B1624] transition-colors text-sm"
-            >
-              YouTube
-            </a>
-          )}
+          {[
+            { key: "youtube", label: "YouTube", icon: "youtube" as const },
+            { key: "instagram", label: "Instagram", icon: "instagram" as const },
+            { key: "linkedin", label: "LinkedIn", icon: "linkedin" as const },
+            { key: "tiktok", label: "TikTok", icon: "tiktok" as const },
+            { key: "x", label: "X", icon: "x" as const },
+            { key: "twitter", label: "X", icon: "x" as const },
+            { key: "facebook", label: "Facebook", icon: "facebook" as const },
+          ].map(({ key, label, icon }) => {
+            const href = socialLinks[key];
+
+            return href ? (
+              <SocialLinkIcon
+                key={key}
+                href={href}
+                label={label}
+                name={icon}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#ECE5E1] text-[#060C39] transition-colors hover:bg-[#E2D8D2]"
+                iconClassName="h-5 w-5"
+              />
+            ) : null;
+          })}
         </div>
       )}
     </div>

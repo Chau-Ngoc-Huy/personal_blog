@@ -49,7 +49,7 @@ export default function PostPreview({
       >
         <Navbar name={profile?.displayName || "Author"} transparent />
         <PostHeader
-          title={title || "Tiêu đề bài viết..."}
+          title={title || "Post title..."}
           tags={tagList}
           coverImage={coverImage}
           profile={profile || { displayName: "Author", avatar: null }}

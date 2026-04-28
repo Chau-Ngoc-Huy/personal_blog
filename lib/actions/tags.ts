@@ -26,7 +26,7 @@ export async function getAllTags() {
     return { success: true, tags };
   } catch (error) {
     console.error("Get tags error:", error);
-    return { success: false, tags: [], error: "Lấy tags thất bại" };
+    return { success: false, tags: [], error: "Failed to load tags" };
   }
 }
 
@@ -35,7 +35,7 @@ export async function createTag(input: CreateTagInput) {
   try {
     // Validate
     if (!input.name || input.name.trim().length === 0) {
-      return { success: false, error: "Tên tag không được để trống" };
+      return { success: false, error: "Tag name cannot be empty" };
     }
 
     // Generate slug from name
@@ -51,7 +51,7 @@ export async function createTag(input: CreateTagInput) {
     });
 
     if (existing) {
-      return { success: false, error: `Tag "${input.name}" đã tồn tại` };
+      return { success: false, error: `Tag "${input.name}" already exists` };
     }
 
     const tag = await prisma.tag.create({
@@ -65,7 +65,7 @@ export async function createTag(input: CreateTagInput) {
     return { success: true, tag };
   } catch (error) {
     console.error("Create tag error:", error);
-    return { success: false, error: "Tạo tag thất bại" };
+    return { success: false, error: "Failed to create tag" };
   }
 }
 
@@ -73,7 +73,7 @@ export async function createTag(input: CreateTagInput) {
 export async function updateTag(input: UpdateTagInput) {
   try {
     if (!input.name || input.name.trim().length === 0) {
-      return { success: false, error: "Tên tag không được để trống" };
+      return { success: false, error: "Tag name cannot be empty" };
     }
 
     const slug = input.name
@@ -91,7 +91,7 @@ export async function updateTag(input: UpdateTagInput) {
     });
 
     if (existing) {
-      return { success: false, error: `Tag "${input.name}" đã tồn tại` };
+      return { success: false, error: `Tag "${input.name}" already exists` };
     }
 
     const tag = await prisma.tag.update({
@@ -106,7 +106,7 @@ export async function updateTag(input: UpdateTagInput) {
     return { success: true, tag };
   } catch (error) {
     console.error("Update tag error:", error);
-    return { success: false, error: "Cập nhật tag thất bại" };
+    return { success: false, error: "Failed to update tag" };
   }
 }
 
@@ -126,6 +126,6 @@ export async function deleteTag(id: string) {
     return { success: true, tag };
   } catch (error) {
     console.error("Delete tag error:", error);
-    return { success: false, error: "Xóa tag thất bại" };
+    return { success: false, error: "Failed to delete tag" };
   }
 }

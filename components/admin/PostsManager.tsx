@@ -45,13 +45,13 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
       {/* ── Header ─────────────────────────────────── */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Bài viết</h1>
-          <p className="text-sm text-slate-400 mt-0.5">{posts.length} bài viết</p>
+          <h1 className="text-2xl font-bold text-slate-900">Posts</h1>
+          <p className="text-sm text-slate-400 mt-0.5">{posts.length} posts</p>
         </div>
         <Link href="/admin/posts/new"
           className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors">
           <span className="text-base leading-none">+</span>
-          Bài viết mới
+          New Post
         </Link>
       </div>
 
@@ -62,7 +62,7 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
           <input
             type="text"
-            placeholder="Tìm theo tiêu đề, tag..."
+            placeholder="Search by title or tag..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
@@ -92,7 +92,7 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
       {filtered.length === 0 && (
         <div className="text-center py-20 text-slate-400">
           <p className="text-4xl mb-3">🔍</p>
-          <p className="text-sm">Không tìm thấy bài viết nào.</p>
+          <p className="text-sm">No posts found.</p>
         </div>
       )}
 
@@ -221,9 +221,9 @@ function DeleteBtn({ id, title, small }: { id: string; title: string; small?: bo
     await deletePost(id);
   }
   return (
-    <button onClick={handleDelete}
+      <button onClick={handleDelete}
       className={`text-xs font-medium text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors ${small ? "px-2 py-1" : "px-3 py-1.5"}`}>
-      Xóa
+      Delete
     </button>
   );
 }
@@ -232,7 +232,7 @@ function DeleteBtn({ id, title, small }: { id: string; title: string; small?: bo
 function CalendarView({ posts }: { posts: Post[] }) {
   const grouped = posts.reduce<Record<string, Post[]>>((acc, post) => {
     const date = post.publishedAt ?? post.createdAt;
-    const key = new Date(date).toLocaleDateString("vi-VN", { month: "long", year: "numeric" });
+    const key = new Date(date).toLocaleDateString("en-US", { month: "long", year: "numeric" });
     if (!acc[key]) acc[key] = [];
     acc[key].push(post);
     return acc;
@@ -245,7 +245,7 @@ function CalendarView({ posts }: { posts: Post[] }) {
           <div className="flex items-center gap-3 mb-4">
             <h3 className="text-sm font-semibold text-slate-700 capitalize">{monthYear}</h3>
             <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-400">{monthPosts.length} bài</span>
+            <span className="text-xs text-slate-400">{monthPosts.length} posts</span>
           </div>
           <div className="space-y-3">
             {monthPosts.map(post => {
@@ -259,7 +259,7 @@ function CalendarView({ posts }: { posts: Post[] }) {
                       {new Date(date).getDate()}
                     </span>
                     <span className="text-[9px] font-medium text-violet-400 uppercase mt-0.5">
-                      {new Date(date).toLocaleDateString("vi-VN", { weekday: "short" })}
+                      {new Date(date).toLocaleDateString("en-US", { weekday: "short" })}
                     </span>
                   </div>
                   {/* Cover thumb */}

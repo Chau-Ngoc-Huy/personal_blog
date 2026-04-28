@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SocialLinkIcon from "./SocialLinkIcon";
 
 interface Profile {
   displayName: string;
@@ -7,9 +8,13 @@ interface Profile {
 }
 
 interface SocialLinks {
-  twitter?: string;
-  github?: string;
+  instagram?: string;
+  facebook?: string;
   linkedin?: string;
+  youtube?: string;
+  tiktok?: string;
+  x?: string;
+  twitter?: string;
 }
 
 export default function SiteFooter({ profile }: { profile: Profile }) {
@@ -18,8 +23,27 @@ export default function SiteFooter({ profile }: { profile: Profile }) {
     if (profile.socialLinks) socials = JSON.parse(profile.socialLinks);
   } catch {}
 
-  const hasConnect = socials.twitter || socials.github || socials.linkedin || profile.email;
+  const hasConnect = Boolean(
+    socials.instagram ||
+      socials.facebook ||
+      socials.linkedin ||
+      socials.youtube ||
+      socials.tiktok ||
+      socials.x ||
+      socials.twitter ||
+      profile.email
+  );
   const year = new Date().getFullYear();
+
+  const socialItems: Array<{ key: keyof SocialLinks; label: string; icon: "youtube" | "instagram" | "linkedin" | "tiktok" | "x" | "facebook" }> = [
+    { key: "youtube", label: "YouTube", icon: "youtube" },
+    { key: "instagram", label: "Instagram", icon: "instagram" },
+    { key: "linkedin", label: "LinkedIn", icon: "linkedin" },
+    { key: "tiktok", label: "TikTok", icon: "tiktok" },
+    { key: "x", label: "X", icon: "x" },
+    { key: "twitter", label: "X", icon: "x" },
+    { key: "facebook", label: "Facebook", icon: "facebook" },
+  ];
 
   return (
     <footer className="bg-[#F9F6F3]" style={{ marginTop: "clamp(0.75rem,2vw,1.5rem)" }}>
@@ -77,9 +101,22 @@ export default function SiteFooter({ profile }: { profile: Profile }) {
               <p className="font-sans text-[11px] uppercase tracking-[0.18em] text-[#8D8A91] font-semibold mb-1">
                 Connect
               </p>
-              {socials.twitter  && <ExternalLink href={socials.twitter}  label="Twitter" />}
-              {socials.github   && <ExternalLink href={socials.github}   label="GitHub" />}
-              {socials.linkedin && <ExternalLink href={socials.linkedin} label="LinkedIn" />}
+              <div className="flex flex-wrap items-center gap-2">
+                {socialItems.map(({ key, label, icon }) => {
+                  const href = socials[key];
+
+                  return href ? (
+                    <SocialLinkIcon
+                      key={key}
+                      href={href}
+                      label={label}
+                      name={icon}
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#ECE5E1] text-[#060C39] transition-colors hover:bg-[#E2D8D2]"
+                      iconClassName="h-5 w-5"
+                    />
+                  ) : null;
+                })}
+              </div>
               {profile.email    && <ExternalLink href={`mailto:${profile.email}`} label="Email" />}
             </div>
           )}

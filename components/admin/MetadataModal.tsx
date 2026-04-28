@@ -69,12 +69,12 @@ export default function MetadataModal({
           setTagOptions(result.tags);
         } else {
           setTagOptions([]);
-          setTagsError(result.error || "Lấy danh sách tags thất bại");
+          setTagsError(result.error || "Failed to load tags");
         }
       } catch {
         if (!active) return;
         setTagOptions([]);
-        setTagsError("Lấy danh sách tags thất bại");
+        setTagsError("Failed to load tags");
       } finally {
         if (active) {
           setLoadingTags(false);
@@ -125,7 +125,7 @@ export default function MetadataModal({
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] bg-white rounded-2xl shadow-2xl z-50 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100 bg-slate-50 rounded-t-2xl">
-          <h2 className="text-lg font-semibold text-slate-900">Metadata Bài Viết</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Post Metadata</h2>
           <button
             onClick={onClose}
             className="text-slate-400 hover:text-slate-600 text-2xl leading-none"
@@ -158,13 +158,13 @@ export default function MetadataModal({
           {/* Excerpt */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-              Tóm tắt
+              Summary
             </label>
             <textarea
               value={excerpt}
               onChange={(e) => onExcerptChange(e.target.value)}
               rows={3}
-              placeholder="Đoạn mô tả ngắn hiển thị ngoài trang chủ..."
+              placeholder="Short summary shown on the homepage..."
               className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none bg-white"
             />
           </div>
@@ -183,7 +183,7 @@ export default function MetadataModal({
                     type="button"
                     onClick={() => toggleTag(tag)}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-violet-50 text-violet-700 border border-violet-200 hover:bg-violet-100 transition-colors"
-                    title="Bỏ chọn tag"
+                    title="Remove tag"
                   >
                     <span>{tag}</span>
                     <span aria-hidden="true">×</span>
@@ -196,7 +196,7 @@ export default function MetadataModal({
               <div className="max-h-56 overflow-y-auto p-3 space-y-2">
                 {loadingTags ? (
                   <p className="text-sm text-slate-400 px-1 py-2">
-                    Đang tải tags...
+                    Loading tags...
                   </p>
                 ) : tagOptions.length > 0 ? (
                   tagOptions.map((tag) => {
@@ -235,10 +235,10 @@ export default function MetadataModal({
                 ) : (
                   <div className="px-1 py-2 space-y-2">
                     <p className="text-sm text-slate-400">
-                      Chưa có tag nào để chọn.
+                      No tags available.
                     </p>
                     <p className="text-xs text-slate-400">
-                      Tạo tags tại trang quản lý tags rồi quay lại chọn ở đây.
+                      Create tags in the tag manager and come back here.
                     </p>
                   </div>
                 )}
@@ -250,14 +250,14 @@ export default function MetadataModal({
             )}
 
             <p className="text-xs text-slate-400 mt-1.5">
-              Chọn nhiều tag từ danh sách, giá trị vẫn được lưu dưới dạng chuỗi phân cách bằng dấu phẩy.
+              Select multiple tags from the list. The value is still stored as a comma-separated string.
             </p>
           </div>
 
           {/* Cover Image */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-              Ảnh bìa (URL)
+              Cover image (URL)
             </label>
             <input
               type="url"
@@ -280,10 +280,10 @@ export default function MetadataModal({
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center px-4 text-center">
                     <p className="text-sm font-medium text-slate-500">
-                      Không tải được ảnh từ URL này.
+                      Could not load the image from this URL.
                     </p>
                     <p className="mt-1 text-xs text-slate-400">
-                      Host có thể đang chặn nhúng trực tiếp hoặc ảnh đã hết hạn.
+                      The host may be blocking hotlinking or the image may have expired.
                     </p>
                   </div>
                 )}
@@ -298,7 +298,7 @@ export default function MetadataModal({
             onClick={onClose}
             className="px-5 py-2.5 text-sm font-medium border border-slate-200 rounded-xl hover:bg-white transition-colors text-slate-600"
           >
-            Đóng
+            Close
           </button>
         </div>
       </div>

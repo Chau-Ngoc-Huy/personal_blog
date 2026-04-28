@@ -15,12 +15,12 @@ export async function createPost(formData: FormData): Promise<ActionResponse> {
     const action = formData.get("action") as string;
 
     if (!title || !slug || !content) {
-      return createErrorResponse("Title, slug và nội dung là bắt buộc");
+      return createErrorResponse("Title, slug, and content are required");
     }
 
     const existing = await prisma.post.findUnique({ where: { slug } });
     if (existing) {
-      return createErrorResponse("Slug đã tồn tại, vui lòng chọn slug khác");
+      return createErrorResponse("That slug already exists. Please choose another one");
     }
 
     const status = action === "publish" ? "published" : "draft";
@@ -49,7 +49,7 @@ export async function createPost(formData: FormData): Promise<ActionResponse> {
 
     redirect("/admin/dashboard");
   } catch (error) {
-    return createErrorResponse(error, "Lỗi khi tạo bài viết");
+    return createErrorResponse(error, "Error creating post");
   }
 }
 
@@ -63,12 +63,12 @@ export async function updatePost(id: string, formData: FormData): Promise<Action
     const action = formData.get("action") as string;
 
     if (!title || !slug || !content) {
-      return createErrorResponse("Title, slug và nội dung là bắt buộc");
+      return createErrorResponse("Title, slug, and content are required");
     }
 
     const existing = await prisma.post.findUnique({ where: { slug } });
     if (existing && existing.id !== id) {
-      return createErrorResponse("Slug đã tồn tại, vui lòng chọn slug khác");
+      return createErrorResponse("That slug already exists. Please choose another one");
     }
 
     const current = await prisma.post.findUnique({ where: { id } });
@@ -107,7 +107,7 @@ export async function updatePost(id: string, formData: FormData): Promise<Action
 
     redirect("/admin/dashboard");
   } catch (error) {
-    return createErrorResponse(error, "Lỗi khi cập nhật bài viết");
+    return createErrorResponse(error, "Error updating post");
   }
 }
 
@@ -116,7 +116,7 @@ export async function deletePost(id: string): Promise<ActionResponse> {
     await prisma.post.delete({ where: { id } });
     redirect("/admin/dashboard");
   } catch (error) {
-    return createErrorResponse(error, "Lỗi khi xóa bài viết");
+    return createErrorResponse(error, "Error deleting post");
   }
 }
 
@@ -128,7 +128,7 @@ export async function getPublishedPosts() {
       orderBy: { publishedAt: "desc" },
     });
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách bài viết:", error);
+    console.error("Error fetching posts:", error);
     return [];
   }
 }
@@ -140,7 +140,7 @@ export async function getPostBySlug(slug: string) {
       include: { tags: true },
     });
   } catch (error) {
-    console.error("Lỗi khi lấy bài viết:", error);
+    console.error("Error fetching post:", error);
     return null;
   }
 }
@@ -152,7 +152,7 @@ export async function getAllPostsForAdmin() {
       orderBy: { createdAt: "desc" },
     });
   } catch (error) {
-    console.error("Lỗi khi lấy danh sách bài viết:", error);
+    console.error("Error fetching admin posts:", error);
     return [];
   }
 }
@@ -164,7 +164,7 @@ export async function getPostById(id: string) {
       include: { tags: true },
     });
   } catch (error) {
-    console.error("Lỗi khi lấy bài viết:", error);
+    console.error("Error fetching post by ID:", error);
     return null;
   }
 }

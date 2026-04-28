@@ -6,9 +6,9 @@ import { logout } from "@/lib/actions/auth";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard",    icon: "▦" },
-  { href: "/admin/posts/new", label: "Bài viết mới", icon: "+" },
+  { href: "/admin/posts/new", label: "New Post", icon: "+" },
   { href: "/admin/tags",      label: "Tags",          icon: "🏷️" },
-  { href: "/admin/profile",   label: "Profile",       icon: "👤" },
+  // { href: "/admin/profile",   label: "Profile",       icon: "👤" },
 ];
 
 export default function AdminNav({ isCollapsed = false }: { isCollapsed?: boolean }) {
@@ -44,24 +44,24 @@ export default function AdminNav({ isCollapsed = false }: { isCollapsed?: boolea
         <Link
           href="/"
           target="_blank"
-          title={isCollapsed ? "Xem blog" : undefined}
+          title={isCollapsed ? "View blog" : undefined}
           className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors ${
             isCollapsed ? "justify-center" : ""
           }`}
         >
           <span className="text-base w-5 text-center flex-shrink-0">↗</span>
-          {!isCollapsed && <span>Xem blog</span>}
+          {!isCollapsed && <span>View blog</span>}
         </Link>
         <form action={logout}>
           <button
             type="submit"
-            title={isCollapsed ? "Đăng xuất" : undefined}
+            title={isCollapsed ? "Log out" : undefined}
             className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors ${
               isCollapsed ? "justify-center" : ""
             }`}
           >
             <span className="text-base w-5 text-center flex-shrink-0">⎋</span>
-            {!isCollapsed && <span>Đăng xuất</span>}
+            {!isCollapsed && <span>Log out</span>}
           </button>
         </form>
       </div>

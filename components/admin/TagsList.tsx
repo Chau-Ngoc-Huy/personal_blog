@@ -26,7 +26,7 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
   const [error, setError] = useState("");
 
   async function handleDelete(tag: Tag) {
-    if (!confirm(`Xóa tag "${tag.name}"?`)) return;
+    if (!confirm(`Delete tag "${tag.name}"?`)) return;
 
     setDeleting(tag.id);
     setError("");
@@ -36,10 +36,10 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
       if (result.success) {
         onUpdate();
       } else {
-        setError(result.error || "Xóa thất bại");
+        setError(result.error || "Delete failed");
       }
     } catch {
-      setError("Lỗi khi xóa");
+      setError("Error deleting tag");
     } finally {
       setDeleting(null);
     }
@@ -49,7 +49,7 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-slate-900">Tags / Chủ đề</h2>
+        <h2 className="text-2xl font-bold text-slate-900">Tags</h2>
         <button
           onClick={() => {
             setSelectedTag(null);
@@ -57,7 +57,7 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
           }}
           className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors"
         >
-          + Tag mới
+            + New Tag
         </button>
       </div>
 
@@ -71,7 +71,7 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
       {/* Empty state */}
       {tags.length === 0 && (
         <div className="text-center py-12 bg-slate-50 rounded-lg border border-slate-200">
-          <p className="text-slate-400">Chưa có tag nào</p>
+          <p className="text-slate-400">No tags yet</p>
         </div>
       )}
 
@@ -82,19 +82,19 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
                 <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
-                  Tên
+                  Name
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
                   Slug
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
-                  Màu
+                  Color
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
-                  Bài viết
+                  Posts
                 </th>
                 <th className="px-6 py-3 text-right text-sm font-semibold text-slate-700">
-                  Hành động
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -132,14 +132,14 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
                         }}
                         className="px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:text-violet-600 hover:bg-violet-50 rounded transition-colors"
                       >
-                        ✏️ Sửa
+                        ✏️ Edit
                       </button>
                       <button
                         onClick={() => handleDelete(tag)}
                         disabled={deleting === tag.id}
                         className="px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors disabled:opacity-50"
                       >
-                        🗑️ Xóa
+                        🗑️ Delete
                       </button>
                     </div>
                   </td>

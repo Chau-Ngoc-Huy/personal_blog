@@ -50,7 +50,7 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
       CodeBlockLowlight.configure({ lowlight }),
       Image.configure({ inline: false }),
       Link.configure({ openOnClick: false }),
-      Placeholder.configure({ placeholder: "Bắt đầu viết bài... (Hỗ trợ paste ảnh, link, code)" }),
+      Placeholder.configure({ placeholder: "Start writing... (Supports pasted images, links, and code)" }),
     ],
     content: initialContent ?? "",
     onUpdate({ editor }) {
@@ -67,12 +67,12 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
   if (!editor) return null;
 
   function addImage() {
-    const url = window.prompt("URL ảnh:");
+    const url = window.prompt("Image URL:");
     if (url) editor?.chain().focus().setImage({ src: url }).run();
   }
 
   function setLink() {
-    const url = window.prompt("URL link:", editor?.getAttributes("link").href);
+    const url = window.prompt("Link URL:", editor?.getAttributes("link").href);
     if (url === null) return;
     if (url === "") {
       editor?.chain().focus().unsetLink().run();
@@ -168,7 +168,7 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
         <ToolbarButton onClick={setLink} active={editor.isActive("link")} title="Link">
           🔗
         </ToolbarButton>
-        <ToolbarButton onClick={addImage} active={false} title="Ảnh">
+        <ToolbarButton onClick={addImage} active={false} title="Image">
           🖼
         </ToolbarButton>
         <span className="w-px h-4 bg-gray-200 mx-1" />

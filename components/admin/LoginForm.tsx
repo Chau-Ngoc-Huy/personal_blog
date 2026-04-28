@@ -18,7 +18,7 @@ export default function LoginForm() {
         setLoading(false);
       }
     } catch {
-      setError("Có lỗi xảy ra. Vui lòng thử lại.");
+      setError("Something went wrong. Please try again.");
       setLoading(false);
     }
   }
@@ -28,7 +28,7 @@ export default function LoginForm() {
       <form action={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Tên đăng nhập
+            Username
           </label>
           <input
             type="text"
@@ -40,7 +40,7 @@ export default function LoginForm() {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Mật khẩu
+            Password
           </label>
           <input
             type="password"
@@ -56,7 +56,7 @@ export default function LoginForm() {
           disabled={loading}
           className="w-full bg-gray-900 text-white rounded-lg py-2 text-sm font-medium hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+          {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
       <ErrorNotification message={error} onDismiss={() => setError(null)} />

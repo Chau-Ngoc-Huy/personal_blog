@@ -35,7 +35,7 @@ export default function TagsPage() {
     return (
       <div className="p-8">
         <div className="text-center py-20 text-slate-400">
-          <p>Đang tải...</p>
+          <p>Loading...</p>
         </div>
       </div>
     );
@@ -44,7 +44,7 @@ export default function TagsPage() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <p className="text-slate-500">Quản lý các tags/chủ đề của blog</p>
+        <p className="text-slate-500">Manage blog tags and topics</p>
       </div>
 
       <div className="bg-white rounded-lg border border-slate-200 p-8">

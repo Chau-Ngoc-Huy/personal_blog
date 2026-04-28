@@ -53,7 +53,7 @@ export default function ProfileSidebarCard({
               onClick={() => setOpen(true)}
               className="text-xs text-violet-500 hover:text-violet-700 font-medium transition-colors"
             >
-              Chỉnh sửa trang cá nhân
+              Edit profile
             </button>
           </div>
         </div>
@@ -61,9 +61,9 @@ export default function ProfileSidebarCard({
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 text-center">
           {[
-            { label: "Tổng", value: stats.total },
-            { label: "Đăng", value: stats.published, color: "text-emerald-600" },
-            { label: "Nháp", value: stats.drafts, color: "text-amber-500" },
+            { label: "Total", value: stats.total },
+            { label: "Published", value: stats.published, color: "text-emerald-600" },
+            { label: "Drafts", value: stats.drafts, color: "text-amber-500" },
           ].map(({ label, value, color }) => (
             <div key={label} className="bg-slate-50 rounded-lg py-2 px-1">
               <p className={`text-base font-bold ${color ?? "text-slate-700"}`}>{value}</p>
@@ -106,8 +106,8 @@ function ProfileEditModal({
     bio:         profile.bio        || "",
     avatar:      profile.avatar     || "",
     email:       profile.email      || "",
-    twitter:     initSocials.twitter  || "",
-    github:      initSocials.github   || "",
+    instagram:   initSocials.instagram || initSocials.twitter || "",
+    facebook:    initSocials.facebook  || initSocials.github || "",
     linkedin:    initSocials.linkedin || "",
   });
   const [loading,  setLoading]  = useState(false);
@@ -131,8 +131,8 @@ function ProfileEditModal({
         avatar:      form.avatar  || undefined,
         email:       form.email   || undefined,
         socialLinks: {
-          twitter:  form.twitter  || undefined,
-          github:   form.github   || undefined,
+          instagram: form.instagram || undefined,
+          facebook:  form.facebook  || undefined,
           linkedin: form.linkedin || undefined,
         },
       });
@@ -140,22 +140,22 @@ function ProfileEditModal({
         setSuccess(true);
         setTimeout(() => { onClose(); router.refresh(); }, 900);
       } else {
-        setError(result.error || "Cập nhật thất bại");
+        setError(result.error || "Update failed");
       }
     } catch {
-      setError("Lỗi khi cập nhật profile");
+      setError("Failed to update profile");
     } finally {
       setLoading(false);
     }
   }
 
   const fields: { key: keyof typeof form; label: string; multiline?: boolean; type?: string }[] = [
-    { key: "displayName", label: "Tên" },
+    { key: "displayName", label: "Display name" },
     { key: "sayHi",       label: "Say hi",   multiline: true },
-    { key: "bio",         label: "Tiểu sử",  multiline: true },
+    { key: "bio",         label: "Bio",  multiline: true },
     { key: "email",       label: "Email",    type: "email" },
-    { key: "twitter",     label: "Twitter" },
-    { key: "github",      label: "GitHub" },
+    { key: "instagram",   label: "Instagram" },
+    { key: "facebook",    label: "Facebook" },
     { key: "linkedin",    label: "LinkedIn" },
   ];
 
@@ -180,16 +180,16 @@ function ProfileEditModal({
             onClick={onClose}
             className="text-sm text-slate-500 hover:text-slate-800 font-medium transition-colors"
           >
-            Hủy
+            Cancel
           </button>
-          <h2 className="text-sm font-semibold text-slate-900">Chỉnh sửa trang cá nhân</h2>
+          <h2 className="text-sm font-semibold text-slate-900">Edit profile</h2>
           <button
             form="ig-profile-form"
             type="submit"
             disabled={loading || success}
             className="text-sm font-semibold text-violet-600 hover:text-violet-700 disabled:opacity-40 transition-colors"
           >
-            {success ? "✓ Đã lưu" : loading ? "Đang lưu…" : "Lưu"}
+            {success ? "✓ Saved" : loading ? "Saving…" : "Save"}
           </button>
         </div>
 
@@ -214,7 +214,7 @@ function ProfileEditModal({
             )}
           </div>
           <label className="mt-3 text-sm font-semibold text-violet-600 hover:text-violet-700 cursor-pointer transition-colors">
-            Thay đổi ảnh
+            Change image
             <input
               type="text"
               className="sr-only"
@@ -256,7 +256,7 @@ function ProfileEditModal({
                     onChange={e => set(key, e.target.value)}
                     rows={3}
                     className="flex-1 text-sm text-slate-800 resize-none focus:outline-none placeholder:text-slate-300"
-                    placeholder={`Thêm ${label.toLowerCase()}…`}
+                    placeholder={`Add ${label.toLowerCase()}…`}
                   />
                 ) : (
                   <input
@@ -265,7 +265,7 @@ function ProfileEditModal({
                     value={form[key]}
                     onChange={e => set(key, e.target.value)}
                     className="flex-1 text-sm text-slate-800 focus:outline-none placeholder:text-slate-300"
-                    placeholder={`Thêm ${label.toLowerCase()}…`}
+                    placeholder={`Add ${label.toLowerCase()}…`}
                   />
                 )}
               </div>

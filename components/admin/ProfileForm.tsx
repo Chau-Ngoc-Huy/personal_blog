@@ -11,9 +11,11 @@ interface ProfileFormProps {
     avatar?: string;
     email?: string;
     socialLinks?: {
+      instagram?: string;
+      facebook?: string;
+      linkedin?: string;
       twitter?: string;
       github?: string;
-      linkedin?: string;
     };
   };
 }
@@ -29,8 +31,8 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
     bio: initialData?.bio || "",
     avatar: initialData?.avatar || "",
     email: initialData?.email || "",
-    twitter: initialData?.socialLinks?.twitter || "",
-    github: initialData?.socialLinks?.github || "",
+    instagram: initialData?.socialLinks?.instagram || initialData?.socialLinks?.twitter || "",
+    facebook: initialData?.socialLinks?.facebook || initialData?.socialLinks?.github || "",
     linkedin: initialData?.socialLinks?.linkedin || "",
   });
 
@@ -47,8 +49,8 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
         avatar: form.avatar || undefined,
         email: form.email || undefined,
         socialLinks: {
-          twitter: form.twitter || undefined,
-          github: form.github || undefined,
+          instagram: form.instagram || undefined,
+          facebook: form.facebook || undefined,
           linkedin: form.linkedin || undefined,
         },
       });
@@ -62,7 +64,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
         setError(result.error || "Cập nhật thất bại");
       }
     } catch {
-      setError("Lỗi khi cập nhật profile");
+      setError("Error updating profile");
     } finally {
       setLoading(false);
     }
@@ -73,7 +75,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
       {/* Display Name */}
       <div>
         <label className="block text-sm font-medium text-slate-900 mb-2">
-          Tên hiển thị <span className="text-red-500">*</span>
+          Display name <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -83,21 +85,21 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
             setForm({ ...form, displayName: e.target.value })
           }
           className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
-          placeholder="Tên của bạn"
+          placeholder="Your name"
         />
       </div>
 
       {/* Bio */}
       <div>
         <label className="block text-sm font-medium text-slate-900 mb-2">
-          Giới thiệu
+          Bio
         </label>
         <textarea
           value={form.bio}
           onChange={(e) => setForm({ ...form, bio: e.target.value })}
           rows={4}
           className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
-          placeholder="Viết một chút về bạn..."
+          placeholder="Write a short bio about yourself..."
         />
       </div>
 
@@ -146,13 +148,13 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
       {/* Social Links */}
       <div className="pt-4 border-t border-slate-200">
         <h3 className="text-lg font-semibold text-slate-900 mb-4">
-          Mạng xã hội
+          Social links
         </h3>
 
         <div className="space-y-4">
           {[
-            { key: "twitter", label: "Twitter" },
-            { key: "github", label: "GitHub" },
+            { key: "instagram", label: "Instagram" },
+            { key: "facebook", label: "Facebook" },
             { key: "linkedin", label: "LinkedIn" },
           ].map(({ key, label }) => (
             <div key={key}>
@@ -166,7 +168,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                   setForm({ ...form, [key]: e.target.value })
                 }
                 className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
-                placeholder={`https://${key === "twitter" ? "x.com" : key}.com/...`}
+                placeholder={`https://${key === "instagram" ? "instagram.com" : key}.com/...`}
               />
             </div>
           ))}
@@ -183,7 +185,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
       {/* Success */}
       {success && (
         <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
-          ✓ Cập nhật thành công!
+          ✓ Updated successfully!
         </div>
       )}
 
@@ -194,14 +196,14 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
           disabled={loading}
           className="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 disabled:bg-slate-400 text-white text-sm font-medium rounded-lg transition-colors"
         >
-          {loading ? "Đang lưu..." : "Lưu thay đổi"}
+          {loading ? "Saving..." : "Save changes"}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
           className="px-6 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-medium rounded-lg transition-colors"
         >
-          Hủy
+          Cancel
         </button>
       </div>
     </form>

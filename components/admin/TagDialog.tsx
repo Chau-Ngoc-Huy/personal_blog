@@ -93,7 +93,7 @@ export default function TagDialog({
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-200">
           <h2 className="text-lg font-semibold text-slate-900">
-            {initialData ? "Chỉnh sửa Tag" : "Tag mới"}
+            {initialData ? "Edit Tag" : "New Tag"}
           </h2>
         </div>
 
@@ -102,7 +102,7 @@ export default function TagDialog({
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
-              Tên Tag <span className="text-red-500">*</span>
+              Tag name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -111,14 +111,14 @@ export default function TagDialog({
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
-              placeholder="vd: Tech, Life, Travel"
+              placeholder="e.g. Tech, Life, Travel"
             />
           </div>
 
           {/* Color */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
-              Màu sắc
+              Color
             </label>
             <div className="grid grid-cols-4 gap-2">
               {COLORS.map((color) => (
@@ -152,14 +152,14 @@ export default function TagDialog({
               disabled={loading}
               className="flex-1 px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-slate-400 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              {loading ? "..." : initialData ? "Cập nhật" : "Tạo"}
+              {loading ? "..." : initialData ? "Update" : "Create"}
             </button>
             <button
               type="button"
               onClick={onClose}
               className="flex-1 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-medium rounded-lg transition-colors"
             >
-              Hủy
+              Cancel
             </button>
           </div>
         </form>

@@ -14,11 +14,11 @@ export function createSuccessResponse<T>(data?: T): ActionResponse<T> {
 
 export function createErrorResponse(
   error: unknown,
-  defaultMessage: string = "Có lỗi xảy ra. Vui lòng thử lại."
+  defaultMessage: string = "Something went wrong. Please try again."
 ): ActionResponse {
   // Re-throw Next.js redirect errors to avoid logging them as real errors
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if (error instanceof Error && (error as any).digest?.startsWith("NEXT_REDIRECT")) {
+  const maybeRedirectError = error as Error & { digest?: string };
+  if (error instanceof Error && maybeRedirectError.digest?.startsWith("NEXT_REDIRECT")) {
     throw error;
   }
 
@@ -28,7 +28,7 @@ export function createErrorResponse(
   if (error instanceof Error) {
     message = error.message;
     if (error.message.includes("Unique constraint failed")) {
-      message = "Dữ liệu này đã tồn tại";
+      message = "This record already exists";
       code = "DUPLICATE";
     }
   } else if (typeof error === "string") {
