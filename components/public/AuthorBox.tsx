@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface AuthorBoxProps {
   profile: {
     displayName: string;
@@ -16,14 +14,15 @@ export default function AuthorBox({ profile, socialLinks }: AuthorBoxProps) {
       style={{ border: "2px dashed #ECE5E1" }}
     >
       {profile.avatar ? (
-        <Image
-          src={profile.avatar}
-          alt={profile.displayName}
-          width={80}
-          height={80}
-          className="rounded-full object-cover"
-          style={{ width: 80, height: 80 }}
-        />
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={profile.avatar}
+            alt={profile.displayName}
+            className="rounded-full object-cover"
+            style={{ width: 80, height: 80 }}
+          />
+        </>
       ) : (
         <div
           className="rounded-full bg-[#F3EDE9] flex items-center justify-center font-heading text-[#FD976D]"

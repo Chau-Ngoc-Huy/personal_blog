@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "@/lib/actions/profile";
 
@@ -35,13 +34,14 @@ export default function ProfileSidebarCard({
       <div className="px-4 py-5 border-b border-slate-100">
         <div className="flex items-center gap-3 mb-4">
           {profile.avatar ? (
-            <Image
-              src={profile.avatar}
-              alt={profile.displayName}
-              width={44}
-              height={44}
-              className="w-11 h-11 rounded-full object-cover shrink-0"
-            />
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={profile.avatar}
+                alt={profile.displayName}
+                className="w-11 h-11 rounded-full object-cover shrink-0"
+              />
+            </>
           ) : (
             <div className="w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white text-lg shrink-0 font-semibold">
               {profile.displayName.charAt(0).toUpperCase()}
@@ -197,15 +197,16 @@ function ProfileEditModal({
         <div className="flex flex-col items-center py-6 bg-slate-50 shrink-0">
           <div className="relative">
             {form.avatar && !avatarErr ? (
-              <Image
-                src={form.avatar}
-                alt="Avatar"
-                width={88}
-                height={88}
-                className="w-22 h-22 rounded-full object-cover border-4 border-white shadow-md"
-                style={{ width: 88, height: 88 }}
-                onError={() => setAvatarErr(true)}
-              />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={form.avatar}
+                  alt="Avatar"
+                  className="w-22 h-22 rounded-full object-cover border-4 border-white shadow-md"
+                  style={{ width: 88, height: 88 }}
+                  onError={() => setAvatarErr(true)}
+                />
+              </>
             ) : (
               <div className="w-[88px] h-[88px] rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold border-4 border-white shadow-md">
                 {form.displayName.charAt(0).toUpperCase() || "?"}

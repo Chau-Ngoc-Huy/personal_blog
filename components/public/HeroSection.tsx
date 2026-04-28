@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 interface Profile {
@@ -121,14 +120,14 @@ export default function HeroSection({ profile }: { profile: Profile }) {
             }}
           >
             {profile.avatar ? (
-              <Image
-                src={profile.avatar}
-                alt={profile.displayName}
-                width={640}
-                height={640}
-                className="w-full h-full object-cover"
-                priority
-              />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={profile.avatar}
+                  alt={profile.displayName}
+                  className="w-full h-full object-cover"
+                />
+              </>
             ) : (
               <div
                 className="w-full h-full flex items-center justify-center font-heading text-[#FD976D]"

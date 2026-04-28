@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { formatDate } from "@/lib/utils";
 
 interface Tag { name: string; slug: string }
@@ -86,13 +85,14 @@ function BlogCard({ post, colorIndex }: { post: Post; colorIndex: number }) {
       {/* Cover */}
       <div className="aspect-[3/2] overflow-hidden shrink-0">
         {post.coverImage ? (
-          <Image
-            src={post.coverImage}
-            alt={post.title}
-            width={400}
-            height={267}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-          />
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            />
+          </>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-4xl" style={placeholder}>
             ✍️

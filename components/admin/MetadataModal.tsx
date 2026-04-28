@@ -41,6 +41,7 @@ export default function MetadataModal({
   const [tagOptions, setTagOptions] = useState<TagOption[]>([]);
   const [loadingTags, setLoadingTags] = useState(false);
   const [tagsError, setTagsError] = useState("");
+  const [coverImageError, setCoverImageError] = useState(false);
 
   const selectedTags = useMemo(
     () =>
@@ -87,6 +88,10 @@ export default function MetadataModal({
       active = false;
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    setCoverImageError(false);
+  }, [coverImage]);
 
   const updateSelectedTags = (nextTags: string[]) => {
     onTagsChange(nextTags.join(", "));
@@ -263,12 +268,25 @@ export default function MetadataModal({
             />
             {coverImage && (
               <div className="mt-3 rounded-xl overflow-hidden aspect-video bg-slate-100">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={coverImage}
-                  alt="preview"
-                  className="w-full h-full object-cover"
-                />
+                {!coverImageError ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={coverImage}
+                    alt="preview"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover"
+                    onError={() => setCoverImageError(true)}
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center px-4 text-center">
+                    <p className="text-sm font-medium text-slate-500">
+                      Không tải được ảnh từ URL này.
+                    </p>
+                    <p className="mt-1 text-xs text-slate-400">
+                      Host có thể đang chặn nhúng trực tiếp hoặc ảnh đã hết hạn.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>

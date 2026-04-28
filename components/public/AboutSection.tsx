@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 interface Profile {
   displayName: string;
   bio: string | null;
@@ -55,13 +53,14 @@ export default function AboutSection({ profile }: { profile: Profile }) {
             }}
           >
             {profile.avatar ? (
-              <Image
-                src={profile.avatar}
-                alt={profile.displayName}
-                width={280}
-                height={320}
-                className="w-full h-full object-cover"
-              />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={profile.avatar}
+                  alt={profile.displayName}
+                  className="w-full h-full object-cover"
+                />
+              </>
             ) : (
               <div
                 className="w-full h-full flex items-center justify-center font-heading text-[#FD976D]"

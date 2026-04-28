@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { deletePost } from "@/lib/actions/posts";
 
 interface Post {
@@ -106,7 +105,12 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
               {/* Cover thumb */}
               <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 shrink-0">
                 {post.coverImage
-                  ? <Image src={post.coverImage} alt={post.title} width={56} height={56} className="w-full h-full object-cover" />
+                  ? (
+                    <>{
+                      /* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
+                    </>
+                  )
                   : <div className="w-full h-full flex items-center justify-center text-slate-300 text-xl">📝</div>
                 }
               </div>
@@ -157,7 +161,12 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
               {/* Cover */}
               <div className="aspect-[16/9] bg-slate-100 overflow-hidden">
                 {post.coverImage
-                  ? <Image src={post.coverImage} alt={post.title} width={400} height={225} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" />
+                  ? (
+                    <>{
+                      /* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" />
+                    </>
+                  )
                   : <div className="w-full h-full flex items-center justify-center text-slate-200 text-4xl">📝</div>
                 }
               </div>
@@ -256,7 +265,8 @@ function CalendarView({ posts }: { posts: Post[] }) {
                   {/* Cover thumb */}
                   {post.coverImage && (
                     <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-100 shrink-0">
-                      <Image src={post.coverImage} alt={post.title} width={48} height={48} className="w-full h-full object-cover" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
                     </div>
                   )}
                   {/* Info */}
