@@ -2,6 +2,7 @@
 
 import type { AdminProfile } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { stringifySocialLinks } from "../social-links";
 
 interface UpdateProfileInput {
   displayName?: string;
@@ -10,9 +11,12 @@ interface UpdateProfileInput {
   avatar?: string;
   email?: string;
   socialLinks?: {
+    youtube?: string;
     instagram?: string;
-    facebook?: string;
     linkedin?: string;
+    tiktok?: string;
+    x?: string;
+    facebook?: string;
   };
 }
 
@@ -52,10 +56,6 @@ export async function updateProfile(data: UpdateProfileInput) {
   try {
     const profile = await getProfile();
 
-    const socialLinks = data.socialLinks
-      ? JSON.stringify(data.socialLinks)
-      : undefined;
-
     const updated = await prisma.adminProfile.update({
       where: { id: profile.id },
       data: {
@@ -64,7 +64,7 @@ export async function updateProfile(data: UpdateProfileInput) {
         sayHi: data.sayHi,
         avatar: data.avatar,
         email: data.email,
-        socialLinks,
+        socialLinks: stringifySocialLinks(data.socialLinks),
       },
     });
 

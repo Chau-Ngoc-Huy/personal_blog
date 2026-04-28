@@ -1,4 +1,4 @@
-type SocialIconName = "youtube" | "instagram" | "linkedin" | "tiktok" | "x" | "facebook";
+type SocialIconName = "youtube" | "instagram" | "linkedin" | "tiktok" | "x" | "facebook" | "email";
 
 const ICONS: Record<SocialIconName, { viewBox: string; path: string }> = {
   youtube: {
@@ -24,6 +24,10 @@ const ICONS: Record<SocialIconName, { viewBox: string; path: string }> = {
   facebook: {
     viewBox: "0 0 24 24",
     path: "M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z",
+  },
+  email: {
+    viewBox: "0 0 24 24",
+    path: "M4 5h16c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2zm0 2v.25l8 5.25 8-5.25V7H4zm16 10V9.38l-7.45 4.89c-.32.21-.74.21-1.06 0L4 9.38V17h16z",
   },
 };
 

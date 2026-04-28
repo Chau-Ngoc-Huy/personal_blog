@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "@/lib/actions/profile";
+import SocialIcon from "../public/SocialIcon";
+import SocialLinkIcon from "@/components/public/SocialLinkIcon";
+import { SOCIAL_LINKS, parseSocialLinks } from "../../lib/social-links";
+
+type SocialIconName = Parameters<typeof SocialIcon>[0]["name"];
 
 interface Profile {
   displayName: string;
@@ -27,6 +32,7 @@ export default function ProfileSidebarCard({
   stats: Stats;
 }) {
   const [open, setOpen] = useState(false);
+  const socials = parseSocialLinks(profile.socialLinks);
 
   return (
     <>
@@ -57,6 +63,34 @@ export default function ProfileSidebarCard({
             </button>
           </div>
         </div>
+
+        {(SOCIAL_LINKS.some(({ key }) => Boolean(socials[key])) || profile.email) && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {SOCIAL_LINKS.map(({ key, label, icon }) => {
+              const href = socials[key];
+
+              return href ? (
+                <SocialLinkIcon
+                  key={key}
+                  href={href}
+                  label={label}
+                  name={icon}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 transition-colors hover:bg-slate-200"
+                  iconClassName="h-4 w-4"
+                />
+              ) : null;
+            })}
+            {profile.email && (
+              <SocialLinkIcon
+                href={`mailto:${profile.email}`}
+                label="Email"
+                name="email"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 transition-colors hover:bg-slate-200"
+                iconClassName="h-4 w-4"
+              />
+            )}
+          </div>
+        )}
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 text-center">
@@ -95,10 +129,7 @@ function ProfileEditModal({
 }) {
   const router = useRouter();
 
-  let initSocials: Record<string, string> = {};
-  try {
-    if (profile.socialLinks) initSocials = JSON.parse(profile.socialLinks);
-  } catch {}
+  const parsedSocials = parseSocialLinks(profile.socialLinks);
 
   const [form, setForm] = useState({
     displayName: profile.displayName || "",
@@ -106,9 +137,12 @@ function ProfileEditModal({
     bio:         profile.bio        || "",
     avatar:      profile.avatar     || "",
     email:       profile.email      || "",
-    instagram:   initSocials.instagram || initSocials.twitter || "",
-    facebook:    initSocials.facebook  || initSocials.github || "",
-    linkedin:    initSocials.linkedin || "",
+    youtube:     parsedSocials.youtube || "",
+    instagram:   parsedSocials.instagram || "",
+    linkedin:    parsedSocials.linkedin || "",
+    tiktok:      parsedSocials.tiktok || "",
+    x:           parsedSocials.x || "",
+    facebook:    parsedSocials.facebook || "",
   });
   const [loading,  setLoading]  = useState(false);
   const [success,  setSuccess]  = useState(false);
@@ -131,9 +165,12 @@ function ProfileEditModal({
         avatar:      form.avatar  || undefined,
         email:       form.email   || undefined,
         socialLinks: {
+          youtube: form.youtube || undefined,
           instagram: form.instagram || undefined,
-          facebook:  form.facebook  || undefined,
           linkedin: form.linkedin || undefined,
+          tiktok: form.tiktok || undefined,
+          x: form.x || undefined,
+          facebook:  form.facebook  || undefined,
         },
       });
       if (result.success) {
@@ -149,14 +186,17 @@ function ProfileEditModal({
     }
   }
 
-  const fields: { key: keyof typeof form; label: string; multiline?: boolean; type?: string }[] = [
+  const fields: { key: keyof typeof form; label: string; icon?: keyof typeof form; multiline?: boolean; type?: string }[] = [
     { key: "displayName", label: "Display name" },
     { key: "sayHi",       label: "Say hi",   multiline: true },
     { key: "bio",         label: "Bio",  multiline: true },
     { key: "email",       label: "Email",    type: "email" },
+    { key: "youtube",     label: "YouTube" },
     { key: "instagram",   label: "Instagram" },
     { key: "facebook",    label: "Facebook" },
     { key: "linkedin",    label: "LinkedIn" },
+    { key: "tiktok",      label: "TikTok" },
+    { key: "x",           label: "X" },
   ];
 
   return (
@@ -169,7 +209,7 @@ function ProfileEditModal({
 
       {/* Modal */}
       <div
-        className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+        className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden"
         style={{ maxHeight: "90vh" }}
         onClick={e => e.stopPropagation()}
       >
@@ -247,8 +287,17 @@ function ProfileEditModal({
           <div className="divide-y divide-slate-100">
             {fields.map(({ key, label, multiline, type }) => (
               <div key={key} className="flex items-start px-4 py-3 gap-3">
-                <label className="w-20 text-xs font-semibold text-slate-400 uppercase tracking-wide pt-1.5 shrink-0">
-                  {label}
+                <label className="w-20 text-xs font-semibold text-slate-400 uppercase tracking-wide pt-1.5 shrink-0 flex items-center gap-2">
+                  {SOCIAL_LINKS.some(({ key: socialKey }) => socialKey === key) ? (
+                    <>
+                      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 text-slate-600">
+                        <SocialIcon name={key as SocialIconName} className="h-3.5 w-3.5" />
+                      </span>
+                      <span className="sr-only">{label}</span>
+                    </>
+                  ) : (
+                    <span>{label}</span>
+                  )}
                 </label>
                 {multiline ? (
                   <textarea
@@ -265,7 +314,7 @@ function ProfileEditModal({
                     value={form[key]}
                     onChange={e => set(key, e.target.value)}
                     className="flex-1 text-sm text-slate-800 focus:outline-none placeholder:text-slate-300"
-                    placeholder={`Add ${label.toLowerCase()}…`}
+                    placeholder={key === "email" ? "you@example.com" : `Add ${label.toLowerCase()}…`}
                   />
                 )}
               </div>

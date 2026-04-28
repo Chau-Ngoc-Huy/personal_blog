@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "@/lib/actions/profile";
+import SocialIcon from "../public/SocialIcon";
+import { SOCIAL_LINKS, parseSocialLinks } from "../../lib/social-links";
 
 interface ProfileFormProps {
   initialData?: {
@@ -10,13 +12,7 @@ interface ProfileFormProps {
     bio?: string;
     avatar?: string;
     email?: string;
-    socialLinks?: {
-      instagram?: string;
-      facebook?: string;
-      linkedin?: string;
-      twitter?: string;
-      github?: string;
-    };
+    socialLinks?: string | null;
   };
 }
 
@@ -26,14 +22,19 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const parsedSocialLinks = parseSocialLinks(initialData?.socialLinks);
+
   const [form, setForm] = useState({
     displayName: initialData?.displayName || "",
     bio: initialData?.bio || "",
     avatar: initialData?.avatar || "",
     email: initialData?.email || "",
-    instagram: initialData?.socialLinks?.instagram || initialData?.socialLinks?.twitter || "",
-    facebook: initialData?.socialLinks?.facebook || initialData?.socialLinks?.github || "",
-    linkedin: initialData?.socialLinks?.linkedin || "",
+    youtube: parsedSocialLinks.youtube || "",
+    instagram: parsedSocialLinks.instagram || "",
+    linkedin: parsedSocialLinks.linkedin || "",
+    tiktok: parsedSocialLinks.tiktok || "",
+    x: parsedSocialLinks.x || "",
+    facebook: parsedSocialLinks.facebook || "",
   });
 
   async function handleSubmit(e: React.FormEvent) {
@@ -49,9 +50,12 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
         avatar: form.avatar || undefined,
         email: form.email || undefined,
         socialLinks: {
+          youtube: form.youtube || undefined,
           instagram: form.instagram || undefined,
-          facebook: form.facebook || undefined,
           linkedin: form.linkedin || undefined,
+          tiktok: form.tiktok || undefined,
+          x: form.x || undefined,
+          facebook: form.facebook || undefined,
         },
       });
 
@@ -152,14 +156,13 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
         </h3>
 
         <div className="space-y-4">
-          {[
-            { key: "instagram", label: "Instagram" },
-            { key: "facebook", label: "Facebook" },
-            { key: "linkedin", label: "LinkedIn" },
-          ].map(({ key, label }) => (
+          {SOCIAL_LINKS.map(({ key, label, icon }) => (
             <div key={key}>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                {label}
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-600">
+                  <SocialIcon name={icon} className="h-4 w-4" />
+                </span>
+                <span>{label}</span>
               </label>
               <input
                 type="url"
@@ -168,7 +171,7 @@ export default function ProfileForm({ initialData }: ProfileFormProps) {
                   setForm({ ...form, [key]: e.target.value })
                 }
                 className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
-                placeholder={`https://${key === "instagram" ? "instagram.com" : key}.com/...`}
+                placeholder={`https://${key}.com/...`}
               />
             </div>
           ))}

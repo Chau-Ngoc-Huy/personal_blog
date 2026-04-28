@@ -1,4 +1,5 @@
 import SocialLinkIcon from "./SocialLinkIcon";
+import { SOCIAL_LINKS } from "@/lib/social-links";
 
 interface AuthorBoxProps {
   profile: {
@@ -50,15 +51,7 @@ export default function AuthorBox({ profile, socialLinks }: AuthorBoxProps) {
       {/* Social links */}
       {Object.keys(socialLinks).length > 0 && (
         <div className="flex gap-4 flex-wrap justify-center">
-          {[
-            { key: "youtube", label: "YouTube", icon: "youtube" as const },
-            { key: "instagram", label: "Instagram", icon: "instagram" as const },
-            { key: "linkedin", label: "LinkedIn", icon: "linkedin" as const },
-            { key: "tiktok", label: "TikTok", icon: "tiktok" as const },
-            { key: "x", label: "X", icon: "x" as const },
-            { key: "twitter", label: "X", icon: "x" as const },
-            { key: "facebook", label: "Facebook", icon: "facebook" as const },
-          ].map(({ key, label, icon }) => {
+          {SOCIAL_LINKS.map(({ key, label, icon }) => {
             const href = socialLinks[key];
 
             return href ? (

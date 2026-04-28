@@ -1,29 +1,16 @@
 import SocialLinkIcon from "./SocialLinkIcon";
+import { SOCIAL_LINKS, parseSocialLinks } from "../../lib/social-links";
 
 interface Profile {
   displayName: string;
   bio: string | null;
   avatar: string | null;
+  email: string | null;
   socialLinks: string | null;
 }
 
-interface SocialLinks {
-  instagram?: string;
-  facebook?: string;
-  linkedin?: string;
-  youtube?: string;
-  tiktok?: string;
-  x?: string;
-  twitter?: string;
-}
-
-type SocialKey = keyof SocialLinks;
-
 export default function AboutSection({ profile }: { profile: Profile }) {
-  let socials: SocialLinks = {};
-  try {
-    if (profile.socialLinks) socials = JSON.parse(profile.socialLinks);
-  } catch {}
+  const socials = parseSocialLinks(profile.socialLinks);
 
   const initials = profile.displayName
     .split(" ")
@@ -31,16 +18,6 @@ export default function AboutSection({ profile }: { profile: Profile }) {
     .join("")
     .slice(0, 2)
     .toUpperCase();
-
-  const socialItems: Array<{ key: SocialKey; label: string; icon: "youtube" | "instagram" | "linkedin" | "tiktok" | "x" | "facebook" }> = [
-    { key: "youtube", label: "YouTube", icon: "youtube" },
-    { key: "instagram", label: "Instagram", icon: "instagram" },
-    { key: "linkedin", label: "LinkedIn", icon: "linkedin" },
-    { key: "tiktok", label: "TikTok", icon: "tiktok" },
-    { key: "x", label: "X", icon: "x" },
-    { key: "twitter", label: "X", icon: "x" },
-    { key: "facebook", label: "Facebook", icon: "facebook" },
-  ];
 
   return (
     <section
@@ -135,9 +112,9 @@ export default function AboutSection({ profile }: { profile: Profile }) {
             <p className="font-sans text-[#8D8A91] italic">No bio yet.</p>
           )}
 
-          {(socials.instagram || socials.facebook || socials.linkedin || socials.youtube || socials.tiktok || socials.x || socials.twitter) && (
+          {(SOCIAL_LINKS.some(({ key }) => Boolean(socials[key])) || profile.email) && (
             <div className="flex items-center flex-wrap mt-8" style={{ gap: "1.5rem" }}>
-              {socialItems.map(({ key, label, icon }) => {
+              {SOCIAL_LINKS.map(({ key, label, icon }) => {
                 const href = socials[key];
 
                 return href ? (
@@ -151,6 +128,15 @@ export default function AboutSection({ profile }: { profile: Profile }) {
                   />
                 ) : null;
               })}
+              {profile.email && (
+                <SocialLinkIcon
+                  href={`mailto:${profile.email}`}
+                  label="Email"
+                  name="email"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#ECE5E1] text-[#060C39] transition-colors hover:bg-[#E2D8D2]"
+                  iconClassName="h-5 w-5"
+                />
+              )}
             </div>
           )}
         </div>

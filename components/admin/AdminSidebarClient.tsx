@@ -17,7 +17,7 @@ export default function AdminSidebarClient({ profile, stats }: AdminSidebarClien
   return (
     <aside
       className={`bg-white border-r border-slate-100 flex flex-col shrink-0 overflow-hidden transition-all duration-300 ${
-        isOpen ? "w-64" : "w-20"
+        isOpen ? "w-54" : "w-20"
       }`}
     >
       {/* Brand */}
