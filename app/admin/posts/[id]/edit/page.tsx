@@ -27,7 +27,7 @@ export default async function EditPostPage({ params }: Props) {
         <h1 className="text-2xl font-bold text-slate-900">Edit Post</h1>
         <p className="text-sm text-slate-400 mt-0.5 truncate max-w-md">{post.title}</p>
       </div>
-      <div className="flex-1 flex overflow-y-auto">
+      <div className="flex-1 flex overflow-hidden">
         <PostForm
           action={update}
           defaultValues={{

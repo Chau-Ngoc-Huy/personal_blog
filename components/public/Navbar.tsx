@@ -32,7 +32,7 @@ export default function Navbar({ name, transparent }: { name: string; transparen
             {/* Mobile Navigation Menu */}
             <nav className="flex flex-col gap-3 pb-4 pt-4" style={{ paddingLeft: "var(--page-px)", paddingRight: "var(--page-px)" }}>
               <Link
-                href="/#blogs"
+                href="#blogs"
                 className="font-sans text-[#54505B] hover:text-[#1B1624] transition-colors duration-150 font-medium"
                 style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
               >
@@ -51,7 +51,7 @@ export default function Navbar({ name, transparent }: { name: string; transparen
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center" style={{ gap: "clamp(1.5rem,2.5vw,2.5rem)" }}>
             <Link
-              href="/blogs"
+              href="#blogs"
               className="font-sans text-[#54505B] hover:text-[#1B1624] transition-colors duration-150 font-medium"
               style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
             >

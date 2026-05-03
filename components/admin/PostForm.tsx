@@ -87,9 +87,9 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
 
   return (
     <>
-      <div className="flex gap-6 h-full overflow-y-auto">
+      <div className="flex gap-6 h-full min-h-0">
         {/* ── Left: Content Editor ──────────────────────────── */}
-        <div className="flex flex-col gap-5 flex-1 overflow-visible">
+        <div className="flex flex-col gap-5 flex-1 min-h-0">
           {/* Title - Editable Inline */}
           <div>
             <input
@@ -102,11 +102,11 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
           </div>
 
           {/* Content Editor */}
-          <div className="flex-1 flex flex-col overflow-visible">
+          <div className="flex-1 flex flex-col min-h-0">
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">
               Content *
             </label>
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 min-h-0">
               <NovelEditor
                 initialContent={defaultValues.content}
                 onChange={setContent}

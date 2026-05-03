@@ -59,7 +59,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
           <nav>
             <ul className="space-y-1">
               {headings.map((h) => (
-                <li key={h.id} style={{ paddingLeft: h.level === 3 ? "0.75rem" : 0 }}>
+                <li key={h.id} style={{ paddingLeft: h.level === 2 ? "0.75rem" : h.level === 3 ? "1.5rem" : 0 }}>
                   <a
                     href={`#${h.id}`}
                     onClick={(e) => {

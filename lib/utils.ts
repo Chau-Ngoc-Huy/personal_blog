@@ -23,7 +23,7 @@ export interface Heading { id: string; text: string; level: number }
 
 export function extractHeadings(html: string): Heading[] {
   const out: Heading[] = [];
-  const re = /<h([23])[^>]*>([\s\S]*?)<\/h[23]>/gi;
+  const re = /<h([123])[^>]*>([\s\S]*?)<\/h[123]>/gi;
   let m: RegExpExecArray | null;
   while ((m = re.exec(html)) !== null) {
     const text = m[2].replace(/<[^>]+>/g, "").trim();
@@ -38,7 +38,7 @@ export function extractHeadings(html: string): Heading[] {
 }
 
 export function addHeadingIds(html: string): string {
-  return html.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (_m, lvl, attrs, inner) => {
+  return html.replace(/<h([123])([^>]*)>([\s\S]*?)<\/h[123]>/gi, (_m, lvl, attrs, inner) => {
     const text = inner.replace(/<[^>]+>/g, "").trim();
     const id = text
       .toLowerCase()

@@ -82,9 +82,9 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+    <div className="border border-gray-200 rounded-lg bg-white flex flex-col h-full">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-1 px-3 py-2 border-b border-gray-100 bg-gray-50">
+      <div className="flex-shrink-0 flex flex-wrap items-center gap-1 px-3 py-2 border-b border-gray-100 bg-gray-50 rounded-t-lg">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={editor.isActive("bold")}
@@ -182,7 +182,9 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
       </div>
 
       {/* Editor */}
-      <EditorContent editor={editor} />
+      <div className="flex-1 overflow-y-auto">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }
