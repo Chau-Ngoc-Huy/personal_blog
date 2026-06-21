@@ -1,0 +1,51 @@
+{
+  "projectId": "23bc2e10-17ce-4911-a348-7fe1e206b147",
+  "shape": "package",
+  "pkg": "blog-scaffold",
+  "globalName": "PersonalBlog",
+  "entry": "./.design-sync/ds-src/dist/index.mjs",
+  "buildCmd": "node .design-sync/ds-src/build-ds.mjs",
+  "srcDir": "components",
+  "cssEntry": ".design-sync/ds-src/ds-styles.css",
+  "readmeHeader": ".design-sync/conventions.md",
+  "componentSrcMap": {
+    "AboutSection": "components/public/AboutSection.tsx",
+    "AuthorBox": "components/public/AuthorBox.tsx",
+    "BlogsSection": "components/public/BlogsSection.tsx",
+    "HelpCardsSection": "components/public/HelpCardsSection.tsx",
+    "HeroSection": "components/public/HeroSection.tsx",
+    "Navbar": "components/public/Navbar.tsx",
+    "PostContent": "components/public/PostContent.tsx",
+    "PostHeader": "components/public/PostHeader.tsx",
+    "SiteFooter": "components/public/SiteFooter.tsx",
+    "SocialIcon": "components/public/SocialIcon.tsx",
+    "SocialLinkIcon": "components/public/SocialLinkIcon.tsx",
+    "TableOfContents": "components/public/TableOfContents.tsx"
+  },
+  "dtsPropsFor": {
+    "AboutSection": "profile: { displayName: string; bio: string | null; avatar: string | null; email: string | null; socialLinks: string | null };",
+    "AuthorBox": "profile: { displayName: string; avatar: string | null; bio: string | null }; socialLinks: Record<string, string>;",
+    "BlogsSection": "posts: Array<{ id: string; title: string; slug: string; excerpt: string | null; coverImage: string | null; publishedAt: string | Date | null; tags: Array<{ name: string; slug: string }> }>;",
+    "HelpCardsSection": "tags: Array<{ id: string; name: string; slug: string; _count: { posts: number } }>;",
+    "HeroSection": "profile: { displayName: string; sayHi: string | null; avatar: string | null };",
+    "Navbar": "name: string; transparent?: boolean;",
+    "PostContent": "excerpt: string | null; contentWithIds: string; headings: Array<{ id: string; text: string; level: number }>; showTOC?: boolean;",
+    "PostHeader": "title: string; tags: Array<{ id: string; name: string }>; coverImage: string | null; profile: { displayName: string; avatar: string | null }; publishedAt: string | Date | null;",
+    "SiteFooter": "profile: { displayName: string; email: string | null; socialLinks: string | null };",
+    "SocialIcon": "name: \"youtube\" | \"instagram\" | \"linkedin\" | \"tiktok\" | \"x\" | \"facebook\" | \"email\"; className?: string;",
+    "SocialLinkIcon": "href: string; label: string; name: \"youtube\" | \"instagram\" | \"linkedin\" | \"tiktok\" | \"x\" | \"facebook\" | \"email\"; className?: string; iconClassName?: string;",
+    "TableOfContents": "headings: Array<{ id: string; text: string; level: number }>;"
+  },
+  "overrides": {
+    "HeroSection": { "cardMode": "column", "viewport": "1280x780" },
+    "AboutSection": { "cardMode": "column", "viewport": "1280x820" },
+    "BlogsSection": { "cardMode": "column", "viewport": "1280x900" },
+    "HelpCardsSection": { "cardMode": "column", "viewport": "1280x820" },
+    "SiteFooter": { "cardMode": "column", "viewport": "1280x620" },
+    "Navbar": { "cardMode": "column", "viewport": "1280x240" },
+    "PostHeader": { "cardMode": "column", "viewport": "1280x680" },
+    "PostContent": { "cardMode": "column", "viewport": "1340x920" },
+    "TableOfContents": { "cardMode": "single", "viewport": "1340x640" },
+    "AuthorBox": { "cardMode": "column", "viewport": "920x660" }
+  }
+}
