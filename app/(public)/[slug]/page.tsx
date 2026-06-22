@@ -9,6 +9,7 @@ import PostHeader from "@/components/public/PostHeader";
 import PostContent from "@/components/public/PostContent";
 import AuthorBox from "@/components/public/AuthorBox";
 import RelatedPosts from "@/components/public/RelatedPosts";
+import PostStats from "@/components/public/PostStats";
 
 interface Props { params: { slug: string } }
 
@@ -76,6 +77,13 @@ export default async function PostPage({ params }: Props) {
               profile={profile}
               publishedAt={post.publishedAt}
               excerpt={post.excerpt}
+              stats={
+                <PostStats
+                  slug={post.slug}
+                  initialViews={post.viewCount}
+                  initialLikes={post.likeCount}
+                />
+              }
             />
           </div>
         </div>

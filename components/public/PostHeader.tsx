@@ -1,3 +1,4 @@
+import React from "react";
 import { formatDate } from "@/lib/utils";
 
 interface PostHeaderProps {
@@ -10,8 +11,8 @@ interface PostHeaderProps {
   };
   publishedAt: Date | null;
   excerpt?: string | null;
-  // kept for compatibility; not displayed (header matches the old "name / date" layout)
   readingLabel?: string;
+  stats?: React.ReactNode;
 }
 
 export default function PostHeader({
@@ -21,6 +22,7 @@ export default function PostHeader({
   profile,
   publishedAt,
   excerpt,
+  stats,
 }: PostHeaderProps) {
   const initials = profile.displayName
     .split(" ")
@@ -69,36 +71,46 @@ export default function PostHeader({
           </p>
         )}
 
-        <div className="flex items-center gap-3 text-sm">
-          <span className="relative h-[40px] w-[40px] flex-none">
-            <span className="absolute inset-[2px] overflow-hidden rounded-full bg-[var(--ac)]">
-              {profile.avatar ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={profile.avatar} alt={profile.displayName} className="h-full w-full object-cover" />
-              ) : (
-                <span
-                  className="absolute inset-0"
-                  style={{ background: "radial-gradient(120% 90% at 30% 14%, rgba(255,255,255,0.25), transparent 60%)" }}
-                />
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-3 text-sm">
+            <span className="relative h-[40px] w-[40px] flex-none">
+              <span className="absolute inset-[2px] overflow-hidden rounded-full bg-[var(--ac)]">
+                {profile.avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={profile.avatar} alt={profile.displayName} className="h-full w-full object-cover" />
+                ) : (
+                  <span
+                    className="absolute inset-0"
+                    style={{ background: "radial-gradient(120% 90% at 30% 14%, rgba(255,255,255,0.25), transparent 60%)" }}
+                  />
+                )}
+              </span>
+              <svg
+                viewBox="0 0 100 100"
+                className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+              >
+                <circle cx="50" cy="50" r="47" fill="none" stroke="var(--ac)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="74 300" transform="rotate(-52 50 50)" opacity="0.5" />
+              </svg>
+              {!profile.avatar && (
+                <span className="absolute inset-0 flex items-center justify-center font-heading text-[12px] font-semibold text-white">
+                  {initials}
+                </span>
               )}
             </span>
-            <svg
-              viewBox="0 0 100 100"
-              className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-            >
-              <circle cx="50" cy="50" r="47" fill="none" stroke="var(--ac)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="74 300" transform="rotate(-52 50 50)" opacity="0.5" />
-            </svg>
-            {!profile.avatar && (
-              <span className="absolute inset-0 flex items-center justify-center font-heading text-[12px] font-semibold text-white">
-                {initials}
-              </span>
+            <span className="font-medium text-[#14181A]">{profile.displayName}</span>
+            {publishedAt && (
+              <>
+                <span className="text-[#B8C0C0]">/</span>
+                <time className="text-[#8C9496]">{formatDate(publishedAt)}</time>
+              </>
             )}
-          </span>
-          <span className="font-medium text-[#14181A]">{profile.displayName}</span>
-          {publishedAt && (
+          </div>
+
+          {/* View/like stats — injected as client component from page */}
+          {stats && (
             <>
-              <span className="text-[#B8C0C0]">/</span>
-              <time className="text-[#8C9496]">{formatDate(publishedAt)}</time>
+              <span className="hidden text-[#D8DFDF] sm:block">·</span>
+              {stats}
             </>
           )}
         </div>

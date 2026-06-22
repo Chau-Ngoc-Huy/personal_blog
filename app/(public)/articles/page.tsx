@@ -34,6 +34,8 @@ export default async function ArticlesPage() {
     coverImage: p.coverImage,
     date: p.publishedAt ? formatDate(p.publishedAt) : "",
     tags: p.tags.map((t) => t.name),
+    viewCount: p.viewCount,
+    likeCount: p.likeCount,
   }));
 
   return (

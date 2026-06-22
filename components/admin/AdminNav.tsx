@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { logout } from "@/lib/actions/auth";
 
 const navItems = [
-  { href: "/admin/dashboard", label: "Bài viết", icon: "▤" },
-  { href: "/admin/tags",      label: "Chủ đề",   icon: "#" },
+  { href: "/admin/dashboard", label: "Bài viết",  icon: "▤" },
+  { href: "/admin/analytics", label: "Thống kê",  icon: "↑" },
+  { href: "/admin/tags",      label: "Chủ đề",    icon: "#" },
 ];
 
 export default function AdminNav({ isCollapsed = false }: { isCollapsed?: boolean }) {
@@ -14,7 +15,7 @@ export default function AdminNav({ isCollapsed = false }: { isCollapsed?: boolea
 
   function isActive(href: string) {
     if (href === "/admin/dashboard")
-      return pathname === "/admin" || pathname === "/admin/dashboard" || pathname.startsWith("/admin/posts");
+      return pathname === "/admin/dashboard" || pathname.startsWith("/admin/posts");
     return pathname.startsWith(href);
   }
 

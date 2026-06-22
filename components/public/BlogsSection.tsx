@@ -14,6 +14,8 @@ interface Post {
   coverImage: string | null;
   publishedAt: Date | null;
   tags: Tag[];
+  viewCount: number;
+  likeCount: number;
 }
 
 const COVER_BG = {
@@ -79,9 +81,23 @@ export default function BlogsSection({ posts }: { posts: Post[] }) {
                 {featured.excerpt}
               </p>
             )}
-            <span className="inline-flex items-center gap-2 text-sm font-medium text-[#14181A]">
-              Đọc bài viết <span className="text-[var(--ac)]">→</span>
-            </span>
+            <div className="flex items-center gap-5">
+              <span className="inline-flex items-center gap-2 text-sm font-medium text-[#14181A]">
+                Đọc bài viết <span className="text-[var(--ac)]">→</span>
+              </span>
+              {featured.viewCount > 0 && (
+                <span className="flex items-center gap-1 text-[13px] text-[#8C9496]">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  {featured.viewCount}
+                </span>
+              )}
+              {featured.likeCount > 0 && (
+                <span className="flex items-center gap-1 text-[13px] text-[#E8506A]">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  {featured.likeCount}
+                </span>
+              )}
+            </div>
           </div>
           <div
             className="aspect-[4/3] overflow-hidden rounded-[var(--ac-radius)] border border-[#E6EAEA]"
@@ -146,6 +162,18 @@ export default function BlogsSection({ posts }: { posts: Post[] }) {
                       </span>
                     ))}
                     {post.publishedAt && <span>{formatDate(post.publishedAt)}</span>}
+                    {post.viewCount > 0 && (
+                      <span className="flex items-center gap-1">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        {post.viewCount}
+                      </span>
+                    )}
+                    {post.likeCount > 0 && (
+                      <span className="flex items-center gap-1 text-[#E8506A]">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        {post.likeCount}
+                      </span>
+                    )}
                   </div>
                 </div>
               </Link>
