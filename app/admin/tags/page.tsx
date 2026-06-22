@@ -33,23 +33,17 @@ export default function TagsPage() {
 
   if (loading) {
     return (
-      <div className="p-8">
-        <div className="text-center py-20 text-slate-400">
-          <p>Loading...</p>
+      <div className="mx-auto w-full max-w-[1200px] p-[clamp(24px,3.5vw,40px)]">
+        <div className="py-20 text-center text-sm text-[#8C9496]">
+          <p>Đang tải…</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <p className="text-slate-500">Manage blog tags and topics</p>
-      </div>
-
-      <div className="bg-white rounded-lg border border-slate-200 p-8">
-        <TagsList tags={tags} onUpdate={loadTags} />
-      </div>
+    <div className="mx-auto w-full max-w-[1200px] p-[clamp(24px,3.5vw,40px)]">
+      <TagsList tags={tags} onUpdate={loadTags} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/db";
+import { revalidatePublic } from "@/lib/revalidate";
 
 interface CreateTagInput {
   name: string;
@@ -62,6 +63,7 @@ export async function createTag(input: CreateTagInput) {
       },
     });
 
+    revalidatePublic();
     return { success: true, tag };
   } catch (error) {
     console.error("Create tag error:", error);
@@ -103,6 +105,7 @@ export async function updateTag(input: UpdateTagInput) {
       },
     });
 
+    revalidatePublic();
     return { success: true, tag };
   } catch (error) {
     console.error("Update tag error:", error);
@@ -123,6 +126,7 @@ export async function deleteTag(id: string) {
       where: { id },
     });
 
+    revalidatePublic();
     return { success: true, tag };
   } catch (error) {
     console.error("Delete tag error:", error);

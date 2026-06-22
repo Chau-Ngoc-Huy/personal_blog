@@ -14,7 +14,7 @@ export default function DeleteButton({ id, title }: Props) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   async function handleDelete() {
-    if (!confirm(`Delete post "${title}"? This action cannot be undone.`)) return;
+    if (!confirm(`Xoá bài viết "${title}"? Hành động này không thể hoàn tác.`)) return;
     setIsDeleting(true);
     setError(null);
     try {
@@ -24,7 +24,7 @@ export default function DeleteButton({ id, title }: Props) {
         setIsDeleting(false);
       }
     } catch {
-      setError("Error deleting the post. Please try again.");
+      setError("Lỗi khi xoá bài viết. Vui lòng thử lại.");
       setIsDeleting(false);
     }
   }
@@ -34,9 +34,9 @@ export default function DeleteButton({ id, title }: Props) {
       <button
         onClick={handleDelete}
         disabled={isDeleting}
-        className="text-red-500 hover:text-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="text-[#C0584F] transition-colors hover:text-[#A23F37] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {isDeleting ? "Deleting..." : "Delete"}
+        {isDeleting ? "Đang xoá…" : "Xoá"}
       </button>
       <ErrorNotification message={error} onDismiss={() => setError(null)} />
     </>

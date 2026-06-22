@@ -53,3 +53,4 @@ next-env.d.ts
 .design-sync/node_modules
 .design-sync/ds-src/dist/
 .design-sync/ds-src/ds-styles.css
+claude-design/

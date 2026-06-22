@@ -16,34 +16,24 @@ export default function AdminSidebarClient({ profile, stats }: AdminSidebarClien
 
   return (
     <aside
-      className={`bg-white border-r border-slate-100 flex flex-col shrink-0 overflow-hidden transition-all duration-300 ${
-        isOpen ? "w-54" : "w-20"
+      className={`flex shrink-0 flex-col gap-4 overflow-y-auto border-r border-[#ECEFEF] bg-white px-3.5 py-5 transition-all duration-300 ${
+        isOpen ? "w-[272px]" : "w-20"
       }`}
     >
       {/* Brand */}
-      {/* <div className="px-5 py-5 border-b border-slate-100">
-        <Link href="/admin/dashboard" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center text-white text-sm font-bold shrink-0">
-            B
-          </div>
-          {isOpen && (
-            <span className="font-semibold text-slate-800 text-sm leading-tight">
-              Blog Admin
+      <div className="flex items-center gap-2.5 px-2 py-1">
+        <span className="h-[9px] w-[9px] shrink-0 rounded-full bg-[var(--ac)]" />
+        {isOpen && (
+          <>
+            <span className="truncate font-heading text-[16px] font-semibold tracking-[-0.01em] text-[#14181A]">
+              {profile.displayName}
             </span>
-          )}
-        </Link>
-      </div> */}
-
-      {/* Toggle Button */}
-      {/* <div className="px-3 py-3 border-b border-slate-100">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-center px-3 py-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors"
-          title={isOpen ? "Thu gọn" : "Mở rộng"}
-        >
-          {isOpen ? "◀" : "▶"}
-        </button>
-      </div> */}
+            <span className="ml-auto shrink-0 rounded-full border border-[#ECEFEF] bg-[#F5F7F7] px-[7px] py-0.5 text-[10px] font-semibold tracking-[0.08em] text-[#8C9496]">
+              ADMIN
+            </span>
+          </>
+        )}
+      </div>
 
       {/* Profile card with edit trigger */}
       {isOpen && (

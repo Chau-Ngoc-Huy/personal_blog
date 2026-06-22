@@ -2,6 +2,7 @@
 
 import type { AdminProfile } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { revalidatePublic } from "@/lib/revalidate";
 import { stringifySocialLinks } from "../social-links";
 
 interface UpdateProfileInput {
@@ -68,6 +69,7 @@ export async function updateProfile(data: UpdateProfileInput) {
       },
     });
 
+    revalidatePublic();
     return { success: true, profile: updated };
   } catch (error) {
     console.error("Update profile error:", error);

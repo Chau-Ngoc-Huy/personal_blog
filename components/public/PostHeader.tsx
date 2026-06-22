@@ -9,6 +9,9 @@ interface PostHeaderProps {
     avatar: string | null;
   };
   publishedAt: Date | null;
+  excerpt?: string | null;
+  // kept for compatibility; not displayed (header matches the old "name / date" layout)
+  readingLabel?: string;
 }
 
 export default function PostHeader({
@@ -17,98 +20,100 @@ export default function PostHeader({
   coverImage,
   profile,
   publishedAt,
+  excerpt,
 }: PostHeaderProps) {
+  const initials = profile.displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const hasCover = !!coverImage;
+
   return (
     <div
+      className={
+        hasCover
+          ? "grid grid-cols-1 items-center gap-8 md:grid-cols-[1.2fr_0.8fr] md:gap-12"
+          : ""
+      }
       style={{
         paddingLeft: "var(--page-px)",
         paddingRight: "var(--page-px)",
-        paddingTop: "var(--navbar-py)",
-        paddingBottom: "var(--navbar-py)",
+        paddingTop: "clamp(8px,2vw,20px)",
+        paddingBottom: "clamp(28px,5vw,56px)",
       }}
     >
-      <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
-        {/* Text side */}
-        <div className="flex-1 min-w-0">
-          {/* Tags */}
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-5">
-              {tags.map((tag) => (
-                <span
-                  key={tag.id}
-                  className="font-sans text-[#54505B] bg-white rounded-full px-3 py-1"
-                  style={{ fontSize: "0.8125rem", fontWeight: 500, border: "1px solid #ECE5E1" }}
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Title */}
-          <h1
-            className="font-heading text-[#1B1624] mb-5"
-            style={{
-              fontSize: "clamp(1.75rem,1.75rem + ((1vw - 0.2rem) * 2.5),3.25rem)",
-              lineHeight: 1.15,
-              fontWeight: 400,
-              letterSpacing: "-0.03em",
-            }}
-          >
-            {title}
-          </h1>
-
-          {/* Meta row */}
-          <div className="flex items-center gap-3 flex-wrap" style={{ fontSize: "0.875rem" }}>
-            {profile.avatar ? (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={profile.avatar}
-                  alt={profile.displayName}
-                  className="rounded-full object-cover"
-                  style={{ width: 36, height: 36 }}
-                />
-              </>
-            ) : (
-              <div
-                className="rounded-full bg-[#F3EDE9] flex items-center justify-center font-heading text-[#FD976D]"
-                style={{ width: 36, height: 36, fontSize: "0.875rem" }}
+      {/* Left — title + meta */}
+      <div>
+        {tags.length > 0 && (
+          <div className="mb-5 flex flex-wrap items-center gap-3">
+            {tags.map((tag) => (
+              <span
+                key={tag.id}
+                className="rounded-full border border-[var(--ac-border)] bg-[var(--ac-soft)] px-3 py-[5px] text-xs font-semibold tracking-[0.04em] text-[var(--ac-dark)]"
               >
-                {profile.displayName.slice(0, 2).toUpperCase()}
-              </div>
-            )}
-            <span className="font-sans font-semibold text-[#1B1624]">{profile.displayName}</span>
-            <span className="text-[#8D8A91]">/</span>
-            {publishedAt && (
-              <time className="font-sans text-[#76737C]">{formatDate(publishedAt)}</time>
-            )}
-          </div>
-        </div>
-
-        {/* Cover image */}
-        {coverImage && (
-          <div className="shrink-0 w-full lg:w-auto">
-            <div
-              className="overflow-hidden"
-              style={{
-                width: "clamp(180px,28vw,260px)",
-                height: "clamp(220px,34vw,340px)",
-                borderRadius: "12px",
-                boxShadow: "0px 20px 40px -10px rgba(0,0,0,0.18)",
-                maxWidth: "100%",
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={coverImage}
-                alt={title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+                {tag.name}
+              </span>
+            ))}
           </div>
         )}
+
+        <h1 className="mb-5 font-heading text-[clamp(30px,4.4vw,52px)] font-semibold leading-[1.06] tracking-[-0.025em] text-[#14181A]">
+          {title}
+        </h1>
+
+        {excerpt && (
+          <p className="mb-6 max-w-[52ch] text-[clamp(16px,1.6vw,19px)] leading-[1.6] text-[#586063]">
+            {excerpt}
+          </p>
+        )}
+
+        <div className="flex items-center gap-3 text-sm">
+          <span className="relative h-[40px] w-[40px] flex-none">
+            <span className="absolute inset-[2px] overflow-hidden rounded-full bg-[var(--ac)]">
+              {profile.avatar ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={profile.avatar} alt={profile.displayName} className="h-full w-full object-cover" />
+              ) : (
+                <span
+                  className="absolute inset-0"
+                  style={{ background: "radial-gradient(120% 90% at 30% 14%, rgba(255,255,255,0.25), transparent 60%)" }}
+                />
+              )}
+            </span>
+            <svg
+              viewBox="0 0 100 100"
+              className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+            >
+              <circle cx="50" cy="50" r="47" fill="none" stroke="var(--ac)" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="74 300" transform="rotate(-52 50 50)" opacity="0.5" />
+            </svg>
+            {!profile.avatar && (
+              <span className="absolute inset-0 flex items-center justify-center font-heading text-[12px] font-semibold text-white">
+                {initials}
+              </span>
+            )}
+          </span>
+          <span className="font-medium text-[#14181A]">{profile.displayName}</span>
+          {publishedAt && (
+            <>
+              <span className="text-[#B8C0C0]">/</span>
+              <time className="text-[#8C9496]">{formatDate(publishedAt)}</time>
+            </>
+          )}
+        </div>
       </div>
+
+      {/* Right — cover (only when present) */}
+      {hasCover && (
+        <div
+          className="aspect-[4/3] overflow-hidden rounded-[16px]"
+          style={{ boxShadow: "0 16px 40px rgba(20,24,26,0.16)" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={coverImage as string} alt={title} className="h-full w-full object-cover" />
+        </div>
+      )}
     </div>
   );
 }

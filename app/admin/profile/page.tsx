@@ -2,7 +2,7 @@ import { getProfile } from "@/lib/actions/profile";
 import ProfileForm from "@/components/admin/ProfileForm";
 
 export const metadata = {
-  title: "Profile Admin | Personal Blog",
+  title: "Hồ sơ | Quản trị",
 };
 
 export default async function ProfilePage() {
@@ -13,13 +13,13 @@ export default async function ProfilePage() {
     : null;
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900">Profile</h1>
-        <p className="text-slate-500 mt-1">Edit your personal information</p>
+    <div className="mx-auto w-full max-w-[1200px] p-[clamp(24px,3.5vw,40px)]">
+      <div className="mb-6">
+        <h1 className="font-heading text-[clamp(24px,3vw,32px)] font-semibold tracking-[-0.02em] text-[#14181A]">Cài đặt hồ sơ</h1>
+        <p className="mt-1.5 text-sm text-[#8C9496]">Thông tin này hiển thị công khai trên trang của bạn.</p>
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 p-8">
+      <div className="rounded-[14px] border border-[#ECEFEF] bg-white p-[clamp(20px,3vw,32px)]">
         <ProfileForm
           initialData={{
             displayName: profile.displayName,

@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 
-interface Tag { name: string; slug: string }
+interface Tag {
+  name: string;
+  slug: string;
+}
 
 interface Post {
   id: string;
@@ -13,146 +16,144 @@ interface Post {
   tags: Tag[];
 }
 
-const PLACEHOLDERS = [
-  { background: "linear-gradient(135deg, rgba(253, 212, 107, 0.3), rgba(253, 151, 109, 0.2))" },
-  { background: "linear-gradient(135deg, rgba(93, 205, 241, 0.2), rgba(201, 177, 251, 0.2))" },
-  { background: "linear-gradient(135deg, rgba(201, 177, 251, 0.2), rgba(93, 205, 241, 0.2))" },
-  { background: "linear-gradient(135deg, rgba(121, 210, 135, 0.2), rgba(93, 205, 241, 0.2))" },
-  { background: "linear-gradient(135deg, rgba(253, 151, 109, 0.2), rgba(253, 212, 107, 0.3))" },
-  { background: "linear-gradient(135deg, rgb(243, 237, 233), rgb(236, 229, 225))" },
-];
+const COVER_BG = {
+  backgroundImage:
+    "repeating-linear-gradient(135deg,#F5F7F7,#F5F7F7 11px,#EFF2F2 11px,#EFF2F2 22px)",
+};
 
-export default function BlogsSection({ posts }: { posts: Post[] }) {
+function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <section
-      id="blogs"
-      className="bg-[#FFFFFF]"
-      style={{
-        paddingTop: "var(--section-py)",
-        paddingBottom: "var(--section-py)",
-      }}
-    >
-      <div
-        className="max-w-[1400px] mx-auto"
-        style={{
-          paddingLeft: "var(--page-px)",
-          paddingRight: "var(--page-px)",
-        }}
-      >
-        <div className="mb-12">
-          <p className="font-sans font-semibold uppercase tracking-[0.18em] text-[#8D8A91] text-xs mb-2">
-            Latest posts
-          </p>
-          <h2
-            className="font-heading text-[#1B1624]"
-            style={{
-              fontSize: "clamp(1.5rem,1.5rem + ((1vw - 0.2rem) * 2.045),2.625rem)",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.25,
-              fontWeight: 400,
-            }}
-          >
-            My Blogs
-          </h2>
-        </div>
-
-        {posts.length === 0 ? (
-          <div className="text-center py-20 font-sans text-[#8D8A91] text-sm">
-            No posts yet — check back soon!
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post, i) => (
-              <BlogCard key={post.id} post={post} colorIndex={i} />
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
+    <h2 className="font-heading text-[13px] font-semibold uppercase tracking-[0.18em] text-[#8C9496]">
+      {children}
+    </h2>
   );
 }
 
-function BlogCard({ post, colorIndex }: { post: Post; colorIndex: number }) {
-  const placeholder = PLACEHOLDERS[colorIndex % PLACEHOLDERS.length];
+export default function BlogsSection({ posts }: { posts: Post[] }) {
+  const wrap = {
+    maxWidth: "var(--maxw)",
+    paddingLeft: "var(--page-px)",
+    paddingRight: "var(--page-px)",
+  } as const;
+
+  if (!posts.length) {
+    return (
+      <section className="mx-auto" style={wrap}>
+        <div className="py-12">
+          <Eyebrow>Bài viết</Eyebrow>
+          <p className="mt-8 text-[15px] text-[#8C9496]">Chưa có bài viết nào — quay lại sau nhé!</p>
+        </div>
+      </section>
+    );
+  }
+
+  const [featured, ...rest] = posts;
 
   return (
-    <Link
-      href={`/${post.slug}`}
-      className="group flex flex-col bg-[#F9F6F3] rounded-[20px] overflow-hidden no-underline
-                 transition-all duration-200 cursor-pointer
-                 hover:bg-ali-tertiary hover:-translate-y-3 hover:shadow-card-hover"
-    >
-      {/* Cover */}
-      <div className="aspect-[3/2] overflow-hidden shrink-0">
-        {post.coverImage ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.coverImage}
-              alt={post.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            />
-          </>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl" style={placeholder}>
-            ✍️
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="p-5 flex flex-col flex-1">
-        {post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            {post.tags.slice(0, 2).map((tag) => (
-              <span
-                key={tag.slug}
-                className="font-sans text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-[#ECE5E1] text-[#76737C]"
-              >
-                {tag.name}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <h3
-          className="font-heading text-[#1B1624] mb-2 line-clamp-2"
-          style={{
-            fontSize: "clamp(1.125rem,1.125rem + ((1vw - 0.2rem) * 0.455),1.375rem)",
-            fontWeight: 400,
-            letterSpacing: "-0.02em",
-            lineHeight: 1.3,
-          }}
-        >
-          {post.title}
-        </h3>
-
-        {post.excerpt && (
-          <p
-            className="font-sans text-[#76737C] leading-relaxed line-clamp-2 flex-1 mb-4"
-            style={{
-              fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)",
-              fontWeight: 500,
-            }}
-          >
-            {post.excerpt}
-          </p>
-        )}
-
-        <div
-          className="flex items-center justify-between mt-auto pt-3"
-          style={{ borderTop: "1px solid #ECE5E1" }}
-        >
-          {post.publishedAt && (
-            <time className="font-sans text-xs text-[#8D8A91] font-medium">
-              {formatDate(post.publishedAt)}
-            </time>
-          )}
-          <span className="font-sans text-xs font-medium text-[#8D8A91] group-hover:text-[#1B1624] transition-colors ml-auto">
-            Read post →
-          </span>
+    <section className="mx-auto" style={wrap}>
+      {/* ── Featured ── */}
+      <div className="py-8 md:py-12">
+        <div className="mb-8">
+          <Eyebrow>Bài nổi bật</Eyebrow>
         </div>
+        <Link
+          href={`/${featured.slug}`}
+          className="group grid grid-cols-1 gap-7 border-t border-[#ECEFEF] pt-8 no-underline md:grid-cols-[1.15fr_1fr] md:items-center md:gap-14 md:pt-12"
+        >
+          <div>
+            <div className="mb-5 flex items-center gap-3">
+              {featured.tags[0] && (
+                <span className="rounded-full border border-[var(--ac-border)] bg-[var(--ac-soft)] px-[11px] py-[5px] text-xs font-semibold tracking-[0.04em] text-[var(--ac-dark)]">
+                  {featured.tags[0].name}
+                </span>
+              )}
+              {featured.publishedAt && (
+                <span className="text-[13px] text-[#8C9496]">{formatDate(featured.publishedAt)}</span>
+              )}
+            </div>
+            <h3 className="mb-4 font-heading text-[clamp(26px,3.4vw,40px)] font-semibold leading-[1.1] tracking-[-0.02em] text-[#14181A] transition-colors group-hover:text-[var(--ac-dark)]">
+              {featured.title}
+            </h3>
+            {featured.excerpt && (
+              <p className="mb-6 max-w-[46ch] text-[16px] leading-[1.65] text-[#586063]">
+                {featured.excerpt}
+              </p>
+            )}
+            <span className="inline-flex items-center gap-2 text-sm font-medium text-[#14181A]">
+              Đọc bài viết <span className="text-[var(--ac)]">→</span>
+            </span>
+          </div>
+          <div
+            className="aspect-[4/3] overflow-hidden rounded-[var(--ac-radius)] border border-[#E6EAEA]"
+            style={featured.coverImage ? undefined : COVER_BG}
+          >
+            {featured.coverImage && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={featured.coverImage}
+                alt={featured.title}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+            )}
+          </div>
+        </Link>
       </div>
-    </Link>
+
+      {/* ── Latest ── */}
+      {rest.length > 0 && (
+        <div id="bai-viet" className="py-8 md:py-14">
+          <div className="mb-2 flex items-baseline justify-between gap-4">
+            <Eyebrow>Bài viết mới nhất</Eyebrow>
+            <Link
+              href="/articles"
+              className="text-sm text-[#586063] no-underline transition-colors hover:text-[var(--ac-dark)]"
+            >
+              Xem tất cả →
+            </Link>
+          </div>
+          <div>
+            {rest.map((post) => (
+              <Link
+                key={post.id}
+                href={`/${post.slug}`}
+                className="group grid grid-cols-1 gap-3 border-t border-[#ECEFEF] py-6 no-underline sm:grid-cols-[160px_minmax(0,1fr)] sm:items-center sm:gap-7 sm:py-7"
+              >
+                <div
+                  className="hidden aspect-[4/3] overflow-hidden rounded-[10px] border border-[#ECEFEF] sm:block"
+                  style={post.coverImage ? undefined : COVER_BG}
+                >
+                  {post.coverImage && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={post.coverImage} alt={post.title} className="h-full w-full object-cover" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="mb-2 font-heading text-[clamp(19px,2.1vw,24px)] font-semibold leading-[1.22] tracking-[-0.015em] text-[#14181A] transition-colors group-hover:text-[var(--ac-dark)]">
+                    {post.title}
+                  </h3>
+                  {post.excerpt && (
+                    <p className="mb-3 max-w-[60ch] text-[15px] leading-[1.6] text-[#586063] line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                  )}
+                  <div className="flex flex-wrap items-center gap-2.5 text-[13px] text-[#8C9496]">
+                    {post.tags.slice(0, 2).map((t) => (
+                      <span
+                        key={t.slug}
+                        className="rounded-full border border-[#ECEFEF] bg-[#F5F7F7] px-2.5 py-[3px] text-[12px] text-[#586063]"
+                      >
+                        {t.name}
+                      </span>
+                    ))}
+                    {post.publishedAt && <span>{formatDate(post.publishedAt)}</span>}
+                  </div>
+                </div>
+              </Link>
+            ))}
+            <div className="border-t border-[#ECEFEF]" />
+          </div>
+        </div>
+      )}
+    </section>
   );
 }

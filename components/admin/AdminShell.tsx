@@ -11,7 +11,7 @@ export default async function AdminShell({ children }: { children: React.ReactNo
   const drafts    = posts.filter(p => p.status === "draft").length;
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-[#F5F7F7] text-[#14181A]">
       {/* ── Sidebar (Client Component for Collapse) ──────── */}
       <AdminSidebarClient profile={profile} stats={{ total: posts.length, published, drafts }} />
 

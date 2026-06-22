@@ -26,7 +26,7 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
   const [error, setError] = useState("");
 
   async function handleDelete(tag: Tag) {
-    if (!confirm(`Delete tag "${tag.name}"?`)) return;
+    if (!confirm(`Xoá chủ đề "${tag.name}"?`)) return;
 
     setDeleting(tag.id);
     setError("");
@@ -36,117 +36,85 @@ export default function TagsList({ tags, onUpdate }: TagsListProps) {
       if (result.success) {
         onUpdate();
       } else {
-        setError(result.error || "Delete failed");
+        setError(result.error || "Xoá thất bại");
       }
     } catch {
-      setError("Error deleting tag");
+      setError("Lỗi khi xoá chủ đề");
     } finally {
       setDeleting(null);
     }
   }
 
   return (
-    <div className="space-y-4">
+    <div>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-slate-900">Tags</h2>
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <h1 className="font-heading text-[clamp(24px,3vw,32px)] font-semibold tracking-[-0.02em] text-[#14181A]">Chủ đề</h1>
+          <p className="mt-1.5 text-sm text-[#8C9496]">Phân loại bài viết theo chủ đề.</p>
+        </div>
         <button
           onClick={() => {
             setSelectedTag(null);
             setIsDialogOpen(true);
           }}
-          className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 rounded-[8px] border border-[#E6EAEA] bg-white px-4 py-2.5 text-sm font-medium text-[#14181A] transition-colors hover:border-[var(--ac)]"
         >
-            + New Tag
+          <span className="text-base leading-none">＋</span> Thêm chủ đề
         </button>
       </div>
 
       {/* Error */}
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+        <div className="mb-4 rounded-lg bg-[#FBECEC] px-3 py-2.5 text-sm text-[#C0584F]">
           {error}
         </div>
       )}
 
       {/* Empty state */}
       {tags.length === 0 && (
-        <div className="text-center py-12 bg-slate-50 rounded-lg border border-slate-200">
-          <p className="text-slate-400">No tags yet</p>
+        <div className="rounded-[14px] border border-[#ECEFEF] bg-white py-16 text-center">
+          <p className="mb-3 font-mono text-[30px] text-[#A7AFAF]">#</p>
+          <p className="text-sm text-[#8C9496]">Chưa có chủ đề nào.</p>
         </div>
       )}
 
-      {/* Table */}
+      {/* Grid */}
       {tags.length > 0 && (
-        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
-                  Slug
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
-                  Color
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-slate-700">
-                  Posts
-                </th>
-                <th className="px-6 py-3 text-right text-sm font-semibold text-slate-700">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {tags.map((tag) => (
-                <tr key={tag.id} className="border-b border-slate-200 hover:bg-slate-50">
-                  <td className="px-6 py-4 text-sm text-slate-900 font-medium">
-                    {tag.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
-                    <code className="px-2 py-1 bg-slate-100 rounded text-xs">
-                      {tag.slug}
-                    </code>
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    {tag.color && (
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-6 h-6 rounded border border-slate-200"
-                          style={{ backgroundColor: tag.color }}
-                        />
-                        <code className="text-xs text-slate-600">{tag.color}</code>
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
-                    {tag._count?.posts || 0}
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => {
-                          setSelectedTag(tag);
-                          setIsDialogOpen(true);
-                        }}
-                        className="px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:text-violet-600 hover:bg-violet-50 rounded transition-colors"
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(tag)}
-                        disabled={deleting === tag.id}
-                        className="px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors disabled:opacity-50"
-                      >
-                        🗑️ Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3.5">
+          {tags.map((tag) => (
+            <div
+              key={tag.id}
+              className="flex items-center gap-3 rounded-[12px] border border-[#ECEFEF] bg-white px-[18px] py-4 transition-colors hover:border-[#E0E5E5]"
+            >
+              <span
+                className="h-3 w-3 flex-none rounded-full"
+                style={{ backgroundColor: tag.color || "#CBD2D2" }}
+              />
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-sm font-medium text-[#14181A]">{tag.name}</div>
+                <div className="mt-0.5 text-xs text-[#8C9496]">{tag._count?.posts || 0} bài viết</div>
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => {
+                    setSelectedTag(tag);
+                    setIsDialogOpen(true);
+                  }}
+                  className="rounded-[7px] px-2.5 py-1.5 text-[13px] font-medium text-[var(--ac-dark)] transition-colors hover:bg-[var(--ac-soft)]"
+                >
+                  Sửa
+                </button>
+                <button
+                  onClick={() => handleDelete(tag)}
+                  disabled={deleting === tag.id}
+                  className="rounded-[7px] px-2.5 py-1.5 text-[13px] font-medium text-[#A7AFAF] transition-colors hover:bg-[#FBECEC] hover:text-[#C0584F] disabled:opacity-50"
+                >
+                  {deleting === tag.id ? "…" : "Xoá"}
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

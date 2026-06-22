@@ -27,36 +27,36 @@ export default function LoginForm() {
     <>
       <form action={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Username
+          <label className="mb-1.5 block text-sm font-medium text-[#586063]">
+            Tên đăng nhập
           </label>
           <input
             type="text"
             name="username"
             required
             autoComplete="username"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full rounded-[8px] border border-[#E6EAEA] px-3 py-2.5 text-sm text-[#14181A] focus:border-[var(--ac)] focus:outline-none focus:ring-[3px] focus:ring-[var(--ac-soft)]"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Password
+          <label className="mb-1.5 block text-sm font-medium text-[#586063]">
+            Mật khẩu
           </label>
           <input
             type="password"
             name="password"
             required
             autoComplete="current-password"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full rounded-[8px] border border-[#E6EAEA] px-3 py-2.5 text-sm text-[#14181A] focus:border-[var(--ac)] focus:outline-none focus:ring-[3px] focus:ring-[var(--ac-soft)]"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gray-900 text-white rounded-lg py-2 text-sm font-medium hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-[8px] bg-[var(--ac)] py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--ac-dark)] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {loading ? "Signing in..." : "Sign in"}
+          {loading ? "Đang đăng nhập…" : "Đăng nhập"}
         </button>
       </form>
       <ErrorNotification message={error} onDismiss={() => setError(null)} />

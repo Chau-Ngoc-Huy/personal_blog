@@ -4,15 +4,15 @@ import Link from "next/link";
 
 export default function Navbar({ name, transparent }: { name: string; transparent?: boolean }) {
   return (
-    <header className={`relative ${transparent ? "bg-transparent" : "bg-[#FAF8F3]"}`} style={{ paddingTop: "var(--navbar-py)" }}>
+    <header className={`relative ${transparent ? "bg-transparent" : "bg-white"}`} style={{ paddingTop: "var(--navbar-py)" }}>
       <div className="max-w-[1400px] mx-auto" style={{ paddingLeft: "var(--page-px)", paddingRight: "var(--page-px)" }}>
         <div
           className="bg-transparent border-b-0 flex items-center justify-between"
         >
           <Link href="/" className="flex flex-col leading-none gap-1">
             <span
-              className="font-heading text-[#1B1624] tracking-tight"
-              style={{ fontSize: "clamp(2rem,2.5vw,2.25rem)", fontWeight: 300 }}
+              className="font-serif text-[#1B1624] tracking-tight"
+              style={{ fontSize: "clamp(2rem,2.5vw,2.25rem)", fontWeight: 400 }}
             >
               {name}
             </span>
@@ -32,18 +32,18 @@ export default function Navbar({ name, transparent }: { name: string; transparen
             {/* Mobile Navigation Menu */}
             <nav className="flex flex-col gap-3 pb-4 pt-4" style={{ paddingLeft: "var(--page-px)", paddingRight: "var(--page-px)" }}>
               <Link
-                href="#blogs"
+                href="/articles"
                 className="font-sans text-[#54505B] hover:text-[#1B1624] transition-colors duration-150 font-medium"
                 style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
               >
-                Blogs
+                Bài viết
               </Link>
               <Link
-                href="#about"
+                href="/#gioi-thieu"
                 className="font-sans text-[#54505B] hover:text-[#1B1624] transition-colors duration-150 font-medium"
                 style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
               >
-                About Me
+                Giới thiệu
               </Link>
             </nav>
           </details>
@@ -51,18 +51,18 @@ export default function Navbar({ name, transparent }: { name: string; transparen
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center" style={{ gap: "clamp(1.5rem,2.5vw,2.5rem)" }}>
             <Link
-              href="#blogs"
+              href="/articles"
               className="font-sans text-[#54505B] hover:text-[#1B1624] transition-colors duration-150 font-medium"
               style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
             >
-              Blogs
+              Bài viết
             </Link>
             <Link
-              href="#about"
+              href="/#gioi-thieu"
               className="font-sans text-[#54505B] hover:text-[#1B1624] transition-colors duration-150 font-medium"
               style={{ fontSize: "clamp(0.875rem,0.875rem + ((1vw - 0.2rem) * 0.227),1rem)" }}
             >
-              About Me
+              Giới thiệu
             </Link>
           </nav>
         </div>
