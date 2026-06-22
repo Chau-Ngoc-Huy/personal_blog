@@ -34,8 +34,8 @@
 
   /* Layout */
   --maxw:        1160px;
-  --page-px:     clamp(24px, 5vw, 72px);
-  --page-px-lg:  clamp(24px, 4vw, 56px);
+  --page-px:     clamp(16px, 2.5vw, 40px);
+  --page-px-lg:  clamp(16px, 2vw, 32px);
   --section-py:  clamp(48px, 8vw, 104px);
   --box-margin:  clamp(0.75rem, 2vw, 1.25rem);
   --navbar-px:   clamp(24px, 5vw, 72px);

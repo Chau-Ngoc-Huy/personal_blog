@@ -46,7 +46,7 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
     <aside
       className="hidden shrink-0 xl:block"
       style={{
-        width: "260px",
+        width: "280px",
         position: "sticky",
         top: "2rem",
         alignSelf: "flex-start",
@@ -54,9 +54,9 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
         overflowY: "auto",
       }}
     >
-      <div className="rounded-[20px] bg-[#F5F7F7] p-6">
-        <p className="mb-4 text-[12px] font-bold uppercase tracking-[0.08em] text-[#586063]">
-          Trong bài viết này
+      <div className="rounded-[16px] bg-[#F5F7F7] p-5">
+        <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#8C9496]">
+          Trong bài viết
         </p>
         <nav>
           <TocList
