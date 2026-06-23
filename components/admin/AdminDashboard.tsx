@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -45,7 +46,6 @@ export default function AdminDashboard({
   totalViews,
   totalLikes,
   totalPosts,
-  publishedPosts,
   draftPosts,
   dailyStats,
   recentPosts,
@@ -197,9 +197,9 @@ export default function AdminDashboard({
             {recentPosts.map((post) => (
               <div key={post.id} className="flex items-center gap-3">
                 {/* Cover thumbnail */}
-                <div className="h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-[#F5F7F7]">
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-[#F5F7F7]">
                   {post.coverImage && (
-                    <img src={post.coverImage} alt="" className="h-full w-full object-cover" />
+                    <Image src={post.coverImage} alt="" fill className="object-cover" />
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
