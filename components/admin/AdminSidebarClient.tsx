@@ -16,7 +16,7 @@ export default function AdminSidebarClient({ profile, stats }: AdminSidebarClien
 
   return (
     <aside
-      className={`flex shrink-0 flex-col gap-4 overflow-y-auto border-r border-[#ECEFEF] bg-white px-3.5 py-5 transition-all duration-300 ${
+      className={`hidden md:flex shrink-0 flex-col gap-4 overflow-y-auto border-r border-[#ECEFEF] bg-white px-3.5 py-5 transition-all duration-300 ${
         isOpen ? "w-[272px]" : "w-20"
       }`}
     >

@@ -31,6 +31,13 @@ model Tag {
   updatedAt DateTime  @updatedAt
 }
 
+// Daily aggregated stats for the bar chart
+model DailyStat {
+  date   DateTime @id // stored as start-of-day UTC
+  views  Int      @default(0)
+  likes  Int      @default(0)
+}
+
 // Blog posts
 model Post {
   id          String    @id @default(uuid())

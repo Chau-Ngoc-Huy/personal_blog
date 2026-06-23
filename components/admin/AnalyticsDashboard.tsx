@@ -42,7 +42,7 @@ export default function AnalyticsDashboard({ posts, totalViews, totalLikes, tota
       </div>
 
       {/* KPI Cards */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <KpiCard label="Tổng lượt xem" value={fmt(totalViews)} icon={EyeIcon} color="bg-[#EEF2FF]" iconColor="text-[#6366F1]" />
         <KpiCard label="Tổng lượt thích" value={fmt(totalLikes)} icon={HeartIcon} color="bg-[#FFF1F3]" iconColor="text-[#E8506A]" />
         <KpiCard label="Bài đã đăng" value={String(totalPosts)} icon={DocIcon} color="bg-[#F0FDF4]" iconColor="text-[#22C55E]" />

@@ -148,7 +148,7 @@ export default function PostsManager({ posts }: { posts: Post[] }) {
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-[#14181A]">{post.title}</p>
                 <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                  <code className="font-mono text-[11px] text-[#B8C0C0]">/{post.slug}</code>
+                  <code className="hidden font-mono text-[11px] text-[#B8C0C0] sm:inline">/{post.slug}</code>
                   {post.tags?.slice(0, 2).map(tag => (
                     <span key={tag.id} className="rounded-full border border-[#ECEFEF] bg-[#F5F7F7] px-2 py-0.5 text-[11px] text-[#586063]">{tag.name}</span>
                   ))}

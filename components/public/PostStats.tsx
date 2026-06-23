@@ -16,29 +16,28 @@ function formatCount(n: number): string {
 export default function PostStats({ slug, initialViews, initialLikes }: PostStatsProps) {
   const [views, setViews] = useState(initialViews);
   const [likes, setLikes] = useState(initialLikes);
-  const [liked, setLiked] = useState(false);
+  // null = chưa biết (đang load), true/false = server đã trả về
+  const [liked, setLiked] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Track view once on mount
+  // Track view và đồng thời lấy trạng thái liked từ server cookie
   useEffect(() => {
     fetch(`/api/posts/${slug}/view`, { method: "POST" })
       .then((r) => r.json())
-      .then((d) => setViews(d.viewCount))
-      .catch(() => {});
-  }, [slug]);
-
-  // Restore liked state from localStorage
-  useEffect(() => {
-    setLiked(localStorage.getItem(`liked_${slug}`) === "1");
+      .then((d) => {
+        setViews(d.viewCount);
+        setLiked(d.liked);
+      })
+      .catch(() => setLiked(false));
   }, [slug]);
 
   async function toggleLike() {
-    if (loading) return;
+    if (loading || liked === null) return;
     setLoading(true);
     const action = liked ? "unlike" : "like";
     const next = !liked;
 
-    // Optimistic
+    // Optimistic update
     setLiked(next);
     setLikes((l) => l + (next ? 1 : -1));
 
@@ -50,9 +49,9 @@ export default function PostStats({ slug, initialViews, initialLikes }: PostStat
       });
       const data = await res.json();
       setLikes(data.likeCount);
-      localStorage.setItem(`liked_${slug}`, next ? "1" : "0");
+      // Đồng bộ lại trạng thái thực từ server (nếu bị block vì spam → revert)
+      if (data.alreadyLiked) setLiked(true);
     } catch {
-      // revert on error
       setLiked(!next);
       setLikes((l) => l + (next ? -1 : 1));
     } finally {
@@ -74,7 +73,7 @@ export default function PostStats({ slug, initialViews, initialLikes }: PostStat
       {/* Like button */}
       <button
         onClick={toggleLike}
-        disabled={loading}
+        disabled={loading || liked === null}
         aria-label={liked ? "Bỏ thích" : "Thích bài viết"}
         className="group flex items-center gap-1.5 transition-colors"
         style={{ color: liked ? "#E8506A" : "#8C9496" }}
