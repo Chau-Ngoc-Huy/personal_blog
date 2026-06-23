@@ -41,7 +41,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
 
   if (action === "like") {
     // Cookie tồn tại vĩnh viễn (1 năm) — 1 like/browser/post
-    res.cookies.set(likedKey, "1", { maxAge: 60 * 60 * 24 * 365, httpOnly: true, sameSite: "lax" });
+    res.cookies.set(likedKey, "1", { maxAge: 2147483647, httpOnly: true, sameSite: "lax" });
   } else {
     res.cookies.delete(likedKey);
   }

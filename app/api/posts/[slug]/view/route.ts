@@ -35,6 +35,6 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
   ]);
 
   const res = NextResponse.json({ viewCount: post.viewCount, liked });
-  res.cookies.set(viewedKey, "1", { maxAge: 60 * 60 * 24, httpOnly: true, sameSite: "lax" });
+  res.cookies.set(viewedKey, "1", { maxAge: 60 * 60 * 2, httpOnly: true, sameSite: "lax" });
   return res;
 }
