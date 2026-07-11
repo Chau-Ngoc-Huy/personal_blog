@@ -18,6 +18,19 @@ export function formatDate(date: Date | string): string {
   });
 }
 
+// Rough reading-time estimate from HTML content (~200 words/min). Vietnamese
+// is whitespace-tokenizable enough for a "N phút" label.
+export function readingTime(html: string | null | undefined): string {
+  if (!html) return "1 phút";
+  const text = html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const words = text ? text.split(" ").length : 0;
+  const mins = Math.max(1, Math.round(words / 200));
+  return `${mins} phút`;
+}
+
 // For backwards compatibility - convert Tag array to tag names
 export interface Heading { id: string; text: string; level: number }
 
@@ -68,4 +81,21 @@ export function parseTags(
   }
 
   return [];
+}
+
+/**
+ * Tailwind classes giving a table-of-contents item its visual hierarchy by
+ * heading level (size / weight / colour). H1 is the largest + boldest, deeper
+ * levels get smaller and lighter so the outline reads as a real tree.
+ * Shared by the public <TableOfContents> and the admin <EditorToc>.
+ */
+export function tocItemClasses(level: number, active: boolean): string {
+  const size = level === 1 ? "text-[14px]" : level === 2 ? "text-[13.5px]" : "text-[13px]";
+  const weight = active ? "font-semibold" : level === 1 ? "font-medium" : "font-normal";
+  const color = active
+    ? "bg-[var(--ac)] text-white"
+    : level >= 3
+      ? "text-[#8C9496] hover:text-[#14181A]"
+      : "text-[#586063] hover:text-[#14181A]";
+  return `${size} ${weight} ${color}`;
 }

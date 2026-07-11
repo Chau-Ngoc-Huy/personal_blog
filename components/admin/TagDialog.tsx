@@ -88,21 +88,21 @@ export default function TagDialog({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-2xl bg-white shadow-2xl">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-200">
-          <h2 className="text-lg font-semibold text-slate-900">
-            {initialData ? "Edit Tag" : "New Tag"}
+        <div className="border-b border-[#ECEFEF] px-6 py-4">
+          <h2 className="font-heading text-lg font-semibold text-[#14181A]">
+            {initialData ? "Sửa chủ đề" : "Chủ đề mới"}
           </h2>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 p-6">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Tag name <span className="text-red-500">*</span>
+            <label className="mb-2 block text-sm font-medium text-[#586063]">
+              Tên chủ đề <span className="text-[#C0584F]">*</span>
             </label>
             <input
               type="text"
@@ -110,15 +110,15 @@ export default function TagDialog({
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
-              placeholder="e.g. Tech, Life, Travel"
+              className="w-full rounded-[8px] border border-[#E6EAEA] px-3 py-2.5 text-sm text-[#14181A] focus:border-[var(--ac)] focus:outline-none focus:ring-[3px] focus:ring-[var(--ac-soft)]"
+              placeholder="VD: Dạy học, Đời sống, STEM"
             />
           </div>
 
           {/* Color */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Color
+            <label className="mb-2 block text-sm font-medium text-[#586063]">
+              Màu sắc
             </label>
             <div className="grid grid-cols-4 gap-2">
               {COLORS.map((color) => (
@@ -126,10 +126,10 @@ export default function TagDialog({
                   key={color.hex}
                   type="button"
                   onClick={() => setForm({ ...form, color: color.hex })}
-                  className={`w-full aspect-square rounded-lg transition-all border-2 ${
+                  className={`aspect-square w-full rounded-[8px] border-2 transition-all ${
                     form.color === color.hex
-                      ? "border-slate-900 ring-2 ring-violet-500"
-                      : "border-slate-200 hover:border-slate-300"
+                      ? "border-[#14181A] ring-2 ring-[var(--ac)]"
+                      : "border-[#E6EAEA] hover:border-[#C8CFCF]"
                   }`}
                   style={{ backgroundColor: color.hex }}
                   title={color.name}
@@ -140,7 +140,7 @@ export default function TagDialog({
 
           {/* Error */}
           {error && (
-            <div className="p-2.5 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+            <div className="rounded-lg bg-[#FBECEC] px-3 py-2.5 text-sm text-[#C0584F]">
               {error}
             </div>
           )}
@@ -150,16 +150,16 @@ export default function TagDialog({
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-slate-400 text-white text-sm font-medium rounded-lg transition-colors"
+              className="flex-1 rounded-[8px] bg-[var(--ac)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--ac-dark)] disabled:opacity-50"
             >
-              {loading ? "..." : initialData ? "Update" : "Create"}
+              {loading ? "…" : initialData ? "Cập nhật" : "Tạo mới"}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-medium rounded-lg transition-colors"
+              className="flex-1 rounded-[8px] border border-[#E6EAEA] bg-white px-4 py-2.5 text-sm font-medium text-[#586063] transition-colors hover:border-[#C8CFCF]"
             >
-              Cancel
+              Huỷ
             </button>
           </div>
         </form>

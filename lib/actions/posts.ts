@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { slugify } from "@/lib/utils";
+import { revalidatePublic } from "@/lib/revalidate";
 import { createErrorResponse, ActionResponse } from "@/lib/error-handler";
 
 export async function createPost(formData: FormData): Promise<ActionResponse> {
@@ -47,6 +48,7 @@ export async function createPost(formData: FormData): Promise<ActionResponse> {
       },
     });
 
+    revalidatePublic();
     redirect("/admin/dashboard");
   } catch (error) {
     return createErrorResponse(error, "Error creating post");
@@ -105,6 +107,7 @@ export async function updatePost(id: string, formData: FormData): Promise<Action
       },
     });
 
+    revalidatePublic();
     redirect("/admin/dashboard");
   } catch (error) {
     return createErrorResponse(error, "Error updating post");
@@ -114,6 +117,7 @@ export async function updatePost(id: string, formData: FormData): Promise<Action
 export async function deletePost(id: string): Promise<ActionResponse> {
   try {
     await prisma.post.delete({ where: { id } });
+    revalidatePublic();
     redirect("/admin/dashboard");
   } catch (error) {
     return createErrorResponse(error, "Error deleting post");

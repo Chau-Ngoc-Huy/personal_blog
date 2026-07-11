@@ -1,3 +1,4 @@
+import AvatarBubble from "./AvatarBubble";
 import SocialLinkIcon from "./SocialLinkIcon";
 import { SOCIAL_LINKS, parseSocialLinks } from "../../lib/social-links";
 
@@ -9,134 +10,90 @@ interface Profile {
   socialLinks: string | null;
 }
 
+const SOCIAL_CLASS =
+  "inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#E2E7E7] bg-white text-[#586063] transition-colors hover:border-[var(--ac)] hover:bg-[var(--ac-soft)] hover:text-[var(--ac-dark)]";
+
 export default function AboutSection({ profile }: { profile: Profile }) {
   const socials = parseSocialLinks(profile.socialLinks);
 
-  const initials = profile.displayName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  const paras = (profile.bio || "")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const lead = paras[0] || "";
+  const rest = paras.slice(1);
+  const hasConnect = SOCIAL_LINKS.some(({ key }) => Boolean(socials[key])) || Boolean(profile.email);
 
   return (
     <section
-      id="about"
-      className="bg-[#F9F6F3]"
-      style={{
-        paddingTop: "var(--section-py)",
-        paddingBottom: "var(--section-py)",
-      }}
+      id="gioi-thieu"
+      className="border-y border-[#ECEFEF] bg-[#F5F7F7]"
+      style={{ marginTop: "clamp(40px,7vw,88px)" }}
     >
       <div
-        className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-start"
+        className="mx-auto grid items-center gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-16"
         style={{
+          maxWidth: "var(--maxw)",
           paddingLeft: "var(--page-px)",
           paddingRight: "var(--page-px)",
-          gap: "clamp(2rem,7.5vw,6rem)",
+          paddingTop: "clamp(56px,9vw,112px)",
+          paddingBottom: "clamp(56px,9vw,112px)",
         }}
       >
-        {/* ── Photo ── */}
-        <div className="shrink-0 mx-auto md:mx-0">
-          <div
-            className="overflow-hidden bg-[#F3EDE9]"
-            style={{
-              width: "clamp(180px,22vw,280px)",
-              height: "clamp(220px,26vw,320px)",
-              borderRadius: "clamp(1.25rem,2.5vw,2rem)",
-              boxShadow: "0px 48px 64px -20px rgba(0,0,0,0.15)",
-            }}
-          >
-            {profile.avatar ? (
-              <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={profile.avatar}
-                  alt={profile.displayName}
-                  className="w-full h-full object-cover"
-                />
-              </>
-            ) : (
-              <div
-                className="w-full h-full flex items-center justify-center font-heading text-[#FD976D]"
-                style={{ fontSize: "clamp(2rem,5vw,3.5rem)", fontWeight: 400 }}
-              >
-                {initials}
-              </div>
-            )}
-          </div>
+        {/* Portrait */}
+        <div className="mx-auto w-full max-w-[320px] md:mx-0">
+          <AvatarBubble
+            avatar={profile.avatar}
+            displayName={profile.displayName}
+            className="w-full"
+            initialsTextClassName="text-[clamp(2rem,5vw,3.5rem)]"
+          />
         </div>
 
-        {/* ── Text ── */}
-        <div className="flex-1">
-          <p className="font-sans font-semibold uppercase tracking-[0.18em] text-[#8D8A91] text-xs mb-3">
-            A little about me
-          </p>
-
-          <h2
-            className="font-heading text-[#1B1624] mb-6"
-            style={{
-              fontSize: "clamp(1.5rem,1.5rem + ((1vw - 0.2rem) * 2.045),2.625rem)",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.25,
-              fontWeight: 400,
-            }}
-          >
-            Hey, I&apos;m{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">{profile.displayName}</span>
-              <span
-                className="absolute left-0 w-full rounded-sm -z-0"
-                style={{ bottom: "0.08em", height: "0.28em", background: "var(--highlight)", opacity: 0.7 }}
-              />
-            </span>
-          </h2>
-
-          {profile.bio ? (
-            <div className="space-y-4">
-              {profile.bio.split("\n").filter(Boolean).map((para, i) => (
-                <p
-                  key={i}
-                  className="font-sans text-[#54505B]"
-                  style={{
-                    fontSize: "clamp(1rem,1rem + ((1vw - 0.2rem) * 0.227),1.125rem)",
-                    lineHeight: 1.6,
-                    fontWeight: 500,
-                  }}
-                >
-                  {para}
-                </p>
-              ))}
-            </div>
-          ) : (
-            <p className="font-sans text-[#8D8A91] italic">No bio yet.</p>
+        {/* Text */}
+        <div>
+          <div className="mb-5 font-heading text-[13px] uppercase tracking-[0.18em] text-[#8C9496]">
+            Giới thiệu
+          </div>
+          {lead && (
+            <p className="mb-5 max-w-[34ch] font-heading text-[clamp(20px,2.4vw,28px)] font-medium leading-[1.4] tracking-[-0.01em] text-[#14181A]">
+              {lead}
+            </p>
           )}
-
-          {(SOCIAL_LINKS.some(({ key }) => Boolean(socials[key])) || profile.email) && (
-            <div className="flex items-center flex-wrap mt-8" style={{ gap: "1.5rem" }}>
-              {SOCIAL_LINKS.map(({ key, label, icon }) => {
-                const href = socials[key];
-
-                return href ? (
+          {rest.map((p, i) => (
+            <p key={i} className="mb-5 max-w-[54ch] text-[16px] leading-[1.7] text-[#586063] last:mb-0">
+              {p}
+            </p>
+          ))}
+          {hasConnect && (
+            <div className="mt-7">
+              <div className="mb-3.5 text-xs uppercase tracking-[0.12em] text-[#A7AFAF]">
+                Kết nối với mình
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {SOCIAL_LINKS.map(({ key, label, icon }) => {
+                  const href = socials[key];
+                  return href ? (
+                    <SocialLinkIcon
+                      key={key}
+                      href={href}
+                      label={label}
+                      name={icon}
+                      className={SOCIAL_CLASS}
+                      iconClassName="h-[19px] w-[19px]"
+                    />
+                  ) : null;
+                })}
+                {profile.email && (
                   <SocialLinkIcon
-                    key={key}
-                    href={href}
-                    label={label}
-                    name={icon}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#ECE5E1] text-[#060C39] transition-colors hover:bg-[#E2D8D2]"
-                    iconClassName="h-5 w-5"
+                    href={`mailto:${profile.email}`}
+                    label="Email"
+                    name="email"
+                    className={SOCIAL_CLASS}
+                    iconClassName="h-[19px] w-[19px]"
                   />
-                ) : null;
-              })}
-              {profile.email && (
-                <SocialLinkIcon
-                  href={`mailto:${profile.email}`}
-                  label="Email"
-                  name="email"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#ECE5E1] text-[#060C39] transition-colors hover:bg-[#E2D8D2]"
-                  iconClassName="h-5 w-5"
-                />
-              )}
+                )}
+              </div>
             </div>
           )}
         </div>

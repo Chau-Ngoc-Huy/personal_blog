@@ -10,63 +10,71 @@ interface AuthorBoxProps {
   socialLinks: Record<string, string>;
 }
 
+const SOCIAL_CLASS =
+  "inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#E2E7E7] bg-white text-[#586063] transition-colors hover:border-[var(--ac)] hover:bg-[var(--ac-soft)] hover:text-[var(--ac-dark)]";
+
 export default function AuthorBox({ profile, socialLinks }: AuthorBoxProps) {
+  const initials = profile.displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const hasSocials = Object.values(socialLinks || {}).some(Boolean);
+
   return (
-    <div
-      className="mt-8 rounded-[20px] p-8 flex flex-col items-center text-center gap-4 bg-[#FAF8F3]"
-      style={{ border: "2px dashed #ECE5E1" }}
-    >
-      {profile.avatar ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={profile.avatar}
-            alt={profile.displayName}
-            className="rounded-full object-cover"
-            style={{ width: 80, height: 80 }}
-          />
-        </>
-      ) : (
-        <div
-          className="rounded-full bg-[#F3EDE9] flex items-center justify-center font-heading text-[#FD976D]"
-          style={{ width: 80, height: 80, fontSize: "1.5rem" }}
-        >
-          {profile.displayName.slice(0, 2).toUpperCase()}
-        </div>
-      )}
-
-      <p
-        className="font-heading text-[#1B1624]"
-        style={{ fontSize: "clamp(1.25rem,1.5vw,1.5rem)", fontWeight: 400 }}
+    <section className="border-y border-[#ECEFEF] bg-[#F5F7F7]">
+      <div
+        className="mx-auto flex flex-col gap-6 sm:flex-row sm:items-start"
+        style={{
+          maxWidth: "760px",
+          paddingLeft: "var(--page-px)",
+          paddingRight: "var(--page-px)",
+          paddingTop: "clamp(40px,6vw,64px)",
+          paddingBottom: "clamp(40px,6vw,64px)",
+        }}
       >
-        {profile.displayName}
-      </p>
-
-      {profile.bio && (
-        <p className="font-sans text-[#54505B] max-w-lg" style={{ fontSize: "1rem", lineHeight: 1.65 }}>
-          {profile.bio}
-        </p>
-      )}
-
-      {/* Social links */}
-      {Object.keys(socialLinks).length > 0 && (
-        <div className="flex gap-4 flex-wrap justify-center">
-          {SOCIAL_LINKS.map(({ key, label, icon }) => {
-            const href = socialLinks[key];
-
-            return href ? (
-              <SocialLinkIcon
-                key={key}
-                href={href}
-                label={label}
-                name={icon}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#ECE5E1] text-[#060C39] transition-colors hover:bg-[#E2D8D2]"
-                iconClassName="h-5 w-5"
-              />
-            ) : null;
-          })}
+        <span className="relative h-[66px] w-[66px] flex-none">
+          <span className="absolute inset-[3px] overflow-hidden rounded-full bg-[var(--ac)]">
+            {profile.avatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile.avatar} alt={profile.displayName} className="h-full w-full object-cover" />
+            ) : (
+              <span className="flex h-full w-full items-center justify-center font-heading text-xl font-semibold text-white">
+                {initials}
+              </span>
+            )}
+          </span>
+        </span>
+        <div>
+          <div className="mb-2 text-xs uppercase tracking-[0.12em] text-[#B8C0C0]">Tác giả</div>
+          <div className="mb-2.5 font-heading text-[20px] font-semibold text-[#14181A]">
+            {profile.displayName}
+          </div>
+          {profile.bio && (
+            <p className="mb-4 max-w-[52ch] whitespace-pre-line text-[15px] leading-[1.7] text-[#586063]">
+              {profile.bio}
+            </p>
+          )}
+          {hasSocials && (
+            <div className="flex flex-wrap gap-2.5">
+              {SOCIAL_LINKS.map(({ key, label, icon }) => {
+                const href = socialLinks[key];
+                return href ? (
+                  <SocialLinkIcon
+                    key={key}
+                    href={href}
+                    label={label}
+                    name={icon}
+                    className={SOCIAL_CLASS}
+                    iconClassName="h-[18px] w-[18px]"
+                  />
+                ) : null;
+              })}
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </section>
   );
 }

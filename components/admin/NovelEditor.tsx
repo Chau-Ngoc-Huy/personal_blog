@@ -1,6 +1,7 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, useEditorState, EditorContent } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -30,10 +31,10 @@ const ToolbarButton = ({
     type="button"
     onClick={onClick}
     title={title}
-    className={`px-2 py-1 text-sm rounded transition-colors ${
+    className={`rounded-[6px] px-2 py-1 text-sm transition-colors ${
       active
-        ? "bg-gray-900 text-white"
-        : "text-gray-600 hover:bg-gray-100"
+        ? "bg-[var(--ac)] text-white"
+        : "text-[#586063] hover:bg-[#F5F7F7]"
     }`}
   >
     {children}
@@ -50,7 +51,7 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
       CodeBlockLowlight.configure({ lowlight }),
       Image.configure({ inline: false }),
       Link.configure({ openOnClick: false }),
-      Placeholder.configure({ placeholder: "Start writing... (Supports pasted images, links, and code)" }),
+      Placeholder.configure({ placeholder: "Bắt đầu viết… (Hỗ trợ dán ảnh, liên kết và mã)" }),
     ],
     content: initialContent ?? "",
     onUpdate({ editor }) {
@@ -59,20 +60,42 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
     editorProps: {
       attributes: {
         class:
-          "min-h-[400px] p-4 focus:outline-none prose-content text-gray-800",
+          "min-h-[420px] focus:outline-none prose-content",
+        // Tắt gạch chân đỏ (spellcheck của trình duyệt) khi gõ tiếng Việt.
+        spellcheck: "false",
       },
     },
   });
 
-  if (!editor) return null;
+  // Subscribe to editor state so the toolbar's active states update on every
+  // selection/cursor move (v3 `useEditor` no longer re-renders on transactions).
+  const active = useEditorState({
+    editor,
+    selector: ({ editor: e }) => ({
+      bold: e?.isActive("bold") ?? false,
+      italic: e?.isActive("italic") ?? false,
+      strike: e?.isActive("strike") ?? false,
+      h1: e?.isActive("heading", { level: 1 }) ?? false,
+      h2: e?.isActive("heading", { level: 2 }) ?? false,
+      h3: e?.isActive("heading", { level: 3 }) ?? false,
+      bulletList: e?.isActive("bulletList") ?? false,
+      orderedList: e?.isActive("orderedList") ?? false,
+      blockquote: e?.isActive("blockquote") ?? false,
+      codeBlock: e?.isActive("codeBlock") ?? false,
+      code: e?.isActive("code") ?? false,
+      link: e?.isActive("link") ?? false,
+    }),
+  });
+
+  if (!editor || !active) return null;
 
   function addImage() {
-    const url = window.prompt("Image URL:");
+    const url = window.prompt("Đường dẫn ảnh:");
     if (url) editor?.chain().focus().setImage({ src: url }).run();
   }
 
   function setLink() {
-    const url = window.prompt("Link URL:", editor?.getAttributes("link").href);
+    const url = window.prompt("Đường dẫn liên kết:", editor?.getAttributes("link").href);
     if (url === null) return;
     if (url === "") {
       editor?.chain().focus().unsetLink().run();
@@ -82,109 +105,138 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg bg-white flex flex-col h-full">
-      {/* Toolbar */}
-      <div className="flex-shrink-0 flex flex-wrap items-center gap-1 px-3 py-2 border-b border-gray-100 bg-gray-50 rounded-t-lg">
+    <div className="flex flex-col">
+      {/* Bubble menu — floats next to the text selection so formatting is always
+          within reach, no matter how far you've scrolled. */}
+      <BubbleMenu
+        editor={editor}
+        className="flex items-center gap-0.5 rounded-[10px] border border-[#E6EAEA] bg-white p-1 shadow-card-lift"
+      >
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={active.bold} title="Đậm">
+          <strong>B</strong>
+        </ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} active={active.italic} title="Nghiêng">
+          <em>I</em>
+        </ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleStrike().run()} active={active.strike} title="Gạch ngang">
+          <s>S</s>
+        </ToolbarButton>
+        <span className="mx-1 h-4 w-px bg-[#E6EAEA]" />
+        <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} active={active.h2} title="Tiêu đề">
+          H2
+        </ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleBlockquote().run()} active={active.blockquote} title="Trích dẫn">
+          ❝
+        </ToolbarButton>
+        <ToolbarButton onClick={() => editor.chain().focus().toggleCode().run()} active={active.code} title="Mã nội dòng">
+          {"`code`"}
+        </ToolbarButton>
+        <ToolbarButton onClick={setLink} active={active.link} title="Liên kết">
+          🔗
+        </ToolbarButton>
+      </BubbleMenu>
+
+      {/* Toolbar — sticky right below the editor top bar (60px) so it stays
+          reachable while writing long posts. */}
+      <div className="sticky top-[60px] z-30 -mx-[clamp(16px,4vw,28px)] mb-4 flex flex-wrap items-center gap-1 border-b border-[#ECEFEF] bg-white/95 px-[clamp(16px,4vw,28px)] py-2.5 backdrop-blur">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
-          active={editor.isActive("bold")}
-          title="Bold"
+          active={active.bold}
+          title="Đậm"
         >
           <strong>B</strong>
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          active={editor.isActive("italic")}
-          title="Italic"
+          active={active.italic}
+          title="Nghiêng"
         >
           <em>I</em>
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          active={editor.isActive("strike")}
-          title="Strikethrough"
+          active={active.strike}
+          title="Gạch ngang"
         >
           <s>S</s>
         </ToolbarButton>
-        <span className="w-px h-4 bg-gray-200 mx-1" />
+        <span className="mx-1 h-4 w-px bg-[#E6EAEA]" />
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          active={editor.isActive("heading", { level: 1 })}
-          title="Heading 1"
+          active={active.h1}
+          title="Tiêu đề 1"
         >
           H1
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          active={editor.isActive("heading", { level: 2 })}
-          title="Heading 2"
+          active={active.h2}
+          title="Tiêu đề 2"
         >
           H2
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          active={editor.isActive("heading", { level: 3 })}
-          title="Heading 3"
+          active={active.h3}
+          title="Tiêu đề 3"
         >
           H3
         </ToolbarButton>
-        <span className="w-px h-4 bg-gray-200 mx-1" />
+        <span className="mx-1 h-4 w-px bg-[#E6EAEA]" />
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          active={editor.isActive("bulletList")}
-          title="Bullet list"
+          active={active.bulletList}
+          title="Danh sách"
         >
           • List
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          active={editor.isActive("orderedList")}
-          title="Ordered list"
+          active={active.orderedList}
+          title="Danh sách đánh số"
         >
           1. List
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          active={editor.isActive("blockquote")}
-          title="Blockquote"
+          active={active.blockquote}
+          title="Trích dẫn"
         >
           ❝
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          active={editor.isActive("codeBlock")}
-          title="Code block"
+          active={active.codeBlock}
+          title="Khối mã"
         >
           {"</>"}
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleCode().run()}
-          active={editor.isActive("code")}
-          title="Inline code"
+          active={active.code}
+          title="Mã nội dòng"
         >
           {"`code`"}
         </ToolbarButton>
-        <span className="w-px h-4 bg-gray-200 mx-1" />
-        <ToolbarButton onClick={setLink} active={editor.isActive("link")} title="Link">
+        <span className="mx-1 h-4 w-px bg-[#E6EAEA]" />
+        <ToolbarButton onClick={setLink} active={active.link} title="Liên kết">
           🔗
         </ToolbarButton>
-        <ToolbarButton onClick={addImage} active={false} title="Image">
+        <ToolbarButton onClick={addImage} active={false} title="Ảnh">
           🖼
         </ToolbarButton>
-        <span className="w-px h-4 bg-gray-200 mx-1" />
+        <span className="mx-1 h-4 w-px bg-[#E6EAEA]" />
         <ToolbarButton
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
           active={false}
-          title="Divider"
+          title="Đường kẻ"
         >
           —
         </ToolbarButton>
       </div>
 
       {/* Editor */}
-      <div className="flex-1 overflow-y-auto">
-        <EditorContent editor={editor} />
-      </div>
+      <EditorContent editor={editor} />
     </div>
   );
 }

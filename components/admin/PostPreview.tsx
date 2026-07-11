@@ -37,51 +37,34 @@ export default function PostPreview({
   const socialLinks: Record<string, string> = {};
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* ── Combined Navbar + Post Header — unified beige box ── */}
-      <div
-        className="max-w-[1400px] mx-auto w-full bg-[#F9F6F3]"
-        style={{
-          margin: "var(--box-margin) auto",
-          borderRadius: "20px",
-          overflow: "hidden",
-        }}
-      >
-        <Navbar name={profile?.displayName || "Author"} transparent />
-        <PostHeader
-          title={title || "Post title..."}
-          tags={tagList}
-          coverImage={coverImage}
-          profile={profile || { displayName: "Author", avatar: null }}
-          publishedAt={new Date()}
-        />
-      </div>
-
-      {/* ── Post Content ── */}
-      <PostContent
-        excerpt={excerpt}
-        contentWithIds={contentWithIds}
-        headings={headings}
-        showTOC={true}
-      />
-
-      {/* ── Author Box ── */}
-      {profile && (
+    <div className="flex min-h-screen flex-col bg-white">
+      <main className="flex-1">
+        {/* Unified header panel — matches the public post page */}
         <div
-          className="max-w-[1400px] mx-auto w-full"
+          className="mx-auto"
           style={{
+            maxWidth: "1240px",
             paddingLeft: "var(--page-px)",
             paddingRight: "var(--page-px)",
-            paddingBottom: "var(--navbar-py)",
+            paddingTop: "var(--box-margin)",
           }}
         >
-          <div className="flex-1 min-w-0">
-            <AuthorBox profile={profile} socialLinks={socialLinks} />
+          <div className="overflow-hidden rounded-[24px] border border-[#ECEFEF] bg-[#F5F7F7]">
+            <Navbar name={profile?.displayName || "Author"} transparent />
+            <PostHeader
+              title={title || "Tiêu đề bài viết..."}
+              tags={tagList}
+              coverImage={coverImage}
+              profile={profile || { displayName: "Author", avatar: null }}
+              publishedAt={new Date()}
+              excerpt={excerpt}
+            />
           </div>
         </div>
-      )}
 
-      {/* ── Footer ── */}
+        <PostContent contentWithIds={contentWithIds} headings={headings} showTOC={true} />
+        {profile && <AuthorBox profile={profile} socialLinks={socialLinks} />}
+      </main>
       {profile && <SiteFooter profile={profile} />}
     </div>
   );

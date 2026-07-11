@@ -2,29 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Ali Abdaal design tokens ───────────────────────────── */
+/* ── Minh Đoàn — cool/emerald design tokens ─────────────── */
 :root {
-  --bg1:       #FFFFFF;
-  --bg2:       #F9F6F3;
-  --bg3:       #F3EDE9;
-  --bg4:       #ECE5E1;
-  --fg1:       #1B1624;
-  --fg2:       #54505B;
-  --fg3:       #76737C;
-  --fg4:       #8D8A91;
-  --primary:   #5DCDF1;
-  --secondary: #FD976D;
-  --tertiary:  #FDD46B;
-  --highlight: #38BD37;
-  --accent:    #C9B1FB;
-  --accent2:   #79D287;
+  /* Surfaces */
+  --bg1: #FFFFFF;
+  --bg2: #F5F7F7;
+  --bg3: #ECEFEF;
+  --bg4: #E6EAEA;
 
-  --page-px:    clamp(3rem, 7vw, 6rem);
-  --page-px-lg: clamp(2.25rem, 4vw, 4rem);
-  --section-py: clamp(1rem, 4vw, 3.5rem);
-  --box-margin: clamp(0.75rem, 2vw, 1.25rem);
-  --navbar-px:  clamp(3rem, 4vw, 6rem);
-  --navbar-py:  clamp(1rem, 2vw, 2rem);
+  /* Text */
+  --fg1: #14181A;
+  --fg2: #586063;
+  --fg3: #8C9496;
+  --fg4: #B8C0C0;
+
+  /* Accent — emerald. Mapped onto the legacy names too so any var()-based
+     usage recolors automatically. */
+  --primary:   #1F8A5B;
+  --secondary: #1F8A5B;
+  --tertiary:  #ECF5F0;
+  --highlight: #1F8A5B;
+  --accent:    #1F8A5B;
+  --accent2:   #186F49;
+
+  /* New design accent family */
+  --ac:        #1F8A5B;
+  --ac-dark:   #186F49;
+  --ac-soft:   #ECF5F0;
+  --ac-border: #CDE6DA;
+  --ac-radius: 8px;
+
+  /* Layout */
+  --maxw:        1160px;
+  --page-px:     clamp(16px, 2.5vw, 40px);
+  --page-px-lg:  clamp(16px, 2vw, 32px);
+  --section-py:  clamp(48px, 8vw, 104px);
+  --box-margin:  clamp(0.75rem, 2vw, 1.25rem);
+  --navbar-px:   clamp(24px, 5vw, 72px);
+  --navbar-py:   18px;
 }
 
 @layer base {
@@ -32,102 +47,110 @@
     font-family: var(--font-inter), "Inter", -apple-system, sans-serif;
     background-color: var(--bg1);
     color: var(--fg1);
-    font-weight: 500;
-    line-height: 1.6;
+    font-weight: 400;
+    line-height: 1.5;
     @apply antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading), Georgia, serif;
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    line-height: 1.25;
+    font-family: var(--font-heading), "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
     color: var(--fg1);
   }
 
   a:not([class]) {
-    color: var(--fg1);
+    color: var(--ac-dark);
     text-decoration: underline;
+    text-underline-offset: 2px;
   }
-  a:not([class]):hover {
-    text-decoration: none;
-  }
+  a:not([class]):hover { text-decoration: none; }
+
+  ::selection { background: #cfe9dd; }
 }
 
-/* ── Prose — nội dung bài viết ─────────────────────────── */
+/* ── Prose — article body (PostContent renders into .prose-content) ─────── */
 .prose-content {
-  font-size: clamp(1rem, 1rem + ((1vw - 0.2rem) * 0.227), 1.125rem);
-  line-height: 1.85;
-  color: var(--fg2);
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #2B3133;
 }
-.prose-content h1 {
-  font-family: var(--font-heading), Georgia, serif;
-  font-size: clamp(1.875rem, 1.875rem + ((1vw - 0.2rem) * 0.909), 2.25rem);
-  font-weight: 400;
-  letter-spacing: -0.03em;
+.prose-content > *:first-child { margin-top: 0; }
+.prose-content h1, .prose-content h2, .prose-content h3 {
+  font-family: var(--font-heading), "Space Grotesk", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--fg1);
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
+  scroll-margin-top: 96px;
 }
-.prose-content h2 {
-  font-family: var(--font-heading), Georgia, serif;
-  font-size: clamp(1.375rem, 1.375rem + ((1vw - 0.2rem) * 0.682), 1.75rem);
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  line-height: 1.3;
-  color: var(--fg1);
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-}
-.prose-content h3 {
-  font-family: var(--font-heading), Georgia, serif;
-  font-size: clamp(1.125rem, 1.125rem + ((1vw - 0.2rem) * 0.455), 1.375rem);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
-  color: var(--fg1);
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-}
-.prose-content p  { margin-bottom: 1.25rem; }
-.prose-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-.prose-content ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
-.prose-content li { margin-bottom: 0.375rem; }
+.prose-content h1 { font-size: clamp(28px, 4vw, 36px); margin: 48px 0 18px; }
+.prose-content h2 { font-size: clamp(24px, 3vw, 30px); margin: 48px 0 18px; }
+.prose-content h3 { font-size: clamp(20px, 2.4vw, 24px); margin: 36px 0 14px; }
+.prose-content p  { margin: 0 0 26px; }
+.prose-content ul { list-style: disc; padding-left: 22px; margin: 0 0 26px; }
+.prose-content ol { list-style: decimal; padding-left: 22px; margin: 0 0 26px; }
+.prose-content li { margin-bottom: 10px; }
 .prose-content blockquote {
-  border-left: 4px solid var(--tertiary);
-  padding-left: 1.25rem;
-  margin: 1.75rem 0;
-  color: var(--fg3);
+  margin: 28px 0;
+  padding: 2px 0 2px 1.25rem;
+  border-left: 4px solid var(--ac);
+  font-family: var(--font-inter), "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.7;
+  letter-spacing: normal;
+  color: var(--fg2);
   font-style: italic;
 }
 .prose-content code {
-  background: var(--bg3);
-  border-radius: 6px;
-  padding: 0.15em 0.4em;
-  font-size: 0.85em;
-  font-family: ui-monospace, "Cascadia Code", monospace;
-  color: #c44;
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  background: var(--bg2);
+  border: 1px solid var(--bg3);
+  border-radius: 5px;
+  padding: 0.12em 0.4em;
+  font-size: 0.86em;
+  color: var(--ac-dark);
 }
 .prose-content pre {
-  background: var(--fg1);
-  color: #e5e7eb;
-  border-radius: 16px;
-  padding: 1.25rem;
+  margin: 0 0 26px;
+  padding: 18px 20px;
+  background: var(--bg2);
+  border: 1px solid var(--bg3);
+  border-radius: var(--ac-radius);
   overflow-x: auto;
-  margin: 1.75rem 0;
-  font-size: 0.875em;
+  font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
+  font-size: 14px;
   line-height: 1.7;
+  color: #2B3133;
 }
-.prose-content pre code { background: transparent; color: inherit; padding: 0; }
-.prose-content a { color: var(--fg1); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--bg4); }
-.prose-content a:hover { text-decoration-color: var(--fg1); }
-.prose-content img { border-radius: 16px; margin: 2rem 0; width: 100%; }
-.prose-content hr  { border-color: var(--bg4); margin: 2.5rem 0; }
+.prose-content pre code { background: transparent; border: none; padding: 0; color: inherit; font-size: inherit; }
+.prose-content a { color: var(--ac-dark); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--ac-border); }
+.prose-content a:hover { text-decoration-color: var(--ac-dark); }
+.prose-content img { border-radius: var(--ac-radius); margin: 36px 0; width: 100%; border: 1px solid var(--bg4); }
+.prose-content hr  { border: none; border-top: 1px solid var(--bg3); margin: 40px 0; }
 .prose-content strong { font-weight: 700; color: var(--fg1); }
+.prose-content figure { margin: 36px 0; }
+.prose-content figcaption { margin-top: 12px; font-size: 14px; color: var(--fg3); text-align: center; }
 
-/* ── TipTap placeholder ─────────────────────────────────── */
+/* ── TipTap placeholder (admin editor — keep) ───────────── */
 .tiptap p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   @apply text-neutral-300 pointer-events-none float-left h-0;
+}
+
+/* ── Skeleton placeholders (loading.tsx route fallbacks) ─── */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg4) 25%, #EFF2F2 37%, var(--bg4) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+@keyframes skeleton-shimmer {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
 }

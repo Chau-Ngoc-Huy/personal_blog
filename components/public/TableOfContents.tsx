@@ -1,11 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Heading } from "@/lib/utils";
+import { type Heading } from "@/lib/utils";
+import TocList from "./TocList";
 
 export default function TableOfContents({ headings }: { headings: Heading[] }) {
   const [activeId, setActiveId] = useState<string>("");
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const activeIndex = headings.findIndex((h) => h.id === activeId);
+
+  const goTo = (i: number) => {
+    const h = headings[i];
+    if (!h) return;
+    document.getElementById(h.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setActiveId(h.id);
+  };
 
   useEffect(() => {
     if (headings.length === 0) return;
@@ -16,7 +25,6 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
       (entries) => {
         const visible = entries.filter((e) => e.isIntersecting);
         if (visible.length > 0) {
-          // pick the topmost visible heading
           visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
           setActiveId(visible[0].target.id);
         }
@@ -36,10 +44,9 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
 
   return (
     <aside
-      className="hidden xl:block"
+      className="hidden shrink-0 xl:block"
       style={{
-        width: "260px",
-        flexShrink: 0,
+        width: "280px",
         position: "sticky",
         top: "2rem",
         alignSelf: "flex-start",
@@ -47,43 +54,19 @@ export default function TableOfContents({ headings }: { headings: Heading[] }) {
         overflowY: "auto",
       }}
     >
-      <div
-        className="bg-[#F9F6F3] rounded-[20px] p-6"
-      >
-          <p
-            className="font-sans text-[#1B1624] mb-4"
-            style={{ fontSize: "0.875rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase" }}
-          >
-            In this article:
-          </p>
-          <nav>
-            <ul className="space-y-1">
-              {headings.map((h) => (
-                <li key={h.id} style={{ paddingLeft: h.level === 2 ? "0.75rem" : h.level === 3 ? "1.5rem" : 0 }}>
-                  <a
-                    href={`#${h.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      document.getElementById(h.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                      setActiveId(h.id);
-                    }}
-                    className="block font-sans transition-colors duration-150 rounded-lg px-2 py-1"
-                    style={{
-                      fontSize: "0.875rem",
-                      lineHeight: 1.5,
-                      fontWeight: activeId === h.id ? 600 : 400,
-                      color: activeId === h.id ? "#1B1624" : "#76737C",
-                      background: activeId === h.id ? "var(--highlight)" : "transparent",
-                      textDecoration: "none",
-                    }}
-                  >
-                    {h.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
+      <div className="rounded-[16px] bg-[#F5F7F7] p-5">
+        <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#8C9496]">
+          Trong bài viết
+        </p>
+        <nav>
+          <TocList
+            headings={headings}
+            activeIndex={activeIndex}
+            onNavigate={goTo}
+            hrefFor={(i) => `#${headings[i].id}`}
+          />
+        </nav>
+      </div>
     </aside>
   );
 }
