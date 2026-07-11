@@ -171,84 +171,111 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
             {/* Editor column */}
             <div ref={editorColRef} className="w-full min-w-0 xl:flex-1">
               <div className="mx-auto max-w-[760px] xl:mx-0">
-          {/* Cover */}
-          <div className="mb-7">
-            {coverImage ? (
-              <div>
-                <div className="relative aspect-[16/7] w-full max-w-[420px] overflow-hidden rounded-[16px] border border-[#E6EAEA] shadow-card-lift">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={coverImage} alt="Ảnh bìa" className="absolute inset-0 h-full w-full object-cover" referrerPolicy="no-referrer" />
+                {/* BỊA & TIÊU ĐỀ Section */}
+                <div className="mb-8 rounded-[12px] border border-[#E6EAEA] bg-white p-6">
+                  {/* Header */}
+                  <div className="mb-6 flex items-center justify-between">
+                    <h3 className="text-[13px] font-semibold uppercase tracking-[0.5px] text-[#8C9496]">BỊA & TIÊU ĐỀ</h3>
+                    <button
+                      type="button"
+                      className="text-[12px] font-medium text-[#586063] transition-colors hover:text-[#14181A]"
+                    >
+                      Thu gọn
+                    </button>
+                  </div>
+
+                  {/* Cover Image Section */}
+                  <div className="mb-6 flex gap-6">
+                    <div className="flex-none">
+                      {coverImage ? (
+                        <div className="relative aspect-[16/9] w-[280px] overflow-hidden rounded-[12px] border border-[#E6EAEA] shadow-sm">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={coverImage}
+                            alt="Ảnh bìa"
+                            className="absolute inset-0 h-full w-full object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setShowMetadata(true)}
+                          className="flex aspect-[16/9] w-[280px] items-center justify-center gap-2.5 rounded-[12px] border border-dashed border-[#CFD6D6] text-sm text-[#8C9496] transition-colors hover:border-[var(--ac)] hover:text-[var(--ac-dark)]"
+                          style={{ background: "repeating-linear-gradient(135deg,#F7F9F9,#F7F9F9 10px,#F1F4F4 10px,#F1F4F4 20px)" }}
+                        >
+                          <span className="text-lg leading-none">＋</span> <span>Chọn ảnh</span>
+                        </button>
+                      )}
+                      {coverImage && (
+                        <div className="mt-3 flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setShowMetadata(true)}
+                            className="text-[13px] font-medium text-[var(--ac)] transition-colors hover:text-[var(--ac-dark)]"
+                          >
+                            Đổi ảnh
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setCoverImage("")}
+                            className="text-[13px] font-medium text-[#C0584F] transition-colors hover:text-[#B3483E]"
+                          >
+                            Xoá ảnh
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Title and Excerpt */}
+                    <div className="flex-1">
+                      {/* Title */}
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => handleTitleChange(e.target.value)}
+                        placeholder="Tiêu đề không tên"
+                        className="mb-4 w-full border-none bg-transparent font-heading text-[28px] font-semibold leading-[1.2] tracking-[-0.015em] text-[#14181A] caret-[var(--ac)] placeholder:text-[#B8C0C0] focus:outline-none"
+                      />
+
+                      {/* Excerpt / summary */}
+                      <textarea
+                        value={excerpt}
+                        onChange={(e) => setExcerpt(e.target.value)}
+                        rows={3}
+                        placeholder="Viết đoạn tóm tắt ngắn hiển thị ở trang chủ…"
+                        className="w-full resize-none border-none bg-transparent text-[15px] leading-[1.6] text-[#586063] caret-[var(--ac)] placeholder:text-[#B8C0C0] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="my-6 border-t border-[#F0F3F3]" />
+
+                  {/* Author meta and word count */}
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-3 text-[13px] text-[#8C9496]">
+                      <span className="relative inline-block h-6 w-6 flex-none">
+                        {profile?.avatar ? (
+                          <>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={profile.avatar} alt={profile.displayName} className="absolute inset-0 h-full w-full rounded-full object-cover" />
+                          </>
+                        ) : (
+                          <span className="absolute inset-0 flex items-center justify-center rounded-full bg-[var(--ac)] font-heading text-[9px] font-semibold text-white">
+                            {initials}
+                          </span>
+                        )}
+                      </span>
+                      <span className="text-[#14181A]">{profile?.displayName ?? "Tác giả"}</span>
+                      <span className="text-[#C8CFCF]">·</span>
+                      <span>{words} từ</span>
+                    </span>
+                  </div>
                 </div>
-                <div className="mt-3.5 flex items-center gap-3.5">
-                  <button
-                    type="button"
-                    onClick={() => setShowMetadata(true)}
-                    className="rounded-[8px] border border-[#E6EAEA] bg-white px-3.5 py-2 text-[13px] text-[#586063] transition-colors hover:border-[#C8CFCF]"
-                  >
-                    Đổi ảnh
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCoverImage("")}
-                    className="px-1 py-2 text-[13px] text-[#C0584F] transition-colors hover:underline"
-                  >
-                    Xoá ảnh
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowMetadata(true)}
-                className="flex aspect-[16/6] w-full max-w-[380px] items-center justify-center gap-2.5 rounded-[14px] border border-dashed border-[#CFD6D6] text-sm text-[#8C9496] transition-colors hover:border-[var(--ac)] hover:text-[var(--ac-dark)]"
-                style={{ background: "repeating-linear-gradient(135deg,#F7F9F9,#F7F9F9 10px,#F1F4F4 10px,#F1F4F4 20px)" }}
-              >
-                <span className="text-lg leading-none">＋</span> Chọn ảnh bìa
-              </button>
-            )}
-          </div>
 
-          {/* Title */}
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-            placeholder="Tiêu đề không tên"
-            className="w-full border-none bg-transparent font-heading text-[clamp(30px,4.4vw,46px)] font-semibold leading-[1.1] tracking-[-0.025em] text-[#14181A] caret-[var(--ac)] placeholder:text-[#B8C0C0] focus:outline-none"
-          />
-
-          {/* Excerpt / summary */}
-          <textarea
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            rows={2}
-            placeholder="Viết đoạn tóm tắt ngắn hiển thị ở trang chủ…"
-            className="mt-3.5 w-full resize-none border-none bg-transparent text-[clamp(16px,2vw,19px)] leading-[1.55] text-[#586063] caret-[var(--ac)] placeholder:text-[#B8C0C0] focus:outline-none"
-          />
-
-          {/* Author meta */}
-          <div className="mb-3.5 mt-3 flex items-center gap-3 border-b border-[#F0F3F3] pb-[18px] text-[13px] text-[#8C9496]">
-            <span className="inline-flex items-center gap-2">
-              <span className="relative inline-block h-6 w-6 flex-none">
-                {profile?.avatar ? (
-                  <>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={profile.avatar} alt={profile.displayName} className="absolute inset-0 h-full w-full rounded-full object-cover" />
-                  </>
-                ) : (
-                  <span className="absolute inset-0 flex items-center justify-center rounded-full bg-[var(--ac)] font-heading text-[9px] font-semibold text-white">
-                    {initials}
-                  </span>
-                )}
-              </span>
-              <span className="text-[#14181A]">{profile?.displayName ?? "Tác giả"}</span>
-            </span>
-            <span className="text-[#C8CFCF]">·</span>
-            <span>{words} từ</span>
-          </div>
-
-          {/* Content editor */}
-          <NovelEditor initialContent={defaultValues.content} onChange={setContent} />
+                {/* Content editor */}
+                <NovelEditor initialContent={defaultValues.content} onChange={setContent} />
               </div>
             </div>
           </div>

@@ -20,6 +20,7 @@ export default function EditorToc({
   containerRef: React.RefObject<HTMLElement>;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Track which heading is in view. The editor DOM mounts asynchronously and
   // changes as the user writes, so a MutationObserver rebuilds the
@@ -78,7 +79,7 @@ export default function EditorToc({
     <aside
       className="hidden shrink-0 xl:block"
       style={{
-        width: "260px",
+        width: isCollapsed ? "auto" : "260px",
         position: "sticky",
         top: "84px",
         alignSelf: "flex-start",
@@ -86,13 +87,27 @@ export default function EditorToc({
         overflowY: "auto",
       }}
     >
-      <div className="rounded-[20px] bg-[#F5F7F7] p-6">
-        <p className="mb-4 text-[12px] font-bold uppercase tracking-[0.08em] text-[#586063]">
-          Trong bài viết này
-        </p>
-        <nav>
-          <TocList headings={headings} activeIndex={activeIndex} onNavigate={scrollTo} />
-        </nav>
+      <div className={`rounded-[12px] border border-[#E6EAEA] bg-white p-6 ${isCollapsed ? "min-w-fit" : ""}`}>
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <p className="whitespace-nowrap text-[12px] font-bold uppercase tracking-[0.08em] text-[#586063]">
+            Dàn ý
+          </p>
+          <button
+            type="button"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="flex h-6 w-6 items-center justify-center rounded-md transition-colors hover:bg-[#F5F7F7]"
+            title={isCollapsed ? "Mở rộng" : "Thu gọn"}
+          >
+            <span className="text-[12px] text-[#8C9496]">
+              {isCollapsed ? "▶" : "▼"}
+            </span>
+          </button>
+        </div>
+        {!isCollapsed && (
+          <nav>
+            <TocList headings={headings} activeIndex={activeIndex} onNavigate={scrollTo} />
+          </nav>
+        )}
       </div>
     </aside>
   );
