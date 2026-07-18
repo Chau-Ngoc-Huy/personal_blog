@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import type { Editor } from "@tiptap/react";
 import { useEditor, useEditorState, EditorContent } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
@@ -14,6 +16,7 @@ const lowlight = createLowlight();
 interface Props {
   initialContent?: string;
   onChange: (html: string) => void;
+  onEditorReady?: (editor: Editor) => void;
 }
 
 const ToolbarButton = ({
@@ -41,7 +44,7 @@ const ToolbarButton = ({
   </button>
 );
 
-export default function NovelEditor({ initialContent, onChange }: Props) {
+export default function NovelEditor({ initialContent, onChange, onEditorReady }: Props) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -66,6 +69,13 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
       },
     },
   });
+
+  // Call onEditorReady callback when editor is ready
+  useEffect(() => {
+    if (editor && onEditorReady) {
+      onEditorReady(editor);
+    }
+  }, [editor, onEditorReady]);
 
   // Subscribe to editor state so the toolbar's active states update on every
   // selection/cursor move (v3 `useEditor` no longer re-renders on transactions).
@@ -136,9 +146,8 @@ export default function NovelEditor({ initialContent, onChange }: Props) {
         </ToolbarButton>
       </BubbleMenu>
 
-      {/* Toolbar — sticky right below the editor top bar (60px) so it stays
-          reachable while writing long posts. */}
-      <div className="sticky top-[60px] z-30 -mx-[clamp(16px,4vw,28px)] mb-4 flex flex-wrap items-center gap-1 border-b border-[#ECEFEF] bg-white/95 px-[clamp(16px,4vw,28px)] py-2.5 backdrop-blur">
+      {/* Toolbar — hidden as it's now in header */}
+      <div className="hidden sticky top-[60px] z-30 -mx-[clamp(16px,4vw,28px)] mb-4 flex flex-wrap items-center gap-1 border-b border-[#ECEFEF] bg-white/95 px-[clamp(16px,4vw,28px)] py-2.5 backdrop-blur">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={active.bold}

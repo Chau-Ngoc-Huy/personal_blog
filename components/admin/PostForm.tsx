@@ -3,10 +3,12 @@
 import { useState, useTransition, useMemo, useRef } from "react";
 import { slugify, extractHeadings } from "@/lib/utils";
 import dynamic from "next/dynamic";
+import { Editor } from "@tiptap/react";
 import { ErrorNotification, SuccessNotification } from "../ErrorNotification";
 import MetadataModal from "./MetadataModal";
 import PostPreview from "./PostPreview";
-import EditorToc from "./EditorToc";
+import EditorToolbar from "./EditorToolbar";
+import TocList from "../public/TocList";
 import { ActionResponse } from "@/lib/error-handler";
 import { getProfile } from "@/lib/actions/profile";
 
@@ -18,6 +20,26 @@ const NovelEditor = dynamic(() => import("./NovelEditor"), {
     </div>
   ),
 });
+
+const ChevronDownIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+);
+
+const ChevronUpIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <path d="M18 15l-6-6-6 6" />
+  </svg>
+);
+
+const OutlineIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+    <rect x="3.5" y="4" width="17" height="16" rx="1.5" />
+    <path d="M8 9h9M8 12.5h9M8 16h6" />
+  </svg>
+);
+
 
 interface Props {
   action: (formData: FormData) => Promise<ActionResponse | void>;
@@ -52,22 +74,30 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
   const [showMetadata, setShowMetadata] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [pendingAction, setPendingAction] = useState<string | null>(null);
+  const [headerExpanded, setHeaderExpanded] = useState(false);
+  const [tocOpen, setTocOpen] = useState(false);
+  const [editor, setEditor] = useState<Editor | null>(null);
+  const [activeHeadingIndex, setActiveHeadingIndex] = useState(0);
 
   const published = defaultValues.status === "published";
   const words = countWords(content, title);
   const headings = useMemo(() => extractHeadings(content), [content]);
   const editorColRef = useRef<HTMLDivElement>(null);
-  const initials =
-    (profile?.displayName ?? "")
-      .split(" ")
-      .map((w) => w.charAt(0))
-      .join("")
-      .slice(0, 2)
-      .toUpperCase() || "·";
 
   function handleTitleChange(v: string) {
     setTitle(v);
     if (!slugEdited) setSlug(slugify(v));
+  }
+
+  function handleTocNavigate(index: number) {
+    setActiveHeadingIndex(index);
+    const heading = headings[index];
+    if (!heading) return;
+    // Scroll to the heading element in the editor
+    const element = editorColRef.current?.querySelector(`h${heading.level}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 
   function handleSubmit(actionType: "draft" | "publish") {
@@ -101,29 +131,28 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
 
   return (
     <>
-      {/* ── Top bar (fixed 60px tall so the editor toolbar can stick right below) ── */}
-      <header className="sticky top-0 z-40 border-b border-[#ECEFEF] bg-white/[0.86] backdrop-blur-[12px]">
-        <div className="mx-auto flex h-[60px] max-w-[1100px] items-center gap-3.5 px-[clamp(16px,4vw,40px)]">
-          <span className="text-sm text-[#8C9496]">{published ? "Đã đăng" : "Bản nháp"}</span>
+      {/* ── Top bar ── */}
+      <header className="sticky top-0 z-40 bg-white border-b border-[#E6EAEA]">
+        {/* Main header row */}
+        <div className="flex h-[52px] items-center justify-between px-7">
+          {/* Left: Status + Mode toggle */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-[13px] font-[600]">
+              <span className="w-2 h-2 rounded-full bg-[#178a5e]" />
+              <span className={published ? "text-[#178a5e]" : "text-[#8C9496]"}>
+                {published ? "Đã đăng" : "Bản nháp"}
+              </span>
+            </div>
 
-          <div className="ml-auto flex items-center gap-3.5">
-            <button
-              type="button"
-              onClick={() => setShowMetadata(true)}
-              className="inline-flex items-center gap-2 rounded-[8px] border border-[#E6EAEA] px-3.5 py-2 text-[13px] font-medium text-[#586063] transition-colors hover:bg-[#F5F7F7]"
-            >
-              <span>⚙</span> <span className="hidden sm:inline">Thông tin</span>
-            </button>
-
-            {/* Segmented toggle */}
-            <div className="flex rounded-full border border-[#ECEFEF] bg-[#F2F4F4] p-[3px]">
+            {/* Tab toggle */}
+            <div className="flex gap-0 bg-[#F5F7F7] rounded-[6px] p-[3px]">
               <button
                 type="button"
                 onClick={() => setMode("edit")}
-                className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
+                className={`px-3 py-1.5 text-[12px] font-[600] rounded-[5px] transition-all ${
                   mode === "edit"
-                    ? "bg-white text-[#14181A] shadow-[0_1px_2px_rgba(20,24,26,0.06)]"
-                    : "text-[#586063] hover:text-[#14181A]"
+                    ? "bg-white text-[#111]"
+                    : "bg-transparent text-[#8C9496] hover:text-[#14181A]"
                 }`}
               >
                 Soạn thảo
@@ -131,192 +160,231 @@ export default function PostForm({ action, defaultValues = {}, profile }: Props)
               <button
                 type="button"
                 onClick={() => setMode("preview")}
-                className={`rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors ${
+                className={`px-3 py-1.5 text-[12px] font-[600] rounded-[5px] transition-all ${
                   mode === "preview"
-                    ? "bg-white text-[#14181A] shadow-[0_1px_2px_rgba(20,24,26,0.06)]"
-                    : "text-[#586063] hover:text-[#14181A]"
+                    ? "bg-white text-[#111]"
+                    : "bg-transparent text-[#8C9496] hover:text-[#14181A]"
                 }`}
               >
                 Xem trước
               </button>
             </div>
+          </div>
+
+          {/* Right: Action buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowMetadata(true)}
+              className="w-8 h-8 flex items-center justify-center rounded-[6px] text-[#8C9496] hover:bg-[#F5F7F7] transition-colors"
+              title="Thông tin"
+            >
+              ⓘ
+            </button>
 
             <button
               type="button"
               onClick={() => handleSubmit("draft")}
               disabled={isPending}
-              className="hidden rounded-[8px] border border-[#E6EAEA] px-4 py-2 text-[13px] font-medium text-[#586063] transition-colors hover:bg-[#F5F7F7] disabled:opacity-50 sm:block"
+              className="px-3 py-1.5 text-[12px] font-[600] text-[#586063] border border-[#E6EAEA] bg-white rounded-[6px] hover:bg-[#F5F7F7] transition-colors disabled:opacity-50 hidden sm:block"
             >
               {isPending && pendingAction === "draft" ? "Đang lưu…" : "Lưu nháp"}
             </button>
+
             <button
               type="button"
               onClick={() => handleSubmit("publish")}
               disabled={isPending}
-              className="rounded-[8px] bg-[var(--ac)] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-[var(--ac-dark)] disabled:opacity-50"
+              className="px-3 py-1.5 text-[12px] font-[700] text-white bg-[#178a5e] rounded-[6px] hover:bg-[#136f4b] transition-colors disabled:opacity-50"
             >
               {isPending && pendingAction === "publish" ? "Đang đăng…" : "Đăng bài"}
             </button>
           </div>
         </div>
+
+        {/* Toolbar row - only show in edit mode */}
+        {mode === "edit" && (
+          <div className="h-[44px] border-t border-[#E6EAEA] flex items-center justify-center">
+            <EditorToolbar editor={editor} compact={true} />
+          </div>
+        )}
       </header>
 
       {/* ── Edit mode ───────────────────────────────────── */}
       {mode === "edit" && (
-        <main className="mx-auto max-w-[1120px] px-[clamp(16px,4vw,28px)] pb-[140px] pt-[clamp(32px,5vw,64px)]">
-          <div className="flex flex-col items-start gap-10 xl:flex-row xl:gap-14">
-            {/* TOC — mirrors the public post layout */}
-            <EditorToc headings={headings} containerRef={editorColRef} />
+        <main className="flex h-[calc(100vh-96px)] overflow-hidden bg-[#F6F5F1]">
+          {/* TOC Rail */}
+          <div className="w-[52px] flex-none border-r border-[#E6EAEA] bg-[#FBFAF7] flex flex-col items-center pt-4 gap-2">
+            <button
+              type="button"
+              onClick={() => setTocOpen(!tocOpen)}
+              className={`w-8 h-8 rounded-md border-none flex items-center justify-center cursor-pointer transition-colors ${
+                tocOpen ? "bg-[#F1F1F1]" : "bg-transparent hover:bg-[#F1F1F1]"
+              }`}
+              title="Outline"
+            >
+              <OutlineIcon />
+            </button>
+          </div>
 
-            {/* Editor column */}
-            <div ref={editorColRef} className="w-full min-w-0 xl:flex-1">
-              <div className="mx-auto max-w-[760px] xl:mx-0">
-                {/* BỊA & TIÊU ĐỀ Section */}
-                <div className="mb-8 rounded-[12px] border border-[#E6EAEA] bg-white p-6">
-                  {/* Header */}
-                  <div className="mb-6 flex items-center justify-between">
-                    <h3 className="text-[13px] font-semibold uppercase tracking-[0.5px] text-[#8C9496]">BỊA & TIÊU ĐỀ</h3>
-                    <button
-                      type="button"
-                      className="text-[12px] font-medium text-[#586063] transition-colors hover:text-[#14181A]"
+          {/* TOC Sidebar */}
+          {tocOpen && (
+            <div className="w-[280px] flex-none border-l border-[#E6EAEA] bg-white p-5 overflow-y-auto">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#8C9496]">
+                Trong bài viết
+              </p>
+              {headings.length > 0 ? (
+                <nav>
+                  <TocList
+                    headings={headings}
+                    activeIndex={activeHeadingIndex}
+                    onNavigate={handleTocNavigate}
+                  />
+                </nav>
+              ) : (
+                <div className="text-[13px] text-[#8C9496]">Chưa có tiêu đề</div>
+              )}
+            </div>
+          )}
+
+          {/* Editor column */}
+          <div className="flex-1 overflow-y-auto px-6 py-7 pb-20">
+            <div className="max-w-[900px] mx-auto">
+              <div ref={editorColRef} className="w-full min-w-0">
+                {/* Editor Card */}
+                <div className="bg-white border border-[#E6EAEA] rounded-[16px] overflow-hidden">
+                  {/* Collapsed Header */}
+                  {!headerExpanded && (
+                    <div
+                      onClick={() => setHeaderExpanded(true)}
+                      className="flex items-center gap-3 px-5 py-4 cursor-pointer border-b border-[#E6EAEA] hover:bg-[#FBFAF7] transition-colors"
                     >
-                      Thu gọn
-                    </button>
-                  </div>
-
-                  {/* Cover Image Section */}
-                  <div className="mb-6 flex gap-6">
-                    <div className="flex-none">
-                      {coverImage ? (
-                        <div className="relative aspect-[16/9] w-[280px] overflow-hidden rounded-[12px] border border-[#E6EAEA] shadow-sm">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={coverImage}
-                            alt="Ảnh bìa"
-                            className="absolute inset-0 h-full w-full object-cover"
-                            referrerPolicy="no-referrer"
-                          />
+                      {coverImage && (
+                        <img
+                          src={coverImage}
+                          alt="Cover"
+                          className="w-11 h-11 rounded-[9px] object-cover flex-none"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[15px] font-[700] whitespace-nowrap overflow-hidden text-ellipsis">
+                          {title || "Tiêu đề không tên"}
                         </div>
-                      ) : (
+                        <div className="text-[12px] text-[#8C9496] mt-0.5">
+                          Bìa & tiêu đề · nhấn để chỉnh sửa
+                        </div>
+                      </div>
+                      <ChevronDownIcon />
+                    </div>
+                  )}
+
+                  {/* Expanded Header */}
+                  {headerExpanded && (
+                    <div className="px-6 py-6 pb-1.5 border-b border-[#E6EAEA]">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="text-[11px] font-[700] letter-spacing-[0.05em] text-[#8C9496] uppercase">
+                          BỊA & TIÊU ĐỀ
+                        </div>
                         <button
                           type="button"
-                          onClick={() => setShowMetadata(true)}
-                          className="flex aspect-[16/9] w-[280px] items-center justify-center gap-2.5 rounded-[12px] border border-dashed border-[#CFD6D6] text-sm text-[#8C9496] transition-colors hover:border-[var(--ac)] hover:text-[var(--ac-dark)]"
-                          style={{ background: "repeating-linear-gradient(135deg,#F7F9F9,#F7F9F9 10px,#F1F4F4 10px,#F1F4F4 20px)" }}
+                          onClick={() => setHeaderExpanded(false)}
+                          className="border-none bg-none text-[#8C9496] text-[12.5px] font-[600] cursor-pointer flex items-center gap-1 hover:text-[#178a5e] transition-colors"
                         >
-                          <span className="text-lg leading-none">＋</span> <span>Chọn ảnh</span>
+                          Thu gọn
+                          <ChevronUpIcon />
                         </button>
-                      )}
-                      {coverImage && (
-                        <div className="mt-3 flex items-center gap-3">
+                      </div>
+
+                      <div className="flex gap-4 mb-4">
+                        {coverImage ? (
+                          <div className="relative w-[180px] h-[120px] rounded-[10px] overflow-hidden flex-none">
+                            <img
+                              src={coverImage}
+                              alt="Ảnh bìa"
+                              className="absolute inset-0 w-full h-full object-cover"
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
+                        ) : (
                           <button
                             type="button"
                             onClick={() => setShowMetadata(true)}
-                            className="text-[13px] font-medium text-[var(--ac)] transition-colors hover:text-[var(--ac-dark)]"
+                            className="w-[180px] h-[120px] rounded-[10px] border border-dashed border-[#CFD6D6] flex items-center justify-center text-sm text-[#8C9496] hover:border-[#178a5e] hover:text-[#178a5e] transition-colors flex-none"
+                            style={{ background: "repeating-linear-gradient(135deg,#F7F9F9,#F7F9F9 10px,#F1F4F4 10px,#F1F4F4 20px)" }}
                           >
-                            Đổi ảnh
+                            <span className="text-center">
+                              <div className="text-lg">＋</div>
+                              <div>Chọn ảnh</div>
+                            </span>
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => setCoverImage("")}
-                            className="text-[13px] font-medium text-[#C0584F] transition-colors hover:text-[#B3483E]"
-                          >
-                            Xoá ảnh
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                        )}
 
-                    {/* Title and Excerpt */}
-                    <div className="flex-1">
-                      {/* Title */}
+                        <div className="flex flex-col justify-center gap-2">
+                          {coverImage && (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => setShowMetadata(true)}
+                                className="border border-[#D7CBBD] bg-white px-4 py-2 text-[12.5px] font-[600] rounded-[8px] hover:bg-[#F5F4EF] transition-colors"
+                              >
+                                Đổi ảnh
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setCoverImage("")}
+                                className="border-none bg-none text-[#B5502E] text-[12.5px] font-[600] cursor-pointer hover:text-[#A0432A] transition-colors"
+                              >
+                                Xoá ảnh
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
                       <input
                         type="text"
                         value={title}
                         onChange={(e) => handleTitleChange(e.target.value)}
                         placeholder="Tiêu đề không tên"
-                        className="mb-4 w-full border-none bg-transparent font-heading text-[28px] font-semibold leading-[1.2] tracking-[-0.015em] text-[#14181A] caret-[var(--ac)] placeholder:text-[#B8C0C0] focus:outline-none"
+                        className="w-full border-none outline-none text-[28px] font-[800] font-serif px-0 pb-2 bg-transparent text-[#14181A] caret-[#178a5e] placeholder:text-[#B8C0C0] focus:outline-none"
                       />
 
-                      {/* Excerpt / summary */}
                       <textarea
                         value={excerpt}
                         onChange={(e) => setExcerpt(e.target.value)}
-                        rows={3}
+                        rows={2}
                         placeholder="Viết đoạn tóm tắt ngắn hiển thị ở trang chủ…"
-                        className="w-full resize-none border-none bg-transparent text-[15px] leading-[1.6] text-[#586063] caret-[var(--ac)] placeholder:text-[#B8C0C0] focus:outline-none"
+                        className="w-full border-none outline-none resize-none text-[14.5px] leading-[1.6] text-[#8C9496] bg-transparent caret-[#178a5e] placeholder:text-[#B8C0C0] focus:outline-none"
                       />
                     </div>
+                  )}
+
+                  {/* Meta Row */}
+                  <div className="flex items-center px-6 py-3 text-[12.5px] text-[#8C9496] border-b border-[#E6EAEA] font-[500]">
+                    {words} từ
                   </div>
 
-                  {/* Divider */}
-                  <div className="my-6 border-t border-[#F0F3F3]" />
-
-                  {/* Author meta and word count */}
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-3 text-[13px] text-[#8C9496]">
-                      <span className="relative inline-block h-6 w-6 flex-none">
-                        {profile?.avatar ? (
-                          <>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={profile.avatar} alt={profile.displayName} className="absolute inset-0 h-full w-full rounded-full object-cover" />
-                          </>
-                        ) : (
-                          <span className="absolute inset-0 flex items-center justify-center rounded-full bg-[var(--ac)] font-heading text-[9px] font-semibold text-white">
-                            {initials}
-                          </span>
-                        )}
-                      </span>
-                      <span className="text-[#14181A]">{profile?.displayName ?? "Tác giả"}</span>
-                      <span className="text-[#C8CFCF]">·</span>
-                      <span>{words} từ</span>
-                    </span>
+                  {/* Content */}
+                  <div className="px-6 py-8">
+                    <NovelEditor initialContent={defaultValues.content} onChange={setContent} onEditorReady={setEditor} />
                   </div>
                 </div>
-
-                {/* Content editor */}
-                <NovelEditor initialContent={defaultValues.content} onChange={setContent} />
               </div>
             </div>
           </div>
         </main>
       )}
 
-      {/* ── Preview mode (inline full article) ──────────── */}
+      {/* ── Preview mode ──────────── */}
       {mode === "preview" && (
-        <div>
-          <PostPreview
-            title={title}
-            excerpt={excerpt}
-            tags={tags}
-            coverImage={coverImage}
-            content={content}
-            profile={profile}
-          />
-
-          {/* Floating preview control */}
-          <div className="fixed bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2.5 rounded-full bg-[#14181A] py-2 pl-[18px] pr-2 text-white shadow-[0_12px_36px_rgba(20,24,26,0.22)]">
-            <span className="inline-flex items-center gap-2 whitespace-nowrap text-[13px]">
-              <span className="h-[7px] w-[7px] rounded-full bg-[#5FD0A8]" />
-              Đang xem trước
-            </span>
-            <button
-              type="button"
-              onClick={() => setMode("edit")}
-              className="rounded-full bg-white/[0.14] px-3.5 py-2 text-[13px] font-medium text-white transition-colors hover:bg-white/[0.24]"
-            >
-              ← Soạn thảo
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSubmit("publish")}
-              disabled={isPending}
-              className="rounded-full bg-[var(--ac)] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-[var(--ac-dark)] disabled:opacity-50"
-            >
-              {isPending && pendingAction === "publish" ? "Đang đăng…" : "Đăng bài"}
-            </button>
-          </div>
-        </div>
+        <PostPreview
+          title={title}
+          excerpt={excerpt}
+          tags={tags}
+          coverImage={coverImage}
+          content={content}
+          profile={profile}
+        />
       )}
 
       {/* ── Metadata Modal ──────────────────────────────── */}
